@@ -1,6 +1,0 @@
-@SeamlessShareApi_HostAddress = http://localhost:5167
-
-GET {{SeamlessShareApi_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
