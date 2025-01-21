@@ -14,6 +14,19 @@ public class FileSchema : BaseShareItemSchema
     public string Url { get; private set; }
 
     public bool IsArchived { get; private set; }
+
+    private FileSchema() { }
+
+    public FileSchema(Guid shareId, FileMetadata metadata, string url)
+    {
+        Id = Guid.NewGuid();
+        ShareId = shareId;
+        Metadata = metadata;
+        Url = url;
+        IsArchived = false;
+    }
+
+    public void Archive() => IsArchived = true;
 }
 
 public record FileMetadata(

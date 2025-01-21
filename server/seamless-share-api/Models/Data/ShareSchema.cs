@@ -1,5 +1,6 @@
 ﻿using meerkat;
 using meerkat.Attributes;
+using shortid;
 
 namespace SeamlessShareApi.Models.Data;
 
@@ -14,6 +15,16 @@ public class ShareSchema : Schema
     public string Code { get; private set; }
 
     public ShareMetadata Metadata { get; set; }
+
+    private ShareSchema() { }
+
+    public ShareSchema(Guid? ownerId = null, string? ipAddress = null, string? userAgent = null)
+    {
+        Id = Guid.NewGuid();
+        OwnerId = ownerId;
+        Code = ShortId.Generate();
+        Metadata = new ShareMetadata(ipAddress, userAgent);
+    }
 }
 
 public record ShareMetadata(string? IpAddress, string? UserAgent);
