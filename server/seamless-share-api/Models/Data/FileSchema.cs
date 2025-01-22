@@ -5,8 +5,6 @@ namespace SeamlessShareApi.Models.Data;
 [Collection(Name = "files", TrackTimestamps = true)]
 public class FileSchema : BaseShareItemSchema
 {
-    public new Guid Id { get; private set; }
-
     public Guid ShareId { get; private set; }
 
     public FileMetadata Metadata { get; private set; }

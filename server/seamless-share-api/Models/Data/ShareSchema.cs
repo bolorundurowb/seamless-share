@@ -1,5 +1,6 @@
 ﻿using meerkat;
 using meerkat.Attributes;
+using MongoDB.Bson.Serialization.Attributes;
 using shortid;
 
 namespace SeamlessShareApi.Models.Data;
@@ -7,14 +8,12 @@ namespace SeamlessShareApi.Models.Data;
 [Collection(Name = "shares", TrackTimestamps = true)]
 public class ShareSchema : Schema
 {
-    public new Guid Id { get; private set; }
-
     public Guid? OwnerId { get; private set; }
 
     [Unique]
     public string Code { get; private set; }
 
-    public ShareMetadata Metadata { get; set; }
+    public ShareMetadata Metadata { get; private set; }
 
     private ShareSchema() { }
 
