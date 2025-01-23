@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseSentry();
 
 builder.Services.AddScoped<ShareService>();
+builder.Services.AddScoped<LinkService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
