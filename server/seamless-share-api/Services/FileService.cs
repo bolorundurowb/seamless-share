@@ -34,7 +34,7 @@ public class FileService
             {
                 fileName = file.FileName,
                 useUniqueFileName = true,
-                tags = { ownerId.ToString() },
+                tags = [ownerId.ToString()],
                 folder = $"/seamless_share/{ownerId}",
                 file = stream
             };
@@ -67,12 +67,13 @@ public class FileService
     public async Task<FileSchema> Create(Guid ownerId, string fileUrl, FileMetadata fileMetadata)
     {
         _logger.LogDebug("Creating a new file. {OwnerId} {FileUrl} {FileMetadata}", ownerId, fileUrl, fileMetadata);
-        
+
         var file = new FileSchema(ownerId, fileMetadata, fileUrl);
         await file.SaveAsync();
-        
-        _logger.LogDebug("File successfully persisted. {FileId} {FileUrl} {FileMetadata}", file.Id, fileUrl, fileMetadata);
-        
+
+        _logger.LogDebug("File successfully persisted. {FileId} {FileUrl} {FileMetadata}", file.Id, fileUrl,
+            fileMetadata);
+
         return file;
     }
 
