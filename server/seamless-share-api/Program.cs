@@ -1,4 +1,9 @@
+using System.Text;
 using meerkat;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.IdentityModel.Tokens;
+using SeamlessShareApi;
 using SeamlessShareApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,11 +15,41 @@ builder.Services.AddScoped<ShareService>();
 builder.Services.AddScoped<LinkService>();
 builder.Services.AddScoped<TextService>();
 builder.Services.AddScoped<FileService>();
+builder.Services.AddScoped<AuthService>();
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// JWT Authentication Configuration
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+var secretKey = Encoding.UTF8.GetBytes(jwtSettings["Secret"]);
+
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwtSettings["Issuer"],
+            ValidAudience = jwtSettings["Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(secretKey)
+        };
+    });
+builder.Services.AddAuthorization();
+
+builder.Services.Configure<KestrelServerOptions>(options =>
+{
+    options.Limits.MaxRequestBodySize = Constants.MaxFileSizeInBytes;
+});
 
 // setup db connection
 var dbUrl = builder.Configuration.GetValue<string>("DatabaseUrl");
@@ -35,6 +70,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

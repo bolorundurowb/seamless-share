@@ -3,9 +3,9 @@ using SeamlessShareApi.Models.Request;
 
 namespace SeamlessShareApi.Validators;
 
-public class AddToShareReqValidator : AbstractValidator<AddToShareReq>
+public class AddTextToShareReqValidator : AbstractValidator<AddTextToShareReq>
 {
-    public AddToShareReqValidator()
+    public AddTextToShareReqValidator()
     {
         RuleFor(x => x.Content)
             .NotEmpty()
