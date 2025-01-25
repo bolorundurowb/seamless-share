@@ -9,7 +9,7 @@ namespace SeamlessShareApi.Services;
 
 public class AuthService(ILogger<AuthService> logger, IConfiguration configuration)
 {
-    public string GenerateJwtToken(UserSchema user)
+    public (DateTime, string) GenerateJwtToken(UserSchema user)
     {
         logger.LogDebug("Generating JWT token for user {UserId} {UserName}", user.Id, user.Name());
 
@@ -20,26 +20,26 @@ public class AuthService(ILogger<AuthService> logger, IConfiguration configurati
         var claims = new[]
         {
             new Claim(ClaimTypes.Name, user.Name()),
-            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+            new Claim(JwtRegisteredClaimNames.Sub, ((Guid)user.Id).ToString("D")),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
+
+        var expiry = DateTime.Now.AddHours(12);
 
         var token = new JwtSecurityToken(
             issuer: jwtSettings["Issuer"],
             audience: jwtSettings["Audience"],
             claims: claims,
-            expires: DateTime.Now.AddHours(12),
+            expires: expiry,
             signingCredentials: credentials);
 
-        return new JwtSecurityTokenHandler().WriteToken(token);
+        return (expiry, new JwtSecurityTokenHandler().WriteToken(token));
     }
 
-    public Guid? GetOwnerId(ClaimsPrincipal claimsPrincipal)
+    public Guid? GetOwnerId(ClaimsPrincipal? claimsPrincipal)
     {
         if (claimsPrincipal == null)
-        {
-            throw new ArgumentNullException(nameof(claimsPrincipal));
-        }
+            return null;
 
         // Try a few common claim types for "sub"
         var extractedHeaderValue = claimsPrincipal.FindFirstValue("sub")

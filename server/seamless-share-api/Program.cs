@@ -19,6 +19,7 @@ builder.Services.AddScoped<LinkService>();
 builder.Services.AddScoped<TextService>();
 builder.Services.AddScoped<FileService>();
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<UserService>();
 
 builder.Services.AddControllers();
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SeamlessShareApi.Mappers;
 using SeamlessShareApi.Models.Data;
 using SeamlessShareApi.Models.Request;
 using SeamlessShareApi.Models.Response;
@@ -10,77 +11,57 @@ namespace SeamlessShareApi.Controllers;
 [ApiController]
 [Route("api/v1/[controller]")]
 public class AuthController(
-    ShareService shareService,
-    LinkService linkService,
-    TextService textService,
-    AuthService authService,
-    FileService fileService) : ControllerBase
+    ILogger<AuthController> logger,
+    UserService userService,
+    AuthService authService) : ControllerBase
 {
-    [HttpGet("{shareId:guid}")]
-    public async Task<IActionResult> GetShare(Guid shareId)
+    [HttpPost("login")]
+    public async Task<IActionResult> Login([FromBody] LoginReq req)
     {
-        var ownerId = authService.GetOwnerId(User);
-        var share = await shareService.GetOne(shareId, ownerId);
+        var user = await userService.FindByEmail(req.EmailAddress);
 
-        if (share is null)
-            return NotFound(new GenericMessage("Share not found"));
-
-        return Ok(share);
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> CreateShare()
-    {
-        var ownerId = authService.GetOwnerId(User);
-        var requestInfo = RequestInfoExtractor.ExtractIpAddressAndUserAgent(HttpContext);
-        var share = await shareService.Create(ownerId, requestInfo.IpAddress, requestInfo.UserAgent);
-
-        return Ok(share);
-    }
-
-    [HttpPost("{shareId:guid}/text")]
-    public async Task<IActionResult> AddTextShare(Guid shareId, [FromBody] AddTextToShareReq req)
-    {
-        var ownerId = authService.GetOwnerId(User);
-        var share = await shareService.GetOne(shareId, ownerId);
-
-        if (share is null)
-            return NotFound(new GenericMessage("Share not found"));
-
-        var isLink = TextCategorizer.IsLink(req.Content);
-        BaseShareItemSchema? sharedContent;
-
-        if (isLink)
-            sharedContent = await linkService.Create(shareId, req.Content);
-        else
-            sharedContent = await textService.Create(shareId, req.Content);
-
-        return Ok(sharedContent);
-    }
-
-    [HttpPost("{shareId:guid}/file")]
-    public async Task<IActionResult> AddFileShare(Guid shareId, AddFileToShareReq req)
-    {
-        var ownerId = authService.GetOwnerId(User);
-
-        if (!ownerId.HasValue)
-            return BadRequest(new GenericMessage("Only authenticated users can upload files"));
-
-        var share = await shareService.GetOne(shareId, ownerId.Value);
-
-        if (share is null)
-            return NotFound(new GenericMessage("Share not found"));
-
-        var uploadResult = await fileService.Upload(ownerId.Value, req.Content);
-
-        if (uploadResult is null)
+        if (user is null)
         {
-            return NotFound(new GenericMessage("File upload failed"));
+            logger.LogWarning("An attempt was made to login with an invalid email address. {EmailAddress}",
+                req.EmailAddress);
+            return BadRequest(new GenericMessage("Check your credentials and try again."));
         }
 
-        var (fileUrl, fileMetadata) = uploadResult.Value;
-        var file = await fileService.Create(ownerId.Value, fileUrl, fileMetadata);
+        if (!user.VerifyPassword(req.Password))
+        {
+            logger.LogWarning("An attempt was made to login with an invalid password. {EmailAddress}",
+                req.EmailAddress);
+            return BadRequest(new GenericMessage("Check your credentials and try again."));
+        }
 
-        return Ok(file);
+        var res = await FinishLogin(user);
+        return Ok(res);
+    }
+
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] RegisterReq req)
+    {
+        var user = await userService.FindByEmail(req.EmailAddress);
+
+        if (user is not null)
+        {
+            logger.LogWarning("An attempt was made to register with an email address already in use. {EmailAddress}",
+                req.EmailAddress);
+            return BadRequest(new GenericMessage("Account already exists."));
+        }
+
+        user = await userService.Create(req.EmailAddress, req.Password, req.FirstName, req.LastName);
+        var res = await FinishLogin(user);
+        return Ok(res);
+    }
+
+    private async Task<AuthRes> FinishLogin(UserSchema user)
+    {
+        var (expiresAt, accessToken) = authService.GenerateJwtToken(user);
+
+        user.SetLastLoginAt();
+        await user.SaveAsync();
+
+        return new AuthRes(expiresAt, accessToken, new UserMapper().MapToUserRes(user));
     }
 }

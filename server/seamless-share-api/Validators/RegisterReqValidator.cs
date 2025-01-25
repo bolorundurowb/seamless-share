@@ -8,20 +8,18 @@ public class RegisterReqValidator : AbstractValidator<RegisterReq>
     public RegisterReqValidator()
     {
         RuleFor(x => x.FirstName)
-            .NotEmpty()
-            .WithMessage("Please enter your first name.")
             .MaximumLength(100)
             .WithMessage("First name cannot exceed 100 characters.")
             .Matches(@"^[a-zA-Z\s]*$")
-            .WithMessage("First name can only contain letters and spaces.");
+            .WithMessage("First name can only contain letters and spaces.")
+            .When(x => !string.IsNullOrEmpty(x.FirstName));
 
         RuleFor(x => x.LastName)
-            .NotEmpty()
-            .WithMessage("Please enter your last name.")
             .MaximumLength(100)
             .WithMessage("Last name cannot exceed 100 characters.")
             .Matches(@"^[a-zA-Z\s]*$")
-            .WithMessage("Last name can only contain letters and spaces.");
+            .WithMessage("Last name can only contain letters and spaces.")
+            .When(x => !string.IsNullOrEmpty(x.LastName));
 
 
         RuleFor(x => x.EmailAddress)

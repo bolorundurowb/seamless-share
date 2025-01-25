@@ -18,7 +18,7 @@ public class LoginReqValidator : AbstractValidator<LoginReq>
         RuleFor(x => x.Password)
             .NotEmpty()
             .WithMessage("Please enter your password.")
-            .MinimumLength(8) //While you might not enforce password creation rules here, a minimum length is still good practice.
+            .MinimumLength(8)
             .WithMessage("Password must be at least 8 characters long.");
     }
 }
