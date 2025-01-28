@@ -10,6 +10,7 @@ namespace SeamlessShareApi.Controllers;
 [ApiController]
 [Route("api/v1/[controller]")]
 public class SharesController(
+    ILogger<SharesController> logger,
     ShareService shareService,
     LinkService linkService,
     TextService textService,
@@ -74,13 +75,23 @@ public class SharesController(
         var uploadResult = await fileService.Upload(ownerId.Value, req.Content);
 
         if (uploadResult is null)
-        {
             return NotFound(new GenericMessage("File upload failed"));
-        }
 
         var (fileUrl, fileMetadata) = uploadResult.Value;
         var file = await fileService.Create(ownerId.Value, fileUrl, fileMetadata);
 
         return Ok(file);
+    }
+
+    private async Task<(bool, IActionResult?)> CheckShareOwner(Guid shareId, Guid? ownerId)
+    {
+        var hasAccess = await shareService.HasShareAccess(shareId, ownerId);
+
+        if (hasAccess)
+            return (true, null);
+
+        logger.LogWarning("An attempt was made to access a share that does not belong to the user. {ShareId} {UserId}",
+            shareId, ownerId);
+        return (false, NotFound("Share not found"));
     }
 }

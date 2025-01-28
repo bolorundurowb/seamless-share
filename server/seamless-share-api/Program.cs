@@ -1,5 +1,6 @@
 using System.Reflection;
 using System.Text;
+using dotenv.net;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using meerkat;
@@ -8,6 +9,9 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.IdentityModel.Tokens;
 using SeamlessShareApi;
 using SeamlessShareApi.Services;
+
+// load env vars
+DotEnv.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -4,7 +4,6 @@ using SeamlessShareApi.Models.Data;
 using SeamlessShareApi.Models.Request;
 using SeamlessShareApi.Models.Response;
 using SeamlessShareApi.Services;
-using SeamlessShareApi.Utils;
 
 namespace SeamlessShareApi.Controllers;
 
