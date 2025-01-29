@@ -17,11 +17,27 @@ public class SharesController(
     AuthService authService,
     FileService fileService) : ControllerBase
 {
-    [HttpGet("{shareId:guid}")]
-    public async Task<IActionResult> GetShare(Guid shareId)
+    [HttpGet]
+    public async Task<IActionResult> GetOwnedShare()
     {
         var ownerId = authService.GetOwnerId(User);
-        var share = await shareService.GetOne(shareId, ownerId);
+
+        if (!ownerId.HasValue) 
+            return BadRequest(new GenericMessage("Only authenticated users can access owned shares"));
+
+        var share = await shareService.GetOwned(ownerId.Value);
+
+        if (share is null)
+            return NotFound(new GenericMessage("Share not found"));
+
+        return Ok(share);
+    }
+    
+    [HttpGet("{shareCode}")]
+    public async Task<IActionResult> GetShareByCode(string shareCode)
+    {
+        var ownerId = authService.GetOwnerId(User);
+        var share = await shareService.GetOneByCode(shareCode, ownerId);
 
         if (share is null)
             return NotFound(new GenericMessage("Share not found"));
