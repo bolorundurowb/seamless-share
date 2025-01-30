@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SeamlessShareApi.Models.Data;
 using SeamlessShareApi.Models.Request;
 using SeamlessShareApi.Models.Response;
@@ -18,11 +19,12 @@ public class SharesController(
     FileService fileService) : ControllerBase
 {
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> GetOwnedShare()
     {
         var ownerId = authService.GetOwnerId(User);
 
-        if (!ownerId.HasValue) 
+        if (!ownerId.HasValue)
             return BadRequest(new GenericMessage("Only authenticated users can access owned shares"));
 
         var share = await shareService.GetOwned(ownerId.Value);
@@ -32,7 +34,7 @@ public class SharesController(
 
         return Ok(share);
     }
-    
+
     [HttpGet("{shareCode}")]
     public async Task<IActionResult> GetShareByCode(string shareCode)
     {
@@ -88,7 +90,7 @@ public class SharesController(
         if (share is null)
             return NotFound(new GenericMessage("Share not found"));
 
-        var uploadResult = await fileService.Upload(ownerId.Value, req.Content);
+        var uploadResult = await fileService.Upload(share.Code, req.Content);
 
         if (uploadResult is null)
             return NotFound(new GenericMessage("File upload failed"));

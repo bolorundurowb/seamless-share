@@ -25,8 +25,10 @@ public class FileService
         _imagekit = new ImagekitClient(publicKey, privateKey, urlEndpoint);
     }
 
-    public async Task<(string, FileMetadata)?> Upload(Guid ownerId, IFormFile file)
+    public async Task<(string, FileMetadata)?> Upload(string shareCode, IFormFile file)
     {
+        _logger.LogDebug("Uploading a file. {ShareCode}", shareCode);
+
         try
         {
             await using var stream = file.OpenReadStream();
@@ -34,8 +36,8 @@ public class FileService
             {
                 fileName = file.FileName,
                 useUniqueFileName = true,
-                tags = [ownerId.ToString()],
-                folder = $"/seamless_share/{ownerId}",
+                tags = ["files", "shares", shareCode],
+                folder = $"/seamless_share/{shareCode}",
                 file = stream
             };
 
@@ -43,7 +45,7 @@ public class FileService
 
             if (uploadResponse is null)
             {
-                _logger.LogError("An error occurred while uploading a file. {OwnerId}", ownerId);
+                _logger.LogError("An error occurred while uploading a file. {ShareCode}", shareCode);
                 return null;
             }
 
@@ -59,7 +61,7 @@ public class FileService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while uploading a file. {OwnerId}", ownerId);
+            _logger.LogError(ex, "An error occurred while uploading a file. {ShareCode}", shareCode);
             return null;
         }
     }
