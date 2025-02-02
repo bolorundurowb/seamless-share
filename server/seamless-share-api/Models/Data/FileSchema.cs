@@ -33,5 +33,5 @@ public record FileMetadata(
     string Extension,
     long SizeInBytes,
     string MimeType,
-    string Checksum
+    string? Checksum
 );

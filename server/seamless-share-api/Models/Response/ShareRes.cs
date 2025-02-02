@@ -4,7 +4,7 @@ namespace SeamlessShareApi.Models.Response;
 
 public class ShareRes
 {
-    public new Guid Id { get; set; }
+    public string Id { get; set; }
 
     public string Code { get; set; }
 

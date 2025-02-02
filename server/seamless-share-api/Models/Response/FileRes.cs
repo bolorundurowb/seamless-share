@@ -1,0 +1,24 @@
+﻿using SeamlessShareApi.Models.Data;
+
+namespace SeamlessShareApi.Models.Response;
+
+public class FileRes
+{
+    public string Id { get; set; } = null!;
+
+    public FileMetadata Metadata { get; set; }
+
+    public string Url { get; set; } = null!;
+
+    public bool IsArchived { get; set; }
+
+    public DateTime? CreatedAt { get; set; }
+
+    public DateTime? UpdatedAt { get; set; }
+
+    public AppSource? Source { get; protected set; }
+
+    public string? DeviceName { get; protected set; }
+
+    public string? AppVersion { get; protected set; }
+}

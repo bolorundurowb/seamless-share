@@ -1,6 +1,9 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 using Imagekit.Sdk;
+using meerkat;
+using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 using SeamlessShareApi.Models.Data;
 
 namespace SeamlessShareApi.Services;
@@ -79,10 +82,18 @@ public class FileService
         return file;
     }
 
-    private static string CalculateChecksum(Stream stream)
+    public Task<List<FileSchema>> GetAll(Guid shareId) => Meerkat.Query<FileSchema>()
+        .Where(x => x.ShareId == shareId)
+        .OrderByDescending(x => x.CreatedAt)
+        .ToListAsync();
+
+    private string? CalculateChecksum(Stream stream)
     {
         if (!stream.CanSeek)
-            throw new ArgumentException("The stream must support seeking.");
+        {
+            _logger.LogError("File stream does not support seeking.");
+            return null;
+        }
 
         var originalPosition = stream.Position;
         stream.Position = 0;
@@ -97,6 +108,11 @@ public class FileService
                 builder.Append(t.ToString("x2")); // "x2" for lowercase hex
 
             return builder.ToString();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while calculating file checksum.");
+            return null;
         }
         finally
         {
