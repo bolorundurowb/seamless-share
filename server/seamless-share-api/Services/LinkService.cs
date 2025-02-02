@@ -1,4 +1,7 @@
-﻿using SeamlessShareApi.Models.Data;
+﻿using meerkat;
+using MongoDB.Driver;
+using MongoDB.Driver.Linq;
+using SeamlessShareApi.Models.Data;
 
 namespace SeamlessShareApi.Services;
 
@@ -15,4 +18,9 @@ public class LinkService(ILogger<LinkService> logger)
 
         return link;
     }
+
+    public Task<List<LinkSchema>> GetAll(Guid shareId) => Meerkat.Query<LinkSchema>()
+        .Where(x => x.ShareId == shareId)
+        .OrderByDescending(x => x.CreatedAt)
+        .ToListAsync();
 }

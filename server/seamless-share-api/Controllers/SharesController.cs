@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SeamlessShareApi.Mappers;
 using SeamlessShareApi.Models.Data;
 using SeamlessShareApi.Models.Request;
 using SeamlessShareApi.Models.Response;
@@ -20,6 +21,9 @@ public class SharesController(
 {
     [HttpGet]
     [Authorize]
+    [ProducesResponseType(typeof(ShareSchema), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(GenericMessage), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(GenericMessage), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetOwnedShare()
     {
         var ownerId = authService.GetOwnerId(User);
@@ -36,6 +40,8 @@ public class SharesController(
     }
 
     [HttpGet("{shareCode}")]
+    [ProducesResponseType(typeof(ShareSchema), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(GenericMessage), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetShareByCode(string shareCode)
     {
         var ownerId = authService.GetOwnerId(User);
@@ -48,6 +54,7 @@ public class SharesController(
     }
 
     [HttpPost]
+    [ProducesResponseType(typeof(ShareSchema), StatusCodes.Status200OK)]
     public async Task<IActionResult> CreateShare()
     {
         var ownerId = authService.GetOwnerId(User);
@@ -57,7 +64,26 @@ public class SharesController(
         return Ok(share);
     }
 
+    [HttpGet("{shareId:guid}/links")]
+    [ProducesResponseType(typeof(List<LinkRes>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(GenericMessage), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetSharedLinks(Guid shareId)
+    {
+        var ownerId = authService.GetOwnerId(User);
+        var hasAccess = await shareService.HasShareAccess(shareId, ownerId);
+
+        if (!hasAccess)
+            return NotFound(new GenericMessage("Share not found"));
+
+        var links = await linkService.GetAll(shareId);
+        var mapper = new LinkMapper();
+        
+        return Ok(links.Select(x => mapper.Map(x)).ToList());
+    }
+
     [HttpPost("{shareId:guid}/text")]
+    [ProducesResponseType(typeof(BaseShareItemSchema), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(GenericMessage), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> AddTextShare(Guid shareId, [FromBody] AddTextToShareReq req)
     {
         var ownerId = authService.GetOwnerId(User);
@@ -78,6 +104,9 @@ public class SharesController(
     }
 
     [HttpPost("{shareId:guid}/file")]
+    [ProducesResponseType(typeof(FileSchema), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(GenericMessage), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(GenericMessage), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> AddFileShare(Guid shareId, AddFileToShareReq req)
     {
         var ownerId = authService.GetOwnerId(User);
