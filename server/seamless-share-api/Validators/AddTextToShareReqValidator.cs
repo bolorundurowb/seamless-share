@@ -9,6 +9,8 @@ public class AddTextToShareReqValidator : AbstractValidator<AddTextToShareReq>
     {
         RuleFor(x => x.Content)
             .NotEmpty()
-            .WithMessage("Content is required.");
+            .WithMessage("Content is required.")
+            .MaximumLength(Constants.MaxTextLength)
+            .WithMessage($"Content cannot exceed {Constants.MaxTextLength} characters.");
     }
 }

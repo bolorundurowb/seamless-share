@@ -1,4 +1,7 @@
-﻿using SeamlessShareApi.Models.Data;
+﻿using meerkat;
+using SeamlessShareApi.Models.Data;
+using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 
 namespace SeamlessShareApi.Services;
 
@@ -15,4 +18,9 @@ public class TextService(ILogger<TextService> logger)
 
         return text;
     }
+
+    public Task<List<TextSchema>> GetAll(Guid shareId) => Meerkat.Query<TextSchema>()
+        .Where(x => x.ShareId == shareId)
+        .OrderByDescending(x => x.CreatedAt)
+        .ToListAsync();
 }

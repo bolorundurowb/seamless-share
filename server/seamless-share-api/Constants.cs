@@ -3,4 +3,6 @@
 public static class Constants
 {
     public const int MaxFileSizeInBytes = 10 * 1024 * 1024; // 10MiB
+
+    public const int MaxTextLength = 5000;
 }
