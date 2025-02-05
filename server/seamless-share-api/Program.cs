@@ -3,6 +3,7 @@ using System.Text;
 using dotenv.net;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using logly.Extensions;
 using meerkat;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -72,6 +73,13 @@ if (dbUrl is null)
 Meerkat.Connect(dbUrl);
 
 var app = builder.Build();
+
+app.UseLogly(opts => opts
+    .AddRequestMethod()
+    .AddStatusCode()
+    .AddResponseTime()
+    .AddUrl()
+    .AddResponseLength());
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
