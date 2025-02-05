@@ -7,11 +7,11 @@ namespace SeamlessShareApi.Services;
 
 public class LinkService(ILogger<LinkService> logger)
 {
-    public async Task<LinkSchema> Create(Guid shareId, string url)
+    public async Task<LinkSchema> Create(Guid shareId, string url, string? appVersion, AppSource? appSource)
     {
         logger.LogDebug("Creating a new shared link. {ShareId} {Url}", shareId, url);
 
-        var link = new LinkSchema(shareId, url);
+        var link = new LinkSchema(shareId, url, appVersion, appSource);
         await link.SaveAsync();
 
         logger.LogDebug("Shared link successfully created. {LinkId} {Url}", link.Id, url);

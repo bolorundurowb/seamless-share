@@ -2,6 +2,7 @@
 using SeamlessShareApi.Models.Data;
 using SeamlessShareApi.Models.Request;
 using SeamlessShareApi.Models.Response;
+using SeamlessShareApi.Utils;
 
 namespace SeamlessShareApi.Controllers;
 
@@ -45,7 +46,8 @@ public partial class SharesController
             return NotFound(new GenericMessage("File upload failed"));
 
         var (fileUrl, fileMetadata) = uploadResult.Value;
-        var file = await fileService.Create(ownerId.Value, fileUrl, fileMetadata);
+        var (version, source) = RequestInfoExtractor.ExtractAppVersionAndSource(HttpContext);
+        var file = await fileService.Create(ownerId.Value, fileUrl, fileMetadata, version, source);
 
         return Ok(file);
     }

@@ -4,5 +4,6 @@ public enum AppSource
 {
     Web,
     Android,
-    iOS
+    iOS,
+    Unknown
 }

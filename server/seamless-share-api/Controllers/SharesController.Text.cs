@@ -36,12 +36,13 @@ public partial class SharesController
             return NotFound(new GenericMessage("Share not found"));
 
         var isLink = TextCategorizer.IsLink(req.Content);
+        var (version, source) = RequestInfoExtractor.ExtractAppVersionAndSource(HttpContext);
         BaseShareItemSchema? sharedContent;
 
         if (isLink)
-            sharedContent = await linkService.Create(shareId, req.Content);
+            sharedContent = await linkService.Create(shareId, req.Content, version, source);
         else
-            sharedContent = await textService.Create(shareId, req.Content);
+            sharedContent = await textService.Create(shareId, req.Content, version, source);
 
         return Ok(sharedContent);
     }

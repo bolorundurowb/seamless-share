@@ -69,11 +69,12 @@ public class FileService
         }
     }
 
-    public async Task<FileSchema> Create(Guid ownerId, string fileUrl, FileMetadata fileMetadata)
+    public async Task<FileSchema> Create(Guid ownerId, string fileUrl, FileMetadata fileMetadata, string? appVersion,
+        AppSource? appSource)
     {
         _logger.LogDebug("Creating a new file. {OwnerId} {FileUrl} {FileMetadata}", ownerId, fileUrl, fileMetadata);
 
-        var file = new FileSchema(ownerId, fileMetadata, fileUrl);
+        var file = new FileSchema(ownerId, fileMetadata, fileUrl, appVersion, appSource);
         await file.SaveAsync();
 
         _logger.LogDebug("File successfully persisted. {FileId} {FileUrl} {FileMetadata}", file.Id, fileUrl,
@@ -83,7 +84,7 @@ public class FileService
     }
 
     public Task<List<FileSchema>> GetAll(Guid shareId) => Meerkat.Query<FileSchema>()
-        .Where(x => x.ShareId == shareId)
+        .Where(x => x.ShareId == shareId && x.IsArchived == false)
         .OrderByDescending(x => x.CreatedAt)
         .ToListAsync();
 

@@ -15,8 +15,11 @@ public class FileSchema : BaseShareItemSchema
 
     private FileSchema() { }
 
-    public FileSchema(Guid shareId, FileMetadata metadata, string url)
+    public FileSchema(Guid shareId, FileMetadata metadata, string url, string? appVersion, AppSource? appSource)
     {
+        Source = appSource;
+        AppVersion = appVersion;
+
         Id = Guid.NewGuid();
         ShareId = shareId;
         Metadata = metadata;

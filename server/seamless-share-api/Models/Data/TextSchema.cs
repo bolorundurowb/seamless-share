@@ -11,8 +11,11 @@ public class TextSchema : BaseShareItemSchema
 
     private TextSchema() { }
 
-    public TextSchema(Guid shareId, string content)
+    public TextSchema(Guid shareId, string content, string? appVersion, AppSource? appSource)
     {
+        Source = appSource;
+        AppVersion = appVersion;
+
         Id = Guid.NewGuid();
         ShareId = shareId;
         Content = content;
