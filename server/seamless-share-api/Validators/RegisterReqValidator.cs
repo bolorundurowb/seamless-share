@@ -35,7 +35,7 @@ public class RegisterReqValidator : AbstractValidator<RegisterReq>
             .WithMessage("Please enter your password.")
             .MinimumLength(8)
             .WithMessage("Password must be at least 8 characters long.")
-            .Matches(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$")
+            .Matches(@"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).+$")
             .WithMessage(
                 "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
     }
