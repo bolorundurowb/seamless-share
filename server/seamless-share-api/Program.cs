@@ -3,7 +3,7 @@ using System.Text;
 using dotenv.net;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using logly.Extensions;
+using Logly.Extensions;
 using meerkat;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
