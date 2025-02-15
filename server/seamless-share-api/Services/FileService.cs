@@ -88,6 +88,37 @@ public class FileService
         .OrderByDescending(x => x.CreatedAt)
         .ToListAsync();
 
+    public async Task DeleteOne(Guid shareId, Guid fileId)
+    {
+        _logger.LogDebug("Request to delete a file. {ShareId} {FileId}", shareId, fileId);
+
+        var file = await Meerkat.Query<FileSchema>()
+            .FirstOrDefaultAsync(x => x.ShareId == shareId && x.Id == (object)fileId);
+
+        if (file is null)
+        {
+            _logger.LogWarning("File to be deleted does not exist. {ShareId} {FileId}", shareId, fileId);
+            return;
+        }
+
+        var deleteResult = await _imagekit.DeleteFileAsync(file.Metadata.Id);
+
+        if (deleteResult.HttpStatusCode is < 200 or >= 300)
+        {
+            _logger.LogError("An error occurred while deleting a file. {ShareId} {FileId} {ExternalFileId}", shareId,
+                fileId, file.Metadata.Id);
+            throw new Exception($"An error occurred while deleting a file. {deleteResult.Raw}");
+        }
+
+        _logger.LogInformation("File successfully deleted from external provider. {ShareId} {FileId} {ExternalFileId}",
+            shareId, fileId, file.Metadata.Id);
+
+        file.Archive();
+        await file.SaveAsync();
+
+        _logger.LogDebug("File successfully archived. {ShareId} {FileId}", shareId, fileId);
+    }
+
     private string? CalculateChecksum(Stream stream)
     {
         if (!stream.CanSeek)

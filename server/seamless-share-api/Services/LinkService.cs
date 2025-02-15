@@ -23,4 +23,13 @@ public class LinkService(ILogger<LinkService> logger)
         .Where(x => x.ShareId == shareId)
         .OrderByDescending(x => x.CreatedAt)
         .ToListAsync();
+
+    public async Task DeleteOne(Guid shareId, Guid linkId)
+    {
+        logger.LogDebug("Deleting a shared link. {ShareId} {LinkId}", shareId, linkId);
+
+        await Meerkat.RemoveOneAsync<LinkSchema>(x => x.ShareId == shareId && x.Id == (object)linkId);
+
+        logger.LogDebug("Shared link successfully deleted. {ShareId} {LinkId}", shareId, linkId);
+    }
 }

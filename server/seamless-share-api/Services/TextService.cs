@@ -23,4 +23,13 @@ public class TextService(ILogger<TextService> logger)
         .Where(x => x.ShareId == shareId)
         .OrderByDescending(x => x.CreatedAt)
         .ToListAsync();
+
+    public async Task DeleteOne(Guid shareId, Guid textId)
+    {
+        logger.LogDebug("Deleting shared text. {ShareId} {TextId}", shareId, textId);
+
+        await Meerkat.RemoveOneAsync<TextSchema>(x => x.ShareId == shareId && x.Id == (object)textId);
+
+        logger.LogDebug("Shared text successfully deleted. {TextId}", textId);
+    }
 }
