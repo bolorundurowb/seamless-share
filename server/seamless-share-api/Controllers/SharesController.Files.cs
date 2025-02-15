@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SeamlessShareApi.Models.Data;
 using SeamlessShareApi.Models.Request;
 using SeamlessShareApi.Models.Response;
@@ -50,5 +51,27 @@ public partial class SharesController
         var file = await fileService.Create(ownerId.Value, fileUrl, fileMetadata, version, source);
 
         return Ok(file);
+    }
+    
+    [Authorize]
+    [HttpDelete("{shareId:guid}/files/{fileId:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(GenericMessage), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(GenericMessage), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteASharedFile(Guid shareId, Guid fileId)
+    {
+        var ownerId = authService.GetOwnerId(User);
+
+        if (!ownerId.HasValue)
+            return BadRequest(new GenericMessage("Only authenticated users can access owned shares"));
+        
+        var hasAccess = await shareService.HasShareAccess(shareId, ownerId);
+
+        if (!hasAccess)
+            return NotFound(new GenericMessage("Share or file not found"));
+
+        await fileService.DeleteOne(shareId, fileId);
+
+        return Ok();
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SeamlessShareApi.Models.Data;
 using SeamlessShareApi.Models.Request;
 using SeamlessShareApi.Models.Response;
@@ -45,5 +46,27 @@ public partial class SharesController
             sharedContent = await textService.Create(shareId, req.Content, version, source);
 
         return Ok(sharedContent);
+    }
+    
+    [Authorize]
+    [HttpDelete("{shareId:guid}/text/{textId:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(GenericMessage), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(GenericMessage), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteASharedText(Guid shareId, Guid textId)
+    {
+        var ownerId = authService.GetOwnerId(User);
+
+        if (!ownerId.HasValue)
+            return BadRequest(new GenericMessage("Only authenticated users can access owned shares"));
+        
+        var hasAccess = await shareService.HasShareAccess(shareId, ownerId);
+
+        if (!hasAccess)
+            return NotFound(new GenericMessage("Share or text not found"));
+
+        await textService.DeleteOne(shareId, textId);
+
+        return Ok();
     }
 }
