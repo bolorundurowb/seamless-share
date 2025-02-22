@@ -1,6 +1,5 @@
 ﻿using meerkat;
 using SeamlessShareApi.Models.Data;
-using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 
 namespace SeamlessShareApi.Services;

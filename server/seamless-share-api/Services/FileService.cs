@@ -2,7 +2,6 @@
 using System.Text;
 using Imagekit.Sdk;
 using meerkat;
-using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using SeamlessShareApi.Models.Data;
 
