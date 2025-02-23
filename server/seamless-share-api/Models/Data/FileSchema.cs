@@ -31,7 +31,7 @@ public class FileSchema : BaseShareItemSchema
 }
 
 public record FileMetadata(
-    string Id,
+    string ExternalId,
     string Name,
     string Extension,
     long SizeInBytes,

@@ -100,17 +100,17 @@ public class FileService
             return;
         }
 
-        var deleteResult = await _imagekit.DeleteFileAsync(file.Metadata.Id);
+        var deleteResult = await _imagekit.DeleteFileAsync(file.Metadata.ExternalId);
 
         if (deleteResult.HttpStatusCode is < 200 or >= 300)
         {
             _logger.LogError("An error occurred while deleting a file. {ShareId} {FileId} {ExternalFileId}", shareId,
-                fileId, file.Metadata.Id);
+                fileId, file.Metadata.ExternalId);
             throw new Exception($"An error occurred while deleting a file. {deleteResult.Raw}");
         }
 
         _logger.LogInformation("File successfully deleted from external provider. {ShareId} {FileId} {ExternalFileId}",
-            shareId, fileId, file.Metadata.Id);
+            shareId, fileId, file.Metadata.ExternalId);
 
         file.Archive();
         await file.SaveAsync();
