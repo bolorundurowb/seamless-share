@@ -1,1 +1,30 @@
-<div>Hello</div>
+<div>
+  <div>
+    <img src="favicon.ico"/>
+    <h1>Seamless Share</h1>
+    <div>This is to allow you share text, URLs, images and other files across your devices</div>
+
+    <nz-tabset
+      nzType="card" nzTabPosition="bottom">
+      <nz-tab nzTitle="Links">
+        <div>
+          <nz-input-group nzSearch nzSize="large" [nzAddOnAfter]="shareButton">
+            <input type="text" nz-input placeholder="input search text" [(ngModel)]="sharedUrl"
+                   (ngModelChange)="validateSharedUrl()"/>
+          </nz-input-group>
+
+          <ng-template #shareButton>
+            <button nz-button nzSearch nzType="primary" nzSize="large" [disabled]="!isSharedUrlValid">Share</button>
+          </ng-template>
+        </div>
+      </nz-tab>
+
+      <nz-tab nzTitle="Text">Content of Tab Pane 2</nz-tab>
+
+      <nz-tab nzTitle="Images">Content of Tab Pane 3</nz-tab>
+
+      <nz-tab nzTitle="Files">Content of Tab Pane 3</nz-tab>
+    </nz-tabset>
+
+  </div>
+</div>
