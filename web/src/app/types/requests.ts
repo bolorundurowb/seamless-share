@@ -13,8 +13,3 @@ export interface RegisterReq {
 export interface AddTextToShareReq {
   content: string;
 }
-
-
-export interface AddFileToShareReq {
-  content: File;
-}
