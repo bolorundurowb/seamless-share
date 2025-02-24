@@ -1,28 +1,34 @@
-import {Component} from '@angular/core';
-import {Title} from '@angular/platform-browser';
-import {NzTabComponent, NzTabSetComponent} from 'ng-zorro-antd/tabs';
-import {NzInputDirective, NzInputGroupComponent} from 'ng-zorro-antd/input';
-import {FormsModule} from '@angular/forms';
-import {NzButtonComponent} from 'ng-zorro-antd/button';
+import { Component } from '@angular/core';
+import { Title } from '@angular/platform-browser';
+import { NzTabComponent, NzTabSetComponent } from 'ng-zorro-antd/tabs';
+import { NzInputDirective, NzInputGroupComponent, NzTextareaCountComponent } from 'ng-zorro-antd/input';
+import { FormsModule } from '@angular/forms';
+import { NzButtonComponent } from 'ng-zorro-antd/button';
+import { AuthService } from '../services/auth.service';
+import { ShareService } from '../services/share.service';
 
 @Component({
   selector: 'ss-home',
   standalone: true,
   templateUrl: './home.page.html',
+  styleUrl: './home.page.scss',
   imports: [
     NzTabSetComponent,
     NzTabComponent,
     NzInputGroupComponent,
     FormsModule,
     NzButtonComponent,
-    NzInputDirective
+    NzInputDirective,
+    NzTextareaCountComponent
   ]
 })
 export class HomePage {
   sharedUrl?: string;
   isSharedUrlValid = false;
 
-  constructor(title: Title) {
+  sharedText?: string;
+
+  constructor(title: Title, private authService: AuthService, private shareService: ShareService) {
     title.setTitle('Seamless Share | Home');
   }
 

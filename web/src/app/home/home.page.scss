@@ -1,0 +1,58 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+
+  .content-wrapper {
+    width: 100%;
+    max-width: 60%;
+    margin-top: -10rem;
+
+    @media (max-width: 768px) {
+      max-width: 100%;
+    }
+
+    .logo {
+      width: 3rem;
+      height: 3rem;
+      margin-bottom: 0.625rem;
+    }
+
+    .title {
+      margin: 0.625rem 0;
+    }
+
+    .tab-container {
+      width: 100%;
+      background-color: #f5f5f5;
+      border-radius: 0.75rem;
+      padding: 1rem;
+      box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.1);
+
+      ::ng-deep .ant-tabs-card {
+        border-radius: 0.75rem;
+
+        .ant-tabs-tab {
+          height: 3.125rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+
+      .tab-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 9.375rem;
+      }
+
+      .share-button {
+        margin-top: 0.625rem;
+      }
+    }
+  }
+}

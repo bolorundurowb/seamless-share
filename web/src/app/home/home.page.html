@@ -1,34 +1,48 @@
-<div>
-  <div>
-    <img src="favicon.ico"/>
-    <h1>Seamless Share</h1>
-    <div>This is to allow you share text, URLs, images and other files across your devices</div>
+<div class="container">
+  <div class="content-wrapper">
+    <img src="favicon.ico" class="logo"/>
+    <h1 class="title">Seamless Share</h1>
+    <div>This platform enables you to seamlessly share text, URLs, images, and various other files across all your devices without the need to create an account, ensuring quick and convenient access to your important content anytime<span>*</span>, anywhere, any device.</div>
 
-    <nz-tabset
-      nzType="card" nzTabPosition="bottom">
+    <nz-tabset nzType="card" nzTabPosition="bottom" class="tab-container">
       <nz-tab nzTitle="Links">
-        <div>
+        <div class="tab-content">
           <nz-input-group nzSearch nzSize="large" [nzAddOnAfter]="shareButton">
             <input type="text" nz-input placeholder="input search text" [(ngModel)]="sharedUrl"
                    (ngModelChange)="validateSharedUrl()"/>
           </nz-input-group>
 
           <ng-template #shareButton>
-            <button nz-button nzSearch nzType="primary" nzSize="large" [disabled]="!isSharedUrlValid">Share</button>
+            <button nz-button nzSearch nzType="primary" nzSize="large" [disabled]="!isSharedUrlValid" class="share-button">
+              Share
+            </button>
           </ng-template>
         </div>
       </nz-tab>
 
-      <nz-tab nzTitle="Text">Content of Tab Pane 2</nz-tab>
+      <nz-tab nzTitle="Text">
+        <div class="tab-content">
+          <nz-textarea-count [nzMaxCharacterCount]="2000">
+            <textarea nz-input [(ngModel)]="sharedText"></textarea>
+          </nz-textarea-count>
+          <button nz-button class="share-button">Share</button>
+        </div>
+      </nz-tab>
 
       <nz-tab nzTitle="Images">
-        <div>
+        <div class="tab-content">
           This feature is coming soon. Express your interest in it by filing an issue.
         </div>
       </nz-tab>
 
-      <nz-tab nzTitle="Files">Content of Tab Pane 3</nz-tab>
+      <nz-tab nzTitle="Files">
+        <div class="tab-content">
+        </div>
+      </nz-tab>
     </nz-tabset>
 
+    <div>
+      Any content shared without an account will be automatically deleted after 30 days. For users without an account, shared content is accessible via a share code. Since share codes can be shared or guessed, we cannot guarantee that you are the only one accessing the content.
+    </div>
   </div>
 </div>
