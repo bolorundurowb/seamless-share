@@ -43,17 +43,17 @@ export class ShareService {
     return firstValueFrom(this.http.delete<void>(`${this.baseUrl}/shares/${shareId}/links/${linkId}`));
   }
 
-  async getFileShares(shareId: string): Promise<FileRes[]> {
-    return firstValueFrom(this.http.get<FileRes[]>(`${this.baseUrl}/shares/${shareId}/files`));
+  async getDocumentShares(shareId: string): Promise<FileRes[]> {
+    return firstValueFrom(this.http.get<FileRes[]>(`${this.baseUrl}/shares/${shareId}/documents`));
   }
 
-  async createFileToShare(shareId: string, file: File): Promise<FileRes> {
+  async createDocumentShare(shareId: string, file: File): Promise<FileRes> {
     const formData = new FormData();
     formData.append('content', file);
-    return firstValueFrom(this.http.post<FileRes>(`${this.baseUrl}/shares/${shareId}/files`, formData));
+    return firstValueFrom(this.http.post<FileRes>(`${this.baseUrl}/shares/${shareId}/documents`, formData));
   }
 
-  async deleteFileFromShare(shareId: string, fileId: string): Promise<void> {
-    return firstValueFrom(this.http.delete<void>(`${this.baseUrl}/shares/${shareId}/files/${fileId}`));
+  async deleteDocumentShare(shareId: string, documentId: string): Promise<void> {
+    return firstValueFrom(this.http.delete<void>(`${this.baseUrl}/shares/${shareId}/documents/${documentId}`));
   }
 }
