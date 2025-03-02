@@ -112,6 +112,24 @@ public class FileService
         _logger.LogInformation("File successfully deleted from external provider. {ShareId} {FileId} {ExternalFileId}",
             shareId, fileId, file.Metadata.ExternalId);
 
+        await Meerkat.RemoveByIdAsync<FileSchema>(fileId);
+
+        _logger.LogDebug("File successfully deleted. {ShareId} {FileId}", shareId, fileId);
+    }
+
+    public async Task ArchiveOne(Guid shareId, Guid fileId)
+    {
+        _logger.LogDebug("Request to archive a file. {ShareId} {FileId}", shareId, fileId);
+
+        var file = await Meerkat.Query<FileSchema>()
+            .FirstOrDefaultAsync(x => x.ShareId == shareId && x.Id == (object)fileId);
+
+        if (file is null)
+        {
+            _logger.LogWarning("File to be archived does not exist. {ShareId} {FileId}", shareId, fileId);
+            return;
+        }
+
         file.Archive();
         await file.SaveAsync();
 

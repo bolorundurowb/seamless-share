@@ -52,7 +52,7 @@ public partial class SharesController
 
         return Ok(file);
     }
-    
+
     [Authorize]
     [HttpDelete("{shareId:guid}/files/{fileId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -64,13 +64,13 @@ public partial class SharesController
 
         if (!ownerId.HasValue)
             return BadRequest(new GenericMessage("Only authenticated users can access owned shares"));
-        
+
         var hasAccess = await shareService.HasShareAccess(shareId, ownerId);
 
         if (!hasAccess)
             return NotFound(new GenericMessage("Share or file not found"));
 
-        await fileService.DeleteOne(shareId, fileId);
+        await fileService.ArchiveOne(shareId, fileId);
 
         return Ok();
     }

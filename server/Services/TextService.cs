@@ -31,4 +31,22 @@ public class TextService(ILogger<TextService> logger)
 
         logger.LogDebug("Shared text successfully deleted. {TextId}", textId);
     }
+    
+    public async Task ArchiveOne(Guid shareId, Guid textId)
+    {
+        logger.LogDebug("Archiving a shared text. {ShareId} {TextId}", shareId, textId);
+
+        var text = await Meerkat.FindOneAsync<TextSchema>(x => x.ShareId == shareId && x.Id == (object)textId);
+
+        if (text is null)
+        {
+            logger.LogWarning("Text to be archived does not exist. {TextId}", textId);
+            return;
+        }
+        
+        text.Archive();
+        await text.SaveAsync();
+
+        logger.LogDebug("Shared text successfully deleted. {ShareId} {TextId}", shareId, textId);
+    }
 }

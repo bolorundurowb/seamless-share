@@ -31,4 +31,22 @@ public class LinkService(ILogger<LinkService> logger)
 
         logger.LogDebug("Shared link successfully deleted. {ShareId} {LinkId}", shareId, linkId);
     }
+
+    public async Task ArchiveOne(Guid shareId, Guid linkId)
+    {
+        logger.LogDebug("Archiving a shared link. {ShareId} {LinkId}", shareId, linkId);
+
+        var link = await Meerkat.FindOneAsync<LinkSchema>(x => x.ShareId == shareId && x.Id == (object)linkId);
+
+        if (link is null)
+        {
+            logger.LogWarning("Link to be archived does not exist. {LinkId}", linkId);
+            return;
+        }
+        
+        link.Archive();
+        await link.SaveAsync();
+
+        logger.LogDebug("Shared link successfully deleted. {ShareId} {LinkId}", shareId, linkId);
+    }
 }

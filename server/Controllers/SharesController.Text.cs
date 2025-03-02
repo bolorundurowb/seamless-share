@@ -65,7 +65,7 @@ public partial class SharesController
         if (!hasAccess)
             return NotFound(new GenericMessage("Share or text not found"));
 
-        await textService.DeleteOne(shareId, textId);
+        await textService.ArchiveOne(shareId, textId);
 
         return Ok();
     }

@@ -39,7 +39,7 @@ public partial class SharesController
         if (!hasAccess)
             return NotFound(new GenericMessage("Share or link not found"));
 
-        await linkService.DeleteOne(shareId, linkId);
+        await linkService.ArchiveOne(shareId, linkId);
 
         return Ok();
     }
