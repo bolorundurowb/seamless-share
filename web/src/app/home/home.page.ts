@@ -8,6 +8,7 @@ import {AuthService} from '../services/auth.service';
 import {ShareService} from '../services/share.service';
 import {NgIf} from '@angular/common';
 import {UserRes} from '../types';
+import {SectionComponent, SectionsComponent} from '../components/section.component';
 
 @Component({
   selector: 'ss-home',
@@ -22,7 +23,9 @@ import {UserRes} from '../types';
     NzButtonComponent,
     NzInputDirective,
     NzTextareaCountComponent,
-    NgIf
+    NgIf,
+    SectionsComponent,
+    SectionComponent
   ]
 })
 export class HomePage implements OnInit {
