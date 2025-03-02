@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { NzTabComponent, NzTabSetComponent } from 'ng-zorro-antd/tabs';
 import { NzInputDirective, NzInputGroupComponent, NzTextareaCountComponent } from 'ng-zorro-antd/input';
@@ -6,6 +6,8 @@ import { FormsModule } from '@angular/forms';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
 import { AuthService } from '../services/auth.service';
 import { ShareService } from '../services/share.service';
+import {NgIf} from '@angular/common';
+import {UserRes} from '../types';
 
 @Component({
   selector: 'ss-home',
@@ -19,17 +21,27 @@ import { ShareService } from '../services/share.service';
     FormsModule,
     NzButtonComponent,
     NzInputDirective,
-    NzTextareaCountComponent
+    NzTextareaCountComponent,
+    NgIf
   ]
 })
-export class HomePage {
+export class HomePage implements OnInit {
+  isAuthenticated = false;
+  user: UserRes | null = null;
+
   sharedUrl?: string;
   isSharedUrlValid = false;
 
   sharedText?: string;
 
+
   constructor(title: Title, private authService: AuthService, private shareService: ShareService) {
     title.setTitle('Seamless Share | Home');
+  }
+
+  ngOnInit() {
+    this.isAuthenticated = this.authService.isAuthenticated();
+    this.user = this.authService.getUser();
   }
 
   validateSharedUrl() {

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../environment';
-import { AuthRes, LoginReq, RegisterReq } from '../types';
+import {AuthRes, LoginReq, RegisterReq, UserRes} from '../types';
 import { firstValueFrom } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
@@ -36,6 +36,16 @@ export class AuthService {
     localStorage.removeItem(this.tokenKey);
     localStorage.removeItem(this.tokenExpiryKey);
     localStorage.removeItem(this.userKey);
+  }
+
+  getUser(): UserRes | null {
+    const rawUser = localStorage.getItem(this.userKey);
+
+    if (!rawUser) {
+      return null;
+    }
+
+    return JSON.parse(rawUser) as UserRes;
   }
 
   private getToken(): string | null {

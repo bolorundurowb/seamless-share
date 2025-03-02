@@ -1,4 +1,22 @@
 <div class="container">
+  <div>
+    <ng-container *ngIf="isAuthenticated">
+      <div>
+        <span>{{user!.firstName}} {{user!.lastName}}</span>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="!isAuthenticated">
+      <div>
+        <button>
+          Login
+        </button>
+        <button>
+          Register
+        </button>
+      </div>
+    </ng-container>
+  </div>
+
   <div class="content-wrapper">
     <img src="favicon.ico" class="logo"/>
     <h1 class="title">Seamless Share</h1>
