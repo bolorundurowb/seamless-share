@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SeamlessShareApi.Models.Data;
 using SeamlessShareApi.Models.Request;
 using SeamlessShareApi.Models.Response;
 using SeamlessShareApi.Utils;
@@ -9,7 +8,7 @@ namespace SeamlessShareApi.Controllers;
 
 public partial class SharesController
 {
-    [HttpGet("{shareId:guid}/files")]
+    [HttpGet("{shareId:guid}/documents")]
     [ProducesResponseType(typeof(List<FileRes>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(GenericMessage), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetSharedFiles(Guid shareId)
@@ -20,21 +19,21 @@ public partial class SharesController
         if (!hasAccess)
             return NotFound(new GenericMessage("Share not found"));
 
-        var files = await fileService.GetAll(shareId);
+        var documents = await documentService.GetAll(shareId);
 
-        return Ok(files.Select(x => _fileMapper.Map(x)).ToList());
+        return Ok(documents.Select(x => _fileMapper.MapDocument(x)).ToList());
     }
 
-    [HttpPost("{shareId:guid}/file")]
-    [ProducesResponseType(typeof(FileSchema), StatusCodes.Status200OK)]
+    [HttpPost("{shareId:guid}/document")]
+    [ProducesResponseType(typeof(FileRes), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(GenericMessage), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(GenericMessage), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> AddFileShare(Guid shareId, AddFileToShareReq req)
+    public async Task<IActionResult> AddDocumentShare(Guid shareId, AddDocumentToShareReq req)
     {
         var ownerId = authService.GetOwnerId(User);
 
         if (!ownerId.HasValue)
-            return BadRequest(new GenericMessage("Only authenticated users can upload files"));
+            return BadRequest(new GenericMessage("Only authenticated users can upload documents"));
 
         var share = await shareService.GetOne(shareId, ownerId.Value);
 
@@ -44,21 +43,21 @@ public partial class SharesController
         var uploadResult = await fileService.Upload(share.Code, req.Content);
 
         if (uploadResult is null)
-            return NotFound(new GenericMessage("File upload failed"));
+            return NotFound(new GenericMessage("Document upload failed"));
 
-        var (fileUrl, fileMetadata) = uploadResult.Value;
+        var (documentUrl, fileMetadata) = uploadResult.Value;
         var (version, source) = RequestInfoExtractor.ExtractAppVersionAndSource(HttpContext);
-        var file = await fileService.Create(ownerId.Value, fileUrl, fileMetadata, version, source);
+        var document = await documentService.Create(ownerId.Value, documentUrl, fileMetadata, version, source);
 
-        return Ok(file);
+        return Ok(document);
     }
 
     [Authorize]
-    [HttpDelete("{shareId:guid}/files/{fileId:guid}")]
+    [HttpDelete("{shareId:guid}/documents/{documentId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(GenericMessage), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(GenericMessage), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeleteASharedFile(Guid shareId, Guid fileId)
+    public async Task<IActionResult> DeleteSharedDocument(Guid shareId, Guid documentId)
     {
         var ownerId = authService.GetOwnerId(User);
 
@@ -68,9 +67,9 @@ public partial class SharesController
         var hasAccess = await shareService.HasShareAccess(shareId, ownerId);
 
         if (!hasAccess)
-            return NotFound(new GenericMessage("Share or file not found"));
+            return NotFound(new GenericMessage("Share or document not found"));
 
-        await fileService.ArchiveOne(shareId, fileId);
+        await documentService.ArchiveOne(shareId, documentId);
 
         return Ok();
     }

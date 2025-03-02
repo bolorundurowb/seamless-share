@@ -16,7 +16,8 @@ public partial class SharesController(
     LinkService linkService,
     TextService textService,
     AuthService authService,
-    FileService fileService) : ControllerBase
+    FileService fileService,
+    DocumentService documentService) : ControllerBase
 {
     private readonly ShareMapper _shareMapper = new();
     private readonly LinkMapper _linkMapper = new();

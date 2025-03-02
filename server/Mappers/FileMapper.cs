@@ -7,5 +7,5 @@ namespace SeamlessShareApi.Mappers;
 [Mapper]
 public partial class FileMapper
 {
-    public partial FileRes Map(FileSchema fileDto);
+    public partial FileRes MapDocument(DocumentSchema documentDto);
 }

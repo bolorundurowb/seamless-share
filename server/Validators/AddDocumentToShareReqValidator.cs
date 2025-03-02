@@ -3,9 +3,9 @@ using SeamlessShareApi.Models.Request;
 
 namespace SeamlessShareApi.Validators;
 
-public class AddFileToShareReqValidator : AbstractValidator<AddFileToShareReq>
+public class AddDocumentToShareReqValidator : AbstractValidator<AddDocumentToShareReq>
 {
-    public AddFileToShareReqValidator()
+    public AddDocumentToShareReqValidator()
     {
         RuleFor(x => x.Content)
             .NotNull()
@@ -23,8 +23,7 @@ public class AddFileToShareReqValidator : AbstractValidator<AddFileToShareReq>
 
         var allowedExtensions = new[]
         {
-            ".pdf", ".txt", ".docx", ".xlsx", ".jpg", ".png", ".mp4", ".webm", ".avi", ".mov", ".wmv", ".flv", ".mpg",
-            ".mpeg", ".gif", ".bmp", ".tif", ".tiff"
+            ".pdf", ".txt", ".docx", ".xlsx", ".doc", ".xls", ".rtf"
         };
         var fileExtension = Path.GetExtension(file.FileName).ToLower();
         return allowedExtensions.Contains(fileExtension);

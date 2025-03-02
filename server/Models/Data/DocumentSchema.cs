@@ -2,8 +2,8 @@
 
 namespace SeamlessShareApi.Models.Data;
 
-[Collection(Name = "files", TrackTimestamps = true)]
-public class FileSchema : BaseShareItemSchema
+[Collection(Name = "documents", TrackTimestamps = true)]
+public class DocumentSchema : BaseShareItemSchema
 {
     public Guid ShareId { get; private set; }
 
@@ -11,9 +11,9 @@ public class FileSchema : BaseShareItemSchema
 
     public string Url { get; private set; }
 
-    private FileSchema() { }
+    private DocumentSchema() { }
 
-    public FileSchema(Guid shareId, FileMetadata metadata, string url, string? appVersion, AppSource? appSource)
+    public DocumentSchema(Guid shareId, FileMetadata metadata, string url, string? appVersion, AppSource? appSource)
     {
         Source = appSource;
         AppVersion = appVersion;

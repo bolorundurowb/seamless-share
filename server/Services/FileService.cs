@@ -1,8 +1,6 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 using Imagekit.Sdk;
-using meerkat;
-using MongoDB.Driver.Linq;
 using SeamlessShareApi.Models.Data;
 
 namespace SeamlessShareApi.Services;
@@ -68,72 +66,20 @@ public class FileService
         }
     }
 
-    public async Task<FileSchema> Create(Guid ownerId, string fileUrl, FileMetadata fileMetadata, string? appVersion,
-        AppSource? appSource)
+    public async Task Delete(string externalFileId)
     {
-        _logger.LogDebug("Creating a new file. {OwnerId} {FileUrl} {FileMetadata}", ownerId, fileUrl, fileMetadata);
+        _logger.LogDebug("Deleting a file from the external provider. {ExternalFileId}", externalFileId);
 
-        var file = new FileSchema(ownerId, fileMetadata, fileUrl, appVersion, appSource);
-        await file.SaveAsync();
-
-        _logger.LogDebug("File successfully persisted. {FileId} {FileUrl} {FileMetadata}", file.Id, fileUrl,
-            fileMetadata);
-
-        return file;
-    }
-
-    public Task<List<FileSchema>> GetAll(Guid shareId) => Meerkat.Query<FileSchema>()
-        .Where(x => x.ShareId == shareId && x.IsArchived == false)
-        .OrderByDescending(x => x.CreatedAt)
-        .ToListAsync();
-
-    public async Task DeleteOne(Guid shareId, Guid fileId)
-    {
-        _logger.LogDebug("Request to delete a file. {ShareId} {FileId}", shareId, fileId);
-
-        var file = await Meerkat.Query<FileSchema>()
-            .FirstOrDefaultAsync(x => x.ShareId == shareId && x.Id == (object)fileId);
-
-        if (file is null)
-        {
-            _logger.LogWarning("File to be deleted does not exist. {ShareId} {FileId}", shareId, fileId);
-            return;
-        }
-
-        var deleteResult = await _imagekit.DeleteFileAsync(file.Metadata.ExternalId);
+        var deleteResult = await _imagekit.DeleteFileAsync(externalFileId);
 
         if (deleteResult.HttpStatusCode is < 200 or >= 300)
         {
-            _logger.LogError("An error occurred while deleting a file. {ShareId} {FileId} {ExternalFileId}", shareId,
-                fileId, file.Metadata.ExternalId);
+            _logger.LogError("An error occurred while deleting a file.{ExternalFileId}", externalFileId);
             throw new Exception($"An error occurred while deleting a file. {deleteResult.Raw}");
         }
 
-        _logger.LogInformation("File successfully deleted from external provider. {ShareId} {FileId} {ExternalFileId}",
-            shareId, fileId, file.Metadata.ExternalId);
-
-        await Meerkat.RemoveByIdAsync<FileSchema>(fileId);
-
-        _logger.LogDebug("File successfully deleted. {ShareId} {FileId}", shareId, fileId);
-    }
-
-    public async Task ArchiveOne(Guid shareId, Guid fileId)
-    {
-        _logger.LogDebug("Request to archive a file. {ShareId} {FileId}", shareId, fileId);
-
-        var file = await Meerkat.Query<FileSchema>()
-            .FirstOrDefaultAsync(x => x.ShareId == shareId && x.Id == (object)fileId);
-
-        if (file is null)
-        {
-            _logger.LogWarning("File to be archived does not exist. {ShareId} {FileId}", shareId, fileId);
-            return;
-        }
-
-        file.Archive();
-        await file.SaveAsync();
-
-        _logger.LogDebug("File successfully archived. {ShareId} {FileId}", shareId, fileId);
+        _logger.LogInformation("File successfully deleted from external provider. {ExternalFileId}",
+            externalFileId);
     }
 
     private string? CalculateChecksum(Stream stream)
