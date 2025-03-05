@@ -25,49 +25,41 @@
       anytime<span>*</span>, anywhere, any device.
     </div>
 
-    <!--    <nz-tabset nzType="card" nzTabPosition="bottom" class="tab-container">-->
-    <!--      <nz-tab nzTitle="Links">-->
-    <!--        <div class="tab-content">-->
-    <!--          <nz-input-group nzSearch nzSize="large" [nzAddOnAfter]="shareButton">-->
-    <!--            <input type="text" nz-input placeholder="input search text" [(ngModel)]="sharedUrl"-->
-    <!--                   (ngModelChange)="validateSharedUrl()"/>-->
-    <!--          </nz-input-group>-->
-
-    <!--          <ng-template #shareButton>-->
-    <!--            <button nz-button nzSearch nzType="primary" nzSize="large" [disabled]="!isSharedUrlValid" class="share-button">-->
-    <!--              Share-->
-    <!--            </button>-->
-    <!--          </ng-template>-->
-    <!--        </div>-->
-    <!--      </nz-tab>-->
-
-    <!--      <nz-tab nzTitle="Text">-->
-    <!--        <div class="tab-content">-->
-    <!--          <nz-textarea-count [nzMaxCharacterCount]="5000">-->
-    <!--            <textarea nz-input [(ngModel)]="sharedText"></textarea>-->
-    <!--          </nz-textarea-count>-->
-    <!--          <button nz-button class="share-button">Share</button>-->
-    <!--        </div>-->
-    <!--      </nz-tab>-->
-
-    <!--      <nz-tab nzTitle="Images">-->
-    <!--        <div class="tab-content">-->
-    <!--          This feature is coming soon. Express your interest in it by filing an issue.-->
-    <!--        </div>-->
-    <!--      </nz-tab>-->
-
-    <!--      <nz-tab nzTitle="Files">-->
-    <!--        <div class="tab-content">-->
-    <!--        </div>-->
-    <!--      </nz-tab>-->
-    <!--    </nz-tabset>-->
-
     <ss-sections>
-      <ss-section title="My First">
-        <div>World</div>
+      <ss-section title="Links">
+        <div class="tab-content">
+          <nz-input-group nzSearch nzSize="large" [nzAddOnAfter]="shareButton">
+            <input type="text" nz-input placeholder="input search text" [(ngModel)]="sharedUrl"
+                   (ngModelChange)="validateSharedUrl()"/>
+          </nz-input-group>
+
+          <ng-template #shareButton>
+            <button nz-button nzSearch nzType="primary" nzSize="large" [disabled]="!isSharedUrlValid"
+                    class="share-button">
+              Share
+            </button>
+          </ng-template>
+        </div>
       </ss-section>
-      <ss-section title="My Second">
-        <div>World</div>
+
+      <ss-section title="Text">
+        <div class="tab-content">
+          <nz-textarea-count [nzMaxCharacterCount]="5000">
+            <textarea nz-input [(ngModel)]="sharedText"></textarea>
+          </nz-textarea-count>
+          <button nz-button class="share-button">Share</button>
+        </div>
+      </ss-section>
+
+      <ss-section title="Images">
+        <div class="tab-content">
+          This feature is coming soon. Express your interest in it by filing an issue.
+        </div>
+      </ss-section>
+
+      <ss-section title="Documents">
+        <div class="tab-content">
+        </div>
       </ss-section>
     </ss-sections>
 

@@ -1,18 +1,21 @@
-import {Component, ContentChild, ContentChildren, Input, QueryList, TemplateRef} from '@angular/core';
-import {NgForOf, NgIf, NgTemplateOutlet} from '@angular/common';
+import {AfterContentInit, Component, ContentChildren, Input, QueryList} from '@angular/core';
+import {NgForOf, NgIf} from '@angular/common';
 
 @Component({
   selector: 'ss-section',
   standalone: true,
+  imports: [
+    NgIf
+  ],
   template: `
-    <ng-template>
+    <div *ngIf="isSelected" class="section">
       <ng-content></ng-content>
-    </ng-template>
+    </div>
   `
 })
 export class SectionComponent {
   @Input() title!: string;
-  @ContentChild(TemplateRef) template!: TemplateRef<any>;
+  isSelected: boolean = false;
 }
 
 
@@ -20,31 +23,30 @@ export class SectionComponent {
   selector: 'ss-sections',
   standalone: true,
   imports: [
-    NgTemplateOutlet,
-    NgForOf,
-    NgIf
+    NgForOf
   ],
   template: `
     <div class="sections-container">
-      <ng-container *ngFor="let section of sections; let i = index">
-        <div *ngIf="selectedSectionIndex === i" class="section-content">
-          <ng-container *ngTemplateOutlet="section.template"></ng-container>
-        </div>
-      </ng-container>
-      <div class="buttons">
-        <button *ngFor="let section of sections; let i = index"
-                (click)="selectSection(i)"
-                [class.active]="selectedSectionIndex === i">{{ section.title }}
-        </button>
-      </div>
+      <ng-content></ng-content>
+    </div>
+    <div class="buttons-container">
+      <button *ngFor="let section of sections" (click)="selectSection(section)">
+        {{ section.title }}
+      </button>
     </div>
   `
 })
-export class SectionsComponent {
+export class SectionsComponent implements AfterContentInit {
   @ContentChildren(SectionComponent) sections!: QueryList<SectionComponent>;
-  selectedSectionIndex = 0;
 
-  selectSection(index: number) {
-    this.selectedSectionIndex = index;
+  ngAfterContentInit(): void {
+    if (this.sections.length > 0) {
+      this.selectSection(this.sections.first);
+    }
+  }
+
+  selectSection(section: SectionComponent): void {
+    this.sections.forEach(s => s.isSelected = false);
+    section.isSelected = true;
   }
 }

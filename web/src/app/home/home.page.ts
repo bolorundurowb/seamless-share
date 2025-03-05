@@ -16,8 +16,6 @@ import {SectionComponent, SectionsComponent} from '../components/section.compone
   templateUrl: './home.page.html',
   styleUrl: './home.page.scss',
   imports: [
-    NzTabSetComponent,
-    NzTabComponent,
     NzInputGroupComponent,
     FormsModule,
     NzButtonComponent,
