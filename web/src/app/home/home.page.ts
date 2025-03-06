@@ -8,6 +8,8 @@ import {ShareService} from '../services/share.service';
 import {NgIf} from '@angular/common';
 import {UserRes} from '../types';
 import {SectionComponent, SectionsComponent} from '../components/section.components';
+import {NzIconDirective} from 'ng-zorro-antd/icon';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'ss-home',
@@ -15,19 +17,22 @@ import {SectionComponent, SectionsComponent} from '../components/section.compone
   templateUrl: './home.page.html',
   styleUrl: './home.page.scss',
   imports: [
-    NzInputGroupComponent,
     FormsModule,
     NzButtonComponent,
     NzInputDirective,
     NzTextareaCountComponent,
     NgIf,
     SectionsComponent,
-    SectionComponent
+    SectionComponent,
+    NzInputGroupComponent,
+    NzIconDirective
   ]
 })
 export class HomePage implements OnInit {
   isAuthenticated = false;
   user: UserRes | null = null;
+
+  shareId?: string;
   shareCode?: string;
 
   sharedUrl?: string;
@@ -35,8 +40,12 @@ export class HomePage implements OnInit {
 
   sharedText?: string;
 
+  sharedFile?: File;
+  isSharedFileValid = false;
 
-  constructor(title: Title, private authService: AuthService, private shareService: ShareService) {
+
+  constructor(title: Title, private authService: AuthService, private shareService: ShareService,
+              private router: Router) {
     title.setTitle('Seamless Share | Home');
   }
 
@@ -46,12 +55,28 @@ export class HomePage implements OnInit {
 
     if (this.isAuthenticated) {
       const ownedShare = await this.shareService.getOwnedShare();
+      this.shareId = ownedShare.id;
       this.shareCode = ownedShare.code;
     }
+  }
+
+  async createLinkShare() {
+    if (!this.shareCode) {
+      const share = await this.shareService.createShare();
+      this.shareId = share.id;
+      this.shareCode = share.code;
+    }
+
+    await this.shareService.addTextToShare(this.shareId!, {content: this.sharedText!});
+    await this.router.navigate(['shares', this.shareCode]);
   }
 
   validateSharedUrl() {
     const urlPattern = /^(https?:\/\/)?([\w\d-]+)\.([a-z]{2,})([\/\w\d.-]*)*\/?$/;
     this.isSharedUrlValid = urlPattern.test(this.sharedUrl || '');
+  }
+
+  fileChanged(event: any) {
+    this.sharedFile = event.target.files[0];
   }
 }

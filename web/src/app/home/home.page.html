@@ -21,24 +21,30 @@
 
     <ss-sections>
       <ss-section title="Links">
-        <nz-input-group nzSearch nzSize="large" [nzAddOnAfter]="shareButton">
-          <input type="text" nz-input placeholder="input search text" [(ngModel)]="sharedUrl"
-                 (ngModelChange)="validateSharedUrl()"/>
-        </nz-input-group>
+        <input nz-input
+               placeholder="input the URL to be shared"
+               [(ngModel)]="sharedUrl"
+               (keyup)="validateSharedUrl()"/>
 
-        <ng-template #shareButton>
-          <button nz-button nzSearch nzType="primary" nzSize="large" [disabled]="!isSharedUrlValid"
-                  class="share-button">
-            Share
-          </button>
-        </ng-template>
+        <button nz-button
+                nzType="primary"
+                class="button-spacer"
+                [disabled]="!isSharedUrlValid"
+        (click)="createLinkShare()">
+          Share
+        </button>
       </ss-section>
 
       <ss-section title="Text">
-        <nz-textarea-count [nzMaxCharacterCount]="5000">
+        <nz-textarea-count
+          [nzMaxCharacterCount]="5000">
           <textarea nz-input [(ngModel)]="sharedText"></textarea>
         </nz-textarea-count>
-        <button nz-button class="share-button">Share</button>
+
+        <button nz-button
+                class="button-spacer">
+          Share
+        </button>
       </ss-section>
 
       <ss-section title="Images">
@@ -46,15 +52,33 @@
       </ss-section>
 
       <ss-section title="Documents">
-        <div>
-        </div>
+        <nz-input-group nzSearch [nzAddOnAfter]="filePickerButton">
+          <input nz-input readonly class="selected-file-display" type="text" placeholder="Select a file"
+                 [value]="sharedFile?.name"/>
+          <input #fileInput class="hidden-file-input" type="file"
+                 accept=".pdf,.doc,.docx,.txt,.rtf,.xlsx,.xls"
+                 (change)="fileChanged($event)"/>
+          <ng-template #filePickerButton>
+            <button nz-button nzSearch (click)="fileInput.click()">
+              <nz-icon nzType="paper-clip"></nz-icon>
+            </button>
+          </ng-template>
+        </nz-input-group>
+
+        <button nz-button
+                nzType="primary"
+                class="button-spacer"
+                [disabled]="!isSharedFileValid">
+          Share
+        </button>
       </ss-section>
     </ss-sections>
 
     <div>
-      Any content shared without an account will be automatically deleted after 30 days. For users without an account,
-      shared content is accessible via a share code. Since share codes can be shared or guessed, we cannot guarantee
-      that you are the only one accessing the content.
+      If you have an account, your shared content will be available in your account.
+      If you share content anonymously, then all shared data will be automatically deleted after 30 days.
+      For anonymous shares, share codes are used to access your data.
+      Since share codes can be shared or guessed, we cannot guarantee that you are the only one accessing the content.
     </div>
   </div>
 </div>
