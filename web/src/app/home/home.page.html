@@ -1,22 +1,16 @@
-<div class="container">
-  <div>
+<div class="navbar">
+  <div class="actions">
     <ng-container *ngIf="isAuthenticated">
-      <div>
-        <span>{{ user!.firstName }} {{ user!.lastName }}</span>
-      </div>
+      <span>{{ user!.firstName }} {{ user!.lastName }}</span>
     </ng-container>
     <ng-container *ngIf="!isAuthenticated">
-      <div>
-        <button>
-          Login
-        </button>
-        <button>
-          Register
-        </button>
-      </div>
+      <button nz-button>Login</button>
+      <button nz-button>Register</button>
     </ng-container>
   </div>
+</div>
 
+<div class="container">
   <div class="content-wrapper">
     <img src="favicon.ico" class="logo"/>
     <h1 class="title">Seamless Share</h1>
@@ -27,38 +21,32 @@
 
     <ss-sections>
       <ss-section title="Links">
-        <div class="tab-content">
-          <nz-input-group nzSearch nzSize="large" [nzAddOnAfter]="shareButton">
-            <input type="text" nz-input placeholder="input search text" [(ngModel)]="sharedUrl"
-                   (ngModelChange)="validateSharedUrl()"/>
-          </nz-input-group>
+        <nz-input-group nzSearch nzSize="large" [nzAddOnAfter]="shareButton">
+          <input type="text" nz-input placeholder="input search text" [(ngModel)]="sharedUrl"
+                 (ngModelChange)="validateSharedUrl()"/>
+        </nz-input-group>
 
-          <ng-template #shareButton>
-            <button nz-button nzSearch nzType="primary" nzSize="large" [disabled]="!isSharedUrlValid"
-                    class="share-button">
-              Share
-            </button>
-          </ng-template>
-        </div>
+        <ng-template #shareButton>
+          <button nz-button nzSearch nzType="primary" nzSize="large" [disabled]="!isSharedUrlValid"
+                  class="share-button">
+            Share
+          </button>
+        </ng-template>
       </ss-section>
 
       <ss-section title="Text">
-        <div class="tab-content">
-          <nz-textarea-count [nzMaxCharacterCount]="5000">
-            <textarea nz-input [(ngModel)]="sharedText"></textarea>
-          </nz-textarea-count>
-          <button nz-button class="share-button">Share</button>
-        </div>
+        <nz-textarea-count [nzMaxCharacterCount]="5000">
+          <textarea nz-input [(ngModel)]="sharedText"></textarea>
+        </nz-textarea-count>
+        <button nz-button class="share-button">Share</button>
       </ss-section>
 
       <ss-section title="Images">
-        <div class="tab-content">
-          This feature is coming soon. Express your interest in it by filing an issue.
-        </div>
+        This feature is coming soon. Express your interest in it by filing an issue.
       </ss-section>
 
       <ss-section title="Documents">
-        <div class="tab-content">
+        <div>
         </div>
       </ss-section>
     </ss-sections>

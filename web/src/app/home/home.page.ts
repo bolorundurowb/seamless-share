@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {Title} from '@angular/platform-browser';
-import {NzTabComponent, NzTabSetComponent} from 'ng-zorro-antd/tabs';
 import {NzInputDirective, NzInputGroupComponent, NzTextareaCountComponent} from 'ng-zorro-antd/input';
 import {FormsModule} from '@angular/forms';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
@@ -8,7 +7,7 @@ import {AuthService} from '../services/auth.service';
 import {ShareService} from '../services/share.service';
 import {NgIf} from '@angular/common';
 import {UserRes} from '../types';
-import {SectionComponent, SectionsComponent} from '../components/section.component';
+import {SectionComponent, SectionsComponent} from '../components/section.components';
 
 @Component({
   selector: 'ss-home',
