@@ -64,6 +64,16 @@ builder.Services.Configure<KestrelServerOptions>(options =>
     options.Limits.MaxRequestBodySize = Constants.MaxFileSizeInBytes;
 });
 
+// Add CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        corsPolicyBuilder => corsPolicyBuilder
+            .WithOrigins("http://localhost:4200", "https://seamless_share.com") // Replace with your allowed origins
+            .AllowAnyHeader()
+            .AllowAnyMethod());
+});
+
 // setup db connection
 var dbUrl = builder.Configuration.GetValue<string>("DatabaseUrl");
 
@@ -89,6 +99,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Enable CORS
+app.UseCors("AllowSpecificOrigin");
 
 app.UseAuthentication();
 app.UseAuthorization();

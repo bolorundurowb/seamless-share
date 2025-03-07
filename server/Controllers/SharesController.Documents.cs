@@ -20,8 +20,19 @@ public partial class SharesController
             return NotFound(new GenericMessage("Share not found"));
 
         var documents = await documentService.GetAll(shareId);
+        var mappedDocuments = new List<FileRes>();
 
-        return Ok(documents.Select(x => _fileMapper.MapDocument(x)).ToList());
+        if (mappedDocuments.Count != 0)
+        {
+            foreach (var document in documents)
+            {
+                var mappedDocument = _fileMapper.MapDocument(document);
+                mappedDocument.Url = fileService.GetSignedUrl(document.Url);
+                mappedDocuments.Add(mappedDocument);
+            }
+        }
+
+        return Ok(mappedDocuments);
     }
 
     [HttpPost("{shareId:guid}/document")]
