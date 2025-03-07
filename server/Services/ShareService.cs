@@ -7,18 +7,18 @@ namespace SeamlessShareApi.Services;
 public class ShareService(ILogger<ShareService> logger)
 {
     public Task<ShareSchema?> GetOne(Guid shareId, Guid? ownerId) =>
-        Meerkat.FindOneAsync<ShareSchema>(x => x.Id == (object)shareId && x.OwnerId == ownerId);
+        Meerkat.FindOneAsync<ShareSchema, Guid>(x => x.Id == shareId && x.OwnerId == ownerId);
 
     public Task<ShareSchema?> GetOneByCode(string shareCode, Guid? ownerId)
     {
         logger.LogDebug("Getting share by code {ShareCode} {OwnerId}", shareCode, ownerId);
-        return Meerkat.FindOneAsync<ShareSchema>(x => x.Code == shareCode && x.OwnerId == ownerId);
+        return Meerkat.FindOneAsync<ShareSchema, Guid>(x => x.Code == shareCode && x.OwnerId == ownerId);
     }
 
     public async Task<ShareSchema?> GetOwned(Guid ownerId)
     {
         logger.LogDebug("Getting owned share {OwnerId}", ownerId);
-        var shares = await Meerkat.Query<ShareSchema>()
+        var shares = await Meerkat.Query<ShareSchema, Guid>()
             .Where(x => x.OwnerId == ownerId)
             .OrderByDescending(x => x.CreatedAt)
             .ToListAsync();
@@ -42,6 +42,6 @@ public class ShareService(ILogger<ShareService> logger)
         return share;
     }
 
-    public Task<bool> HasShareAccess(Guid shareId, Guid? ownerId) => Meerkat.Query<ShareSchema>()
-        .AnyAsync(x => x.Id == (object)shareId && (x.OwnerId == null || x.OwnerId == ownerId));
+    public Task<bool> HasShareAccess(Guid shareId, Guid? ownerId) => Meerkat.Query<ShareSchema, Guid>()
+        .AnyAsync(x => x.Id == shareId && (x.OwnerId == null || x.OwnerId == ownerId));
 }

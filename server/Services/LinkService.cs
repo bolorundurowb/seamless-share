@@ -18,7 +18,7 @@ public class LinkService(ILogger<LinkService> logger)
         return link;
     }
 
-    public Task<List<LinkSchema>> GetAll(Guid shareId) => Meerkat.Query<LinkSchema>()
+    public Task<List<LinkSchema>> GetAll(Guid shareId) => Meerkat.Query<LinkSchema, Guid>()
         .Where(x => x.ShareId == shareId)
         .OrderByDescending(x => x.CreatedAt)
         .ToListAsync();
@@ -27,7 +27,7 @@ public class LinkService(ILogger<LinkService> logger)
     {
         logger.LogDebug("Deleting a shared link. {ShareId} {LinkId}", shareId, linkId);
 
-        await Meerkat.RemoveOneAsync<LinkSchema>(x => x.ShareId == shareId && x.Id == (object)linkId);
+        await Meerkat.RemoveOneAsync<LinkSchema, Guid>(x => x.ShareId == shareId && x.Id == linkId);
 
         logger.LogDebug("Shared link successfully deleted. {ShareId} {LinkId}", shareId, linkId);
     }
@@ -36,14 +36,14 @@ public class LinkService(ILogger<LinkService> logger)
     {
         logger.LogDebug("Archiving a shared link. {ShareId} {LinkId}", shareId, linkId);
 
-        var link = await Meerkat.FindOneAsync<LinkSchema>(x => x.ShareId == shareId && x.Id == (object)linkId);
+        var link = await Meerkat.FindOneAsync<LinkSchema, Guid>(x => x.ShareId == shareId && x.Id == linkId);
 
         if (link is null)
         {
             logger.LogWarning("Link to be archived does not exist. {LinkId}", linkId);
             return;
         }
-        
+
         link.Archive();
         await link.SaveAsync();
 

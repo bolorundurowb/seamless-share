@@ -24,7 +24,7 @@ public class DocumentService(ILogger<DocumentService> logger)
         return document;
     }
 
-    public Task<List<DocumentSchema>> GetAll(Guid shareId) => Meerkat.Query<DocumentSchema>()
+    public Task<List<DocumentSchema>> GetAll(Guid shareId) => Meerkat.Query<DocumentSchema, Guid>()
         .Where(x => x.ShareId == shareId && x.IsArchived == false)
         .OrderByDescending(x => x.CreatedAt)
         .ToListAsync();
@@ -33,8 +33,8 @@ public class DocumentService(ILogger<DocumentService> logger)
     {
         logger.LogDebug("Request to delete a document. {ShareId} {DocumentId}", shareId, documentId);
 
-        var document = await Meerkat.Query<DocumentSchema>()
-            .FirstOrDefaultAsync(x => x.ShareId == shareId && x.Id == (object)documentId);
+        var document = await Meerkat.Query<DocumentSchema, Guid>()
+            .FirstOrDefaultAsync(x => x.ShareId == shareId && x.Id == documentId);
 
         if (document is null)
         {
@@ -42,7 +42,7 @@ public class DocumentService(ILogger<DocumentService> logger)
             return;
         }
 
-        await Meerkat.RemoveByIdAsync<DocumentSchema>(documentId);
+        await Meerkat.RemoveByIdAsync<DocumentSchema, Guid>(documentId);
 
         logger.LogDebug("Document successfully deleted. {ShareId} {DocumentId}", shareId, documentId);
     }
@@ -51,8 +51,8 @@ public class DocumentService(ILogger<DocumentService> logger)
     {
         logger.LogDebug("Request to archive a document. {ShareId} {DocumentId}", shareId, documentId);
 
-        var document = await Meerkat.Query<DocumentSchema>()
-            .FirstOrDefaultAsync(x => x.ShareId == shareId && x.Id == (object)documentId);
+        var document = await Meerkat.Query<DocumentSchema, Guid>()
+            .FirstOrDefaultAsync(x => x.ShareId == shareId && x.Id == documentId);
 
         if (document is null)
         {

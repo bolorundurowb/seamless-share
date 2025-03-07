@@ -2,7 +2,7 @@
 
 namespace SeamlessShareApi.Models.Data;
 
-public abstract class BaseShareItemSchema : Schema
+public abstract class BaseShareItemSchema : Schema<Guid>
 {
     public AppSource? Source { get; protected set; }
 

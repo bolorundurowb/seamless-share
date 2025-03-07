@@ -8,6 +8,9 @@ using meerkat;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.IdentityModel.Tokens;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
 using SeamlessShareApi;
 using SeamlessShareApi.Services;
 
@@ -81,6 +84,7 @@ var dbUrl = builder.Configuration.GetValue<string>("DatabaseUrl");
 if (dbUrl is null)
     throw new ArgumentNullException(nameof(dbUrl), "The DatabaseUrl configuration setting is required.");
 
+BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
 Meerkat.Connect(dbUrl);
 
 var app = builder.Build();

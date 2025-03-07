@@ -18,7 +18,7 @@ public class TextService(ILogger<TextService> logger)
         return text;
     }
 
-    public Task<List<TextSchema>> GetAll(Guid shareId) => Meerkat.Query<TextSchema>()
+    public Task<List<TextSchema>> GetAll(Guid shareId) => Meerkat.Query<TextSchema, Guid>()
         .Where(x => x.ShareId == shareId)
         .OrderByDescending(x => x.CreatedAt)
         .ToListAsync();
@@ -27,23 +27,23 @@ public class TextService(ILogger<TextService> logger)
     {
         logger.LogDebug("Deleting shared text. {ShareId} {TextId}", shareId, textId);
 
-        await Meerkat.RemoveOneAsync<TextSchema>(x => x.ShareId == shareId && x.Id == (object)textId);
+        await Meerkat.RemoveOneAsync<TextSchema, Guid>(x => x.ShareId == shareId && x.Id == textId);
 
         logger.LogDebug("Shared text successfully deleted. {TextId}", textId);
     }
-    
+
     public async Task ArchiveOne(Guid shareId, Guid textId)
     {
         logger.LogDebug("Archiving a shared text. {ShareId} {TextId}", shareId, textId);
 
-        var text = await Meerkat.FindOneAsync<TextSchema>(x => x.ShareId == shareId && x.Id == (object)textId);
+        var text = await Meerkat.FindOneAsync<TextSchema, Guid>(x => x.ShareId == shareId && x.Id == textId);
 
         if (text is null)
         {
             logger.LogWarning("Text to be archived does not exist. {TextId}", textId);
             return;
         }
-        
+
         text.Archive();
         await text.SaveAsync();
 

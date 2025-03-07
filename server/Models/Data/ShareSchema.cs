@@ -5,11 +5,11 @@ using shortid;
 namespace SeamlessShareApi.Models.Data;
 
 [Collection(Name = "shares", TrackTimestamps = true)]
-public class ShareSchema : Schema
+public class ShareSchema : Schema<Guid>
 {
     public Guid? OwnerId { get; private set; }
 
-    [Unique]
+    [UniqueIndex]
     public string Code { get; private set; }
 
     public ShareMetadata Metadata { get; private set; }
