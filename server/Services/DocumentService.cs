@@ -10,16 +10,16 @@ namespace SeamlessShareApi.Services;
 public class DocumentService(ILogger<DocumentService> logger)
 {
     public async Task<DocumentSchema> Create(Guid ownerId, string documentUrl, FileMetadata documentMetadata,
-        string? appVersion,
-        AppSource? appSource)
+        string? appVersion, AppSource? appSource)
     {
-        logger.LogDebug("Creating a new document. {OwnerId} {DocumentUrl} {DocumentMetadata}", ownerId, documentUrl, documentMetadata);
+        logger.LogDebug("Creating a new document. {OwnerId} {DocumentUrl} {DocumentMetadata}", ownerId, documentUrl,
+            documentMetadata);
 
         var document = new DocumentSchema(ownerId, documentMetadata, documentUrl, appVersion, appSource);
         await document.SaveAsync();
 
-        logger.LogDebug("Document successfully persisted. {DocumentId} {DocumentUrl} {DocumentMetadata}", document.Id, documentUrl,
-            documentMetadata);
+        logger.LogDebug("Document successfully persisted. {DocumentId} {DocumentUrl} {DocumentMetadata}", document.Id,
+            documentUrl, documentMetadata);
 
         return document;
     }
