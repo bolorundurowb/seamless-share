@@ -30,20 +30,25 @@
                 nzType="primary"
                 class="button-spacer"
                 [disabled]="!isSharedUrlValid"
-        (click)="createLinkShare()">
-          Share
+                (click)="createLinkShare()">
+          Share Link
         </button>
       </ss-section>
 
       <ss-section title="Text">
         <nz-textarea-count
           [nzMaxCharacterCount]="5000">
-          <textarea nz-input [(ngModel)]="sharedText"></textarea>
+          <textarea nz-input
+                    [(ngModel)]="sharedText"
+                    (keyup)="validateSharedText()"></textarea>
         </nz-textarea-count>
 
         <button nz-button
-                class="button-spacer">
-          Share
+                nzType="primary"
+                class="button-spacer"
+                [disabled]="!isSharedTextValid"
+                (click)="createTextShare()">
+          Share Text
         </button>
       </ss-section>
 
@@ -69,7 +74,7 @@
                 nzType="primary"
                 class="button-spacer"
                 [disabled]="!isSharedFileValid">
-          Share
+          Share Document
         </button>
       </ss-section>
     </ss-sections>

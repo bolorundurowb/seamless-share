@@ -39,6 +39,7 @@ export class HomePage implements OnInit {
   isSharedUrlValid = false;
 
   sharedText?: string;
+  isSharedTextValid = false;
 
   sharedFile?: File;
   isSharedFileValid = false;
@@ -62,13 +63,20 @@ export class HomePage implements OnInit {
 
   async createLinkShare() {
     if (!this.shareCode) {
-      const share = await this.shareService.createShare();
-      this.shareId = share.id;
-      this.shareCode = share.code;
+      await this.createShare();
+    }
+
+    await this.shareService.addTextToShare(this.shareId!, {content: this.sharedUrl!});
+    await this.goToShare();
+  }
+
+  async createTextShare() {
+    if (!this.shareCode) {
+      await this.createShare();
     }
 
     await this.shareService.addTextToShare(this.shareId!, {content: this.sharedText!});
-    await this.router.navigate(['shares', this.shareCode]);
+    await this.goToShare();
   }
 
   validateSharedUrl() {
@@ -76,7 +84,21 @@ export class HomePage implements OnInit {
     this.isSharedUrlValid = urlPattern.test(this.sharedUrl || '');
   }
 
+  validateSharedText() {
+    this.isSharedTextValid = !!this.sharedText && this.sharedText.length > 0 && this.sharedText.length <= 5000;
+  }
+
   fileChanged(event: any) {
     this.sharedFile = event.target.files[0];
+  }
+
+  private async createShare() {
+    const share = await this.shareService.createShare();
+    this.shareId = share.id;
+    this.shareCode = share.code;
+  }
+
+  private async goToShare() {
+    await this.router.navigate(['shares', this.shareCode]);
   }
 }
