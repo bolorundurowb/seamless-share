@@ -8,13 +8,12 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
   padding: 10px 20px;
+  justify-content: end;
 
   .actions {
     display: flex;
-    gap: 10px;
+    gap: 1rem;
   }
 }
 
@@ -45,6 +44,20 @@
 
     .title {
       margin: 0.625rem 0;
+    }
+
+    .sub-title {
+      margin: 1rem;
+    }
+
+    .terms-conditions {
+      margin-top: 2rem;
+
+      .terms-text {
+        font-size: 0.85rem;
+        color: #6c757d; // A less emphatic greyish color
+        margin-bottom: 0.5rem;
+      }
     }
   }
 }

@@ -64,8 +64,8 @@ export class SectionComponent {
       border-style: dashed;
       border-width: 0.15rem;
       border-color: #cacaca;
-      padding: 0.5rem 1rem;
-      height: 12.5rem;
+      padding: 0.75rem 1rem;
+      height: 14rem;
       background-color: #fafafa;
       display: flex;
       flex-direction: column;

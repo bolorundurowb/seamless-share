@@ -4,7 +4,7 @@
       <span>{{ user!.firstName }} {{ user!.lastName }}</span>
     </ng-container>
     <ng-container *ngIf="!isAuthenticated">
-      <button nz-button>Login</button>
+      <button nz-button nzType="primary">Login</button>
       <button nz-button>Register</button>
     </ng-container>
   </div>
@@ -14,7 +14,8 @@
   <div class="content-wrapper">
     <img src="favicon.ico" class="logo"/>
     <h1 class="title">Seamless Share</h1>
-    <div>This platform enables you to seamlessly share text, URLs, images, and various other files across all your
+    <div class="sub-title">
+      This platform enables you to seamlessly share text, URLs, images, and various other files across all your
       devices without the need to create an account, ensuring quick and convenient access to your important content
       anytime<span>*</span>, anywhere, any device.
     </div>
@@ -39,6 +40,7 @@
         <nz-textarea-count
           [nzMaxCharacterCount]="5000">
           <textarea nz-input
+                    rows="3"
                     [(ngModel)]="sharedText"
                     (keyup)="validateSharedText()"></textarea>
         </nz-textarea-count>
@@ -79,11 +81,19 @@
       </ss-section>
     </ss-sections>
 
-    <div>
-      If you have an account, your shared content will be available in your account.
-      If you share content anonymously, then all shared data will be automatically deleted after 30 days.
-      For anonymous shares, share codes are used to access your data.
-      Since share codes can be shared or guessed, we cannot guarantee that you are the only one accessing the content.
-    </div>
+    <section class="terms-conditions">
+      <p class="terms-text">
+        If you have an account, your shared content will be available in your account.
+      </p>
+      <p class="terms-text">
+        If you share content anonymously, then all shared data will be automatically deleted after 30 days.
+      </p>
+      <p class="terms-text">
+        For anonymous shares, share codes are used to access your data.
+      </p>
+      <p class="terms-text">
+        Since share codes can be shared or guessed, we cannot guarantee that you are the only one accessing the content.
+      </p>
+    </section>
   </div>
 </div>
