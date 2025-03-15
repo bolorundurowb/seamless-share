@@ -10,6 +10,7 @@ import {UserRes} from '../types';
 import {SectionComponent, SectionsComponent} from '../components/section.components';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {Router} from '@angular/router';
+import {ImagePasteSelectComponent} from '../components/image-paste-select.component';
 
 @Component({
   selector: 'ss-home',
@@ -25,7 +26,8 @@ import {Router} from '@angular/router';
     SectionsComponent,
     SectionComponent,
     NzInputGroupComponent,
-    NzIconDirective
+    NzIconDirective,
+    ImagePasteSelectComponent
   ]
 })
 export class HomePage implements OnInit {

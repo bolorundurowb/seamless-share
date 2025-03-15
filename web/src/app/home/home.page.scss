@@ -1,3 +1,5 @@
+$less_emphatic_text_colour: #6c757d;
+
 .navbar {
   position: fixed;
   top: 0;
@@ -14,6 +16,8 @@
   .actions {
     display: flex;
     gap: 1rem;
+    height: 100%;
+    align-items: center;
   }
 }
 
@@ -48,6 +52,7 @@
 
     .sub-title {
       margin: 1rem;
+      color: $less_emphatic_text_colour;
     }
 
     .terms-conditions {
@@ -55,8 +60,8 @@
 
       .terms-text {
         font-size: 0.85rem;
-        color: #6c757d; // A less emphatic greyish color
         margin-bottom: 0.5rem;
+        color: $less_emphatic_text_colour;
       }
     }
   }
