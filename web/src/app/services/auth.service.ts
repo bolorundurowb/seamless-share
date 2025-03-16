@@ -48,7 +48,7 @@ export class AuthService {
     return JSON.parse(rawUser) as UserRes;
   }
 
-  private getToken(): string | null {
+  getToken(): string | null {
     return localStorage.getItem(this.tokenKey);
   }
 
