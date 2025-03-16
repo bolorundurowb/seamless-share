@@ -1,14 +1,4 @@
-<div class="navbar">
-  <div class="actions">
-    <ng-container *ngIf="isAuthenticated">
-      <span>{{ user!.firstName }} {{ user!.lastName }}</span>
-    </ng-container>
-    <ng-container *ngIf="!isAuthenticated">
-      <button nz-button nzType="primary" (click)="goToLogin()">Login</button>
-      <button nz-button (click)="goToRegister()">Register</button>
-    </ng-container>
-  </div>
-</div>
+<ss-navbar></ss-navbar>
 
 <div class="container">
   <div class="content-wrapper">

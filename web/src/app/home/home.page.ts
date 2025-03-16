@@ -11,6 +11,7 @@ import { SectionComponent, SectionsComponent } from '../components/section.compo
 import { NzIconDirective } from 'ng-zorro-antd/icon';
 import { Router } from '@angular/router';
 import { ImagePasteSelectComponent } from '../components/image-paste-select.component';
+import { NavbarComponent } from '../components/navbar.component';
 
 @Component({
   selector: 'ss-home',
@@ -27,7 +28,8 @@ import { ImagePasteSelectComponent } from '../components/image-paste-select.comp
     SectionComponent,
     NzInputGroupComponent,
     NzIconDirective,
-    ImagePasteSelectComponent
+    ImagePasteSelectComponent,
+    NavbarComponent
   ]
 })
 export class HomePage implements OnInit {
@@ -64,14 +66,6 @@ export class HomePage implements OnInit {
       this.shareId = ownedShare.id;
       this.shareCode = ownedShare.code;
     }
-  }
-
-  async goToLogin() {
-    await this.router.navigate([ 'auth', 'login' ]);
-  }
-
-  async goToRegister() {
-    await this.router.navigate([ 'auth', 'register' ]);
   }
 
   async createLinkShare() {

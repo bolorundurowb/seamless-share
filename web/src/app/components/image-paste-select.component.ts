@@ -46,7 +46,7 @@ import { NgIf } from '@angular/common';
 
     .image-container {
       width: 99.9%;
-      height: 9rem;
+      height: 7rem;
       border: 2px dashed #ccc;
       border-radius: 0.5rem;
       display: flex;
