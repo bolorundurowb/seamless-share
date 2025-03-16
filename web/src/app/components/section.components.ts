@@ -1,6 +1,6 @@
-import {AfterContentInit, Component, ContentChildren, Input, QueryList} from '@angular/core';
-import {NgForOf, NgIf} from '@angular/common';
-import {NzButtonComponent} from 'ng-zorro-antd/button';
+import { AfterContentInit, Component, ContentChildren, Input, QueryList } from '@angular/core';
+import { NgForOf, NgIf } from '@angular/common';
+import { NzButtonComponent } from 'ng-zorro-antd/button';
 
 @Component({
   selector: 'ss-section',

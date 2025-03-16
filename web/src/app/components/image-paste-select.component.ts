@@ -1,5 +1,5 @@
-import {Component, ElementRef, HostListener, ViewChild} from '@angular/core';
-import {NgIf} from '@angular/common';
+import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'ss-image-paste-select',
@@ -45,10 +45,10 @@ import {NgIf} from '@angular/common';
     }
 
     .image-container {
-      width: 200px;
-      height: 200px;
+      width: 99.9%;
+      height: 9rem;
       border: 2px dashed #ccc;
-      border-radius: 8px;
+      border-radius: 0.5rem;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -99,7 +99,7 @@ export class ImagePasteSelectComponent {
   }
 
   // Handle paste event
-  @HostListener('window:paste', ['$event'])
+  @HostListener('window:paste', [ '$event' ])
   onPaste(event: ClipboardEvent): void {
     const items = event.clipboardData?.items;
     if (items) {

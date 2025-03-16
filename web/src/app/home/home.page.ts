@@ -1,16 +1,16 @@
-import {Component, OnInit} from '@angular/core';
-import {Title} from '@angular/platform-browser';
-import {NzInputDirective, NzInputGroupComponent, NzTextareaCountComponent} from 'ng-zorro-antd/input';
-import {FormsModule} from '@angular/forms';
-import {NzButtonComponent} from 'ng-zorro-antd/button';
-import {AuthService} from '../services/auth.service';
-import {ShareService} from '../services/share.service';
-import {NgIf} from '@angular/common';
-import {UserRes} from '../types';
-import {SectionComponent, SectionsComponent} from '../components/section.components';
-import {NzIconDirective} from 'ng-zorro-antd/icon';
-import {Router} from '@angular/router';
-import {ImagePasteSelectComponent} from '../components/image-paste-select.component';
+import { Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
+import { NzInputDirective, NzInputGroupComponent, NzTextareaCountComponent } from 'ng-zorro-antd/input';
+import { FormsModule } from '@angular/forms';
+import { NzButtonComponent } from 'ng-zorro-antd/button';
+import { AuthService } from '../services/auth.service';
+import { ShareService } from '../services/share.service';
+import { NgIf } from '@angular/common';
+import { UserRes } from '../types';
+import { SectionComponent, SectionsComponent } from '../components/section.components';
+import { NzIconDirective } from 'ng-zorro-antd/icon';
+import { Router } from '@angular/router';
+import { ImagePasteSelectComponent } from '../components/image-paste-select.component';
 
 @Component({
   selector: 'ss-home',
@@ -68,7 +68,7 @@ export class HomePage implements OnInit {
       await this.createShare();
     }
 
-    await this.shareService.addTextToShare(this.shareId!, {content: this.sharedUrl!});
+    await this.shareService.addTextToShare(this.shareId!, { content: this.sharedUrl! });
     await this.goToShare();
   }
 
@@ -77,7 +77,7 @@ export class HomePage implements OnInit {
       await this.createShare();
     }
 
-    await this.shareService.addTextToShare(this.shareId!, {content: this.sharedText!});
+    await this.shareService.addTextToShare(this.shareId!, { content: this.sharedText! });
     await this.goToShare();
   }
 
@@ -101,6 +101,6 @@ export class HomePage implements OnInit {
   }
 
   private async goToShare() {
-    await this.router.navigate(['shares', this.shareCode]);
+    await this.router.navigate([ 'shares', this.shareCode ]);
   }
 }

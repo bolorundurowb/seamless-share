@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { AddTextToShareReq, FileRes, LinkRes, ShareRes, TextRes } from '../types';
 
-@Injectable({ providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class ShareService {
   private baseUrl = environment.apiV1BaseUrl;
 
