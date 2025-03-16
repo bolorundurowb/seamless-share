@@ -6,6 +6,9 @@ import { Router } from '@angular/router';
 import { NgIf } from '@angular/common';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
 import { TextIconComponent } from './text-icon.component';
+import { NzDropDownDirective, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
+import { NzIconDirective } from 'ng-zorro-antd/icon';
+import { NzMenuDirective, NzMenuDividerDirective, NzMenuItemComponent, NzSubMenuComponent } from 'ng-zorro-antd/menu';
 
 @Component({
   selector: 'ss-navbar',
@@ -13,13 +16,32 @@ import { TextIconComponent } from './text-icon.component';
   imports: [
     NgIf,
     NzButtonComponent,
-    TextIconComponent
+    TextIconComponent,
+    NzDropDownDirective,
+    NzIconDirective,
+    NzDropdownMenuComponent,
+    NzMenuDirective,
+    NzMenuItemComponent,
+    NzMenuDividerDirective,
+    NzSubMenuComponent
   ],
   template: `
     <div class="navbar">
       <div class="actions">
         <ng-container *ngIf="isAuthenticated">
-          <ss-text-icon name="{{ user!.firstName }} {{ user!.lastName }}"></ss-text-icon>
+          <div>
+            <a nz-dropdown nzTrigger="hover">
+              <ss-text-icon name="{{ user!.firstName }} {{ user!.lastName }}"></ss-text-icon>
+              <nz-icon nzType="down" />
+            </a>
+            <nz-dropdown-menu #menu="nzDropdownMenu">
+              <ul nz-menu>
+                <li nz-menu-item>My Share</li>
+                <li nz-menu-divider></li>
+                <li nz-menu-item>Log Out</li>
+              </ul>
+            </nz-dropdown-menu>
+          </div>
         </ng-container>
         <ng-container *ngIf="!isAuthenticated">
           <button nz-button nzType="primary" (click)="goToLogin()">Login</button>
