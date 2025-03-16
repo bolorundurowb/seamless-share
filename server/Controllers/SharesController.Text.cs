@@ -47,7 +47,7 @@ public partial class SharesController
 
         return Ok(sharedContent);
     }
-    
+
     [Authorize]
     [HttpDelete("{shareId:guid}/text/{textId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -59,7 +59,7 @@ public partial class SharesController
 
         if (!ownerId.HasValue)
             return BadRequest(new GenericMessage("Only authenticated users can access owned shares"));
-        
+
         var hasAccess = await shareService.HasShareAccess(shareId, ownerId);
 
         if (!hasAccess)

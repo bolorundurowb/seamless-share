@@ -21,7 +21,7 @@ public partial class SharesController
 
         return Ok(links.Select(x => _linkMapper.Map(x)).ToList());
     }
-    
+
     [Authorize]
     [HttpDelete("{shareId:guid}/links/{linkId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -33,7 +33,7 @@ public partial class SharesController
 
         if (!ownerId.HasValue)
             return BadRequest(new GenericMessage("Only authenticated users can access owned shares"));
-        
+
         var hasAccess = await shareService.HasShareAccess(shareId, ownerId);
 
         if (!hasAccess)

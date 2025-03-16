@@ -15,7 +15,7 @@ public class LinkSchema : BaseShareItemSchema
     {
         Source = appSource;
         AppVersion = appVersion;
-        
+
         Id = Guid.NewGuid();
         ShareId = shareId;
         Url = url;

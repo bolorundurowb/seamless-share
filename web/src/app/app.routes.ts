@@ -8,5 +8,9 @@ export const routes: Routes = [
   {
     path: 'shares/:shareCode',
     loadComponent: () => import('./share/share.page').then((m) => m.SharePage),
+  },
+  {
+    path: 'auth',
+    loadChildren: () => import('./auth/auth.module').then((m) => m.AuthModule),
   }
 ];
