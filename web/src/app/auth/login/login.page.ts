@@ -1,6 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { NonNullableFormBuilder, Validators } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
+import { LoginReq } from '../../types';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'ss-login',
@@ -11,9 +15,9 @@ import { NonNullableFormBuilder, Validators } from '@angular/forms';
     </h2>
     <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
       <nz-form-item>
-        <nz-form-control nzErrorTip="Please input your username!">
+        <nz-form-control nzErrorTip="Please input your email address!">
           <nz-input-group nzPrefixIcon="user">
-            <input type="text" nz-input formControlName="username" placeholder="Username"/>
+            <input type="email" nz-input formControlName="emailAddress" placeholder="Email Address"/>
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -26,7 +30,7 @@ import { NonNullableFormBuilder, Validators } from '@angular/forms';
       </nz-form-item>
 
       <div class="login-form-forgot">
-        <a >forgot password?</a>
+        <a>forgot password?</a>
       </div>
 
       <button nz-button class="login-form-button" [nzType]="'primary'">Log in</button>
@@ -55,8 +59,12 @@ import { NonNullableFormBuilder, Validators } from '@angular/forms';
 })
 export class LoginPage {
   private formBuilder = inject(NonNullableFormBuilder);
+  private authService = inject(AuthService);
+  private readonly notificationService = inject(NzNotificationService);
+  private readonly router = inject(Router);
+
   validateForm = this.formBuilder.group({
-    username: this.formBuilder.control('', [ Validators.required ]),
+    emailAddress: this.formBuilder.control('', [ Validators.required, Validators.email ]),
     password: this.formBuilder.control('', [ Validators.required ]),
   });
 
@@ -64,16 +72,35 @@ export class LoginPage {
     title.setTitle('Seamless Share | Login');
   }
 
-  submitForm(): void {
-    if (this.validateForm.valid) {
-      console.log('submit', this.validateForm.value);
-    } else {
+  async submitForm(): Promise<void> {
+    if (!this.validateForm.valid) {
       Object.values(this.validateForm.controls).forEach(control => {
         if (control.invalid) {
           control.markAsDirty();
           control.updateValueAndValidity({ onlySelf: true });
         }
       });
+      return;
+    }
+
+    try {
+      const res = await this.authService.login(this.validateForm.value as LoginReq);
+      this.notificationService.create(
+        'success',
+        'Success',
+        'You have successfully logged in'
+      );
+      this.authService.persistAuth(res);
+      this.validateForm.reset();
+
+      // navigate to the home page
+      await this.router.navigate([ '' ]);
+    } catch (e: any) {
+      this.notificationService.create(
+        'error',
+        'Error',
+         e.error?.message ?? 'Failed to log in'
+      );
     }
   }
 }

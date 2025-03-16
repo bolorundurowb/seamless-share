@@ -36,7 +36,7 @@ import { Component } from '@angular/core';
       .auth-container {
         width: 100%;
         max-width: 30rem;
-        padding: 1rem;
+        padding: 2rem 1.5rem;
         border: 1px solid #ddd;
         border-radius: 0.5rem;
         background-color: #fff;
