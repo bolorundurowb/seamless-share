@@ -4,8 +4,8 @@
       <span>{{ user!.firstName }} {{ user!.lastName }}</span>
     </ng-container>
     <ng-container *ngIf="!isAuthenticated">
-      <button nz-button nzType="primary">Login</button>
-      <button nz-button>Register</button>
+      <button nz-button nzType="primary" (click)="goToLogin()">Login</button>
+      <button nz-button (click)="goToRegister()">Register</button>
     </ng-container>
   </div>
 </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { NzInputDirective, NzInputGroupComponent, NzTextareaCountComponent } from 'ng-zorro-antd/input';
 import { FormsModule } from '@angular/forms';
@@ -31,6 +31,10 @@ import { ImagePasteSelectComponent } from '../components/image-paste-select.comp
   ]
 })
 export class HomePage implements OnInit {
+  private readonly router = inject(Router);
+  private readonly authService = inject(AuthService);
+  private readonly shareService = inject(ShareService);
+
   isAuthenticated = false;
   user: UserRes | null = null;
 
@@ -47,8 +51,7 @@ export class HomePage implements OnInit {
   isSharedFileValid = false;
 
 
-  constructor(title: Title, private authService: AuthService, private shareService: ShareService,
-              private router: Router) {
+  constructor(title: Title) {
     title.setTitle('Seamless Share | Home');
   }
 
@@ -61,6 +64,14 @@ export class HomePage implements OnInit {
       this.shareId = ownedShare.id;
       this.shareCode = ownedShare.code;
     }
+  }
+
+  async goToLogin() {
+    await this.router.navigate([ 'auth', 'login' ]);
+  }
+
+  async goToRegister() {
+    await this.router.navigate([ 'auth', 'register' ]);
   }
 
   async createLinkShare() {

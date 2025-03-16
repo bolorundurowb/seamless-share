@@ -13,17 +13,17 @@ import { Router } from '@angular/router';
     <h2 class="title">
       Log In
     </h2>
-    <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
+    <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
       <nz-form-item>
         <nz-form-control nzErrorTip="Please input your email address!">
-          <nz-input-group nzPrefixIcon="user">
+          <nz-input-group>
             <input type="email" nz-input formControlName="emailAddress" placeholder="Email Address"/>
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
         <nz-form-control nzErrorTip="Please input your Password!">
-          <nz-input-group nzPrefixIcon="lock">
+          <nz-input-group>
             <input type="password" nz-input formControlName="password" placeholder="Password"/>
           </nz-input-group>
         </nz-form-control>
@@ -99,7 +99,7 @@ export class LoginPage {
       this.notificationService.create(
         'error',
         'Error',
-         e.error?.message ?? 'Failed to log in'
+        e.error?.message ?? 'Failed to log in'
       );
     }
   }
