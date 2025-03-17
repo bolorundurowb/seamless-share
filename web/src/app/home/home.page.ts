@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
 import { AuthService } from '../services/auth.service';
 import { ShareService } from '../services/share.service';
-import { NgIf } from '@angular/common';
 import { UserRes } from '../types';
 import { SectionComponent, SectionsComponent } from '../components/section.components';
 import { NzIconDirective } from 'ng-zorro-antd/icon';
@@ -23,7 +22,6 @@ import { NavbarComponent } from '../components/navbar.component';
     NzButtonComponent,
     NzInputDirective,
     NzTextareaCountComponent,
-    NgIf,
     SectionsComponent,
     SectionComponent,
     NzInputGroupComponent,

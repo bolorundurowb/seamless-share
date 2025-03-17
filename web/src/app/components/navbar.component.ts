@@ -8,7 +8,7 @@ import { NzButtonComponent } from 'ng-zorro-antd/button';
 import { TextIconComponent } from './text-icon.component';
 import { NzDropDownDirective, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
 import { NzIconDirective } from 'ng-zorro-antd/icon';
-import { NzMenuDirective, NzMenuDividerDirective, NzMenuItemComponent, NzSubMenuComponent } from 'ng-zorro-antd/menu';
+import { NzMenuDirective, NzMenuDividerDirective, NzMenuItemComponent } from 'ng-zorro-antd/menu';
 
 @Component({
   selector: 'ss-navbar',
@@ -23,7 +23,6 @@ import { NzMenuDirective, NzMenuDividerDirective, NzMenuItemComponent, NzSubMenu
     NzMenuDirective,
     NzMenuItemComponent,
     NzMenuDividerDirective,
-    NzSubMenuComponent
   ],
   template: `
     <div class="navbar">
