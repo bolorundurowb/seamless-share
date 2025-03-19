@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
 import { AuthService } from '../services/auth.service';
 import { ShareService } from '../services/share.service';
-import { UserRes } from '../types';
+import { ShareRes } from '../types';
 import { SectionComponent, SectionsComponent } from '../components/section.components';
 import { NzIconDirective } from 'ng-zorro-antd/icon';
 import { Router } from '@angular/router';
@@ -35,12 +35,6 @@ export class HomePage implements OnInit {
   private readonly authService = inject(AuthService);
   private readonly shareService = inject(ShareService);
 
-  isAuthenticated = false;
-  user: UserRes | null = null;
-
-  shareId?: string;
-  shareCode?: string;
-
   sharedUrl?: string;
   isSharedUrlValid = false;
 
@@ -56,32 +50,24 @@ export class HomePage implements OnInit {
   }
 
   async ngOnInit() {
-    this.isAuthenticated = this.authService.isAuthenticated();
-    this.user = this.authService.getUser();
+    const isAuthenticated = this.authService.isAuthenticated();
 
-    if (this.isAuthenticated) {
+    if (isAuthenticated) {
       const ownedShare = await this.shareService.getOwnedShare();
-      this.shareId = ownedShare.id;
-      this.shareCode = ownedShare.code;
+      await this.goToShare(ownedShare.code);
     }
   }
 
   async createLinkShare() {
-    if (!this.shareCode) {
-      await this.createShare();
-    }
-
-    await this.shareService.addTextToShare(this.shareId!, { content: this.sharedUrl! });
-    await this.goToShare();
+    const share = await this.createShare();
+    await this.shareService.addTextToShare(share.id, { content: this.sharedUrl! });
+    await this.goToShare(share.code);
   }
 
   async createTextShare() {
-    if (!this.shareCode) {
-      await this.createShare();
-    }
-
-    await this.shareService.addTextToShare(this.shareId!, { content: this.sharedText! });
-    await this.goToShare();
+    const share = await this.createShare();
+    await this.shareService.addTextToShare(share.id, { content: this.sharedText! });
+    await this.goToShare(share.code);
   }
 
   validateSharedUrl() {
@@ -97,13 +83,11 @@ export class HomePage implements OnInit {
     this.sharedFile = event.target.files[0];
   }
 
-  private async createShare() {
-    const share = await this.shareService.createShare();
-    this.shareId = share.id;
-    this.shareCode = share.code;
+  private async createShare(): Promise<ShareRes> {
+    return await this.shareService.createShare();
   }
 
-  private async goToShare() {
-    await this.router.navigate([ 'shares', this.shareCode ]);
+  private async goToShare(shareCode: string) {
+    await this.router.navigate([ 'shares', shareCode ]);
   }
 }
