@@ -9,6 +9,8 @@ import { FormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './services/auth.interceptor';
+import { provideNzIcons } from 'ng-zorro-antd/icon';
+import { PlusOutline } from '@ant-design/icons-angular/icons';
 
 registerLocaleData(en);
 
@@ -21,6 +23,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     provideHttpClient(
       withInterceptors([authInterceptor])
-    )
+    ),
+    provideNzIcons([PlusOutline])
   ]
 };

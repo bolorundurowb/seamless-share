@@ -1,3 +1,31 @@
-<div>
-  Hello
+<ss-navbar></ss-navbar>
+
+<div class="container">
+  <div class="actions">
+    <button nz-button nzType="primary">
+      <nz-icon nzType="plus-square" nzTheme="outline" />
+      Add To Share
+    </button>
+  </div>
+
+  <div>
+    <nz-input-group nzSearch nzSize="large" [nzAddOnAfter]="suffixButton">
+      <input type="text" nz-input placeholder="your share link" />
+    </nz-input-group>
+    <ng-template #suffixButton>
+      <button nz-button nzType="primary" nzSearch>
+        <nz-icon nzType="copy" nzTheme="outline" />
+        Copy
+      </button>
+    </ng-template>
+  </div>
+
+  <div class="main">
+    <div class="sidebar">
+
+    </div>
+    <div class="content">
+      Hello
+    </div>
+  </div>
 </div>
