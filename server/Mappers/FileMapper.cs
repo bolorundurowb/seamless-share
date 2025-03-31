@@ -8,4 +8,6 @@ namespace SeamlessShareApi.Mappers;
 public partial class FileMapper
 {
     public partial FileRes MapDocument(DocumentSchema documentDto);
+    
+    public partial FileRes MapImage(ImageSchema imageDto);
 }
