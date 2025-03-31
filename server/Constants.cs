@@ -7,4 +7,8 @@ public static class Constants
     public const int MaxTextLength = 5000;
 
     public const int MaxFileExpiryInSecs = 60 * 60 * 3; // 3 hours
+
+    public const string DocumentsFolderName = "docs";
+
+    public const string ImagesFolderName = "images";
 }

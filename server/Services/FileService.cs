@@ -27,7 +27,7 @@ public class FileService
         _imagekit = new ImagekitClient(publicKey, privateKey, urlEndpoint);
     }
 
-    public async Task<(string, FileMetadata)?> Upload(string shareCode, IFormFile file)
+    public async Task<(string, FileMetadata)?> Upload(string shareCode, string subDirectoryName, IFormFile file)
     {
         _logger.LogDebug("Uploading a file. {ShareCode}", shareCode);
 
@@ -38,8 +38,8 @@ public class FileService
             {
                 fileName = file.FileName,
                 useUniqueFileName = true,
-                tags = ["files", "shares", shareCode],
-                folder = $"/seamless_share/{shareCode}",
+                tags = ["shares", shareCode, subDirectoryName],
+                folder = $"/seamless_share/{shareCode}/${subDirectoryName}",
                 file = stream
             };
 

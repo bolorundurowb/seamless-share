@@ -51,7 +51,7 @@ public partial class SharesController
         if (share is null)
             return NotFound(new GenericMessage("Share not found"));
 
-        var uploadResult = await fileService.Upload(share.Code, req.Content);
+        var uploadResult = await fileService.Upload(share.Code, Constants.DocumentsFolderName, req.Content);
 
         if (uploadResult is null)
             return NotFound(new GenericMessage("Document upload failed"));
