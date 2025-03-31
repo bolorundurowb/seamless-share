@@ -11,7 +11,7 @@ public partial class SharesController
     [HttpGet("{shareId:guid}/documents")]
     [ProducesResponseType(typeof(List<FileRes>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(GenericMessage), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetSharedFiles(Guid shareId)
+    public async Task<IActionResult> GetSharedDocuments(Guid shareId)
     {
         var ownerId = authService.GetOwnerId(User);
         var hasAccess = await shareService.HasShareAccess(shareId, ownerId);

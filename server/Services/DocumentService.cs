@@ -1,7 +1,4 @@
-﻿using System.Security.Cryptography;
-using System.Text;
-using Imagekit.Sdk;
-using meerkat;
+﻿using meerkat;
 using MongoDB.Driver.Linq;
 using SeamlessShareApi.Models.Data;
 
