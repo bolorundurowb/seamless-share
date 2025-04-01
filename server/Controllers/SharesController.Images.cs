@@ -22,15 +22,13 @@ public partial class SharesController
         var images = await imageService.GetAll(shareId);
         var mappedImages = new List<FileRes>();
 
-        if (mappedImages.Count != 0)
-        {
+        if (images.Count > 0)
             foreach (var image in images)
             {
                 var mappedImage = _fileMapper.MapImage(image);
                 mappedImage.Url = fileService.GetSignedUrl(image.Url);
                 mappedImages.Add(mappedImage);
             }
-        }
 
         return Ok(mappedImages);
     }
@@ -59,8 +57,11 @@ public partial class SharesController
         var (imageUrl, fileMetadata) = uploadResult.Value;
         var (version, source) = RequestInfoExtractor.ExtractAppVersionAndSource(HttpContext);
         var image = await imageService.Create(shareId, imageUrl, fileMetadata, version, source);
+        
+        var mappedImage = _fileMapper.MapImage(image);
+        mappedImage.Url = fileService.GetSignedUrl(image.Url);
 
-        return Ok(image);
+        return Ok(mappedImage);
     }
 
     [Authorize]

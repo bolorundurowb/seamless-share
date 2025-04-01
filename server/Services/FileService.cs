@@ -39,13 +39,13 @@ public class FileService
                 fileName = file.FileName,
                 useUniqueFileName = true,
                 tags = ["shares", shareCode, subDirectoryName],
-                folder = $"/seamless_share/{shareCode}/${subDirectoryName}",
+                folder = $"seamless_share/{shareCode}/{subDirectoryName}",
                 file = stream
             };
 
             var uploadResponse = await _imagekit.UploadAsync(fileCreateRequest);
 
-            if (uploadResponse is null)
+            if (uploadResponse is null || uploadResponse.HttpStatusCode is < 200 or >= 300)
             {
                 _logger.LogError("An error occurred while uploading a file. {ShareCode}", shareCode);
                 return null;

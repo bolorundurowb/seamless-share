@@ -22,15 +22,13 @@ public partial class SharesController
         var documents = await documentService.GetAll(shareId);
         var mappedDocuments = new List<FileRes>();
 
-        if (mappedDocuments.Count != 0)
-        {
+        if (documents.Count != 0)
             foreach (var document in documents)
             {
                 var mappedDocument = _fileMapper.MapDocument(document);
                 mappedDocument.Url = fileService.GetSignedUrl(document.Url);
                 mappedDocuments.Add(mappedDocument);
             }
-        }
 
         return Ok(mappedDocuments);
     }
@@ -59,8 +57,11 @@ public partial class SharesController
         var (documentUrl, fileMetadata) = uploadResult.Value;
         var (version, source) = RequestInfoExtractor.ExtractAppVersionAndSource(HttpContext);
         var document = await documentService.Create(shareId, documentUrl, fileMetadata, version, source);
+        
+        var mappedDocument = _fileMapper.MapDocument(document);
+        mappedDocument.Url = fileService.GetSignedUrl(document.Url);
 
-        return Ok(document);
+        return Ok(mappedDocument);
     }
 
     [Authorize]
