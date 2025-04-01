@@ -20,8 +20,8 @@ internal static class RequestInfoExtractor
             var parts = headerValue.ToString()
                 .Split(';', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
 
-            var appVersion = parts.Length > 0 ? parts[0] : null;
-            AppSource? source = parts.Length > 1 && Enum.TryParse(parts[1], out AppSource parsedSource)
+            var appVersion = parts.Length > 1 ? parts[1] : null;
+            AppSource? source = parts.Length > 0 && Enum.TryParse(parts[0], out AppSource parsedSource)
                 ? parsedSource
                 : null;
 

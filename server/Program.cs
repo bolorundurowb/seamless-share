@@ -1,5 +1,6 @@
 using System.Reflection;
 using System.Text;
+using System.Text.Json.Serialization;
 using dotenv.net;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -31,7 +32,8 @@ builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<DocumentService>();
 builder.Services.AddScoped<ImageService>();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(opts => opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
