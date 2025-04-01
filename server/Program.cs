@@ -29,6 +29,7 @@ builder.Services.AddScoped<FileService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<DocumentService>();
+builder.Services.AddScoped<ImageService>();
 
 builder.Services.AddControllers();
 

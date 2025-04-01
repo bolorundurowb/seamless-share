@@ -3,27 +3,27 @@ using SeamlessShareApi.Models.Request;
 
 namespace SeamlessShareApi.Validators;
 
-public class AddDocumentToShareReqValidator : AbstractValidator<AddDocumentToShareReq>
+public class AddImageToShareReqValidator : AbstractValidator<AddImageToShareReq>
 {
-    public AddDocumentToShareReqValidator()
+    public AddImageToShareReqValidator()
     {
         RuleFor(x => x.Content)
             .NotNull()
-            .WithMessage("Please select a document to upload.")
-            .Must(BeAValidDocument)
-            .WithMessage("Please upload a valid document.")
+            .WithMessage("Please select a image to upload.")
+            .Must(BeAValidImage)
+            .WithMessage("Please upload a valid image.")
             .Must(SatisfiesFileSizeLimit)
-            .WithMessage("Document size must be less than 10MiB.");
+            .WithMessage("Image size must be less than 10MiB.");
     }
 
-    private bool BeAValidDocument(IFormFile? file)
+    private bool BeAValidImage(IFormFile? file)
     {
         if (file == null || file.Length == 0)
             return false;
 
         var allowedExtensions = new[]
         {
-            ".pdf", ".txt", ".docx", ".xlsx", ".doc", ".xls", ".rtf"
+            ".jpg", ".jpeg", ".png", ".svg", ".gif", ".bmp", ".webp"
         };
         var fileExtension = Path.GetExtension(file.FileName).ToLower();
         return allowedExtensions.Contains(fileExtension);

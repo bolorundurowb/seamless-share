@@ -2,7 +2,7 @@
 
 namespace SeamlessShareApi.Models.Data;
 
-[Collection(Name = "images", TrackTimestamps = true)]
+[Collection(Name = "files", TrackTimestamps = true)]
 public class ImageSchema : BaseFileSchema
 {
     protected ImageSchema() { }

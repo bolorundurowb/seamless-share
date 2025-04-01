@@ -35,7 +35,7 @@ public partial class SharesController
         return Ok(mappedDocuments);
     }
 
-    [HttpPost("{shareId:guid}/document")]
+    [HttpPost("{shareId:guid}/documents")]
     [ProducesResponseType(typeof(FileRes), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(GenericMessage), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(GenericMessage), StatusCodes.Status404NotFound)]
@@ -58,7 +58,7 @@ public partial class SharesController
 
         var (documentUrl, fileMetadata) = uploadResult.Value;
         var (version, source) = RequestInfoExtractor.ExtractAppVersionAndSource(HttpContext);
-        var document = await documentService.Create(ownerId.Value, documentUrl, fileMetadata, version, source);
+        var document = await documentService.Create(shareId, documentUrl, fileMetadata, version, source);
 
         return Ok(document);
     }

@@ -35,11 +35,11 @@ public partial class SharesController
         return Ok(mappedImages);
     }
 
-    [HttpPost("{shareId:guid}/image")]
+    [HttpPost("{shareId:guid}/images")]
     [ProducesResponseType(typeof(FileRes), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(GenericMessage), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(GenericMessage), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> AddImageShare(Guid shareId, AddDocumentToShareReq req)
+    public async Task<IActionResult> AddImageShare(Guid shareId, AddImageToShareReq req)
     {
         var ownerId = authService.GetOwnerId(User);
 
@@ -54,11 +54,11 @@ public partial class SharesController
         var uploadResult = await fileService.Upload(share.Code, Constants.ImagesFolderName, req.Content);
 
         if (uploadResult is null)
-            return NotFound(new GenericMessage("Document upload failed"));
+            return NotFound(new GenericMessage("Image upload failed"));
 
         var (imageUrl, fileMetadata) = uploadResult.Value;
         var (version, source) = RequestInfoExtractor.ExtractAppVersionAndSource(HttpContext);
-        var image = await imageService.Create(ownerId.Value, imageUrl, fileMetadata, version, source);
+        var image = await imageService.Create(shareId, imageUrl, fileMetadata, version, source);
 
         return Ok(image);
     }

@@ -6,13 +6,13 @@ namespace SeamlessShareApi.Services;
 
 public class ImageService(ILogger<ImageService> logger)
 {
-    public async Task<ImageSchema> Create(Guid ownerId, string imageUrl, FileMetadata imageMetadata,
+    public async Task<ImageSchema> Create(Guid shareId, string imageUrl, FileMetadata imageMetadata,
         string? appVersion, AppSource? appSource)
     {
-        logger.LogDebug("Creating a new image. {OwnerId} {ImageUrl} {ImageMetadata}", ownerId, imageUrl,
+        logger.LogDebug("Creating a new image. {ShareId} {ImageUrl} {ImageMetadata}", shareId, imageUrl,
             imageMetadata);
 
-        var image = new ImageSchema(ownerId, imageMetadata, imageUrl, appVersion, appSource);
+        var image = new ImageSchema(shareId, imageMetadata, imageUrl, appVersion, appSource);
         await image.SaveAsync();
 
         logger.LogDebug("Image successfully persisted. {ImageId} {ImageUrl} {ImageMetadata}", image.Id, imageUrl,
