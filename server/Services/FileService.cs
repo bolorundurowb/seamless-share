@@ -9,7 +9,6 @@ public class FileService
 {
     private readonly ILogger<FileService> _logger;
     private readonly ImagekitClient _imagekit;
-    private readonly string _imagekitUrlEndpoint;
 
     public FileService(ILogger<FileService> logger, IConfiguration configuration)
     {
@@ -23,7 +22,6 @@ public class FileService
                 "Imagekit configuration settings are missing. Please configure 'Imagekit:PublicKey', 'Imagekit:PrivateKey', and 'Imagekit:UrlEndpoint' in appsettings.json.");
 
         _logger = logger;
-        _imagekitUrlEndpoint = urlEndpoint;
         _imagekit = new ImagekitClient(publicKey, privateKey, urlEndpoint);
     }
 
