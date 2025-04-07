@@ -56,4 +56,18 @@ export class ShareService {
   async deleteDocumentShare(shareId: string, documentId: string): Promise<void> {
     return firstValueFrom(this.http.delete<void>(`${this.baseUrl}/shares/${shareId}/documents/${documentId}`));
   }
+
+  async getImageShares(shareId: string): Promise<FileRes[]> {
+    return firstValueFrom(this.http.get<FileRes[]>(`${this.baseUrl}/shares/${shareId}/images`));
+  }
+
+  async createImageShare(shareId: string, file: File): Promise<FileRes> {
+    const formData = new FormData();
+    formData.append('content', file);
+    return firstValueFrom(this.http.post<FileRes>(`${this.baseUrl}/shares/${shareId}/images`, formData));
+  }
+
+  async deleteImageShare(shareId: string, documentId: string): Promise<void> {
+    return firstValueFrom(this.http.delete<void>(`${this.baseUrl}/shares/${shareId}/images/${documentId}`));
+  }
 }
