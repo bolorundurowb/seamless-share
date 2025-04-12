@@ -12,9 +12,9 @@ public class TextRes
 
     public DateTime? UpdatedAt { get; set; }
 
-    public AppSource? Source { get; protected set; }
+    public AppSource? Source { get; set; }
 
-    public string? DeviceName { get; protected set; }
+    public string? DeviceName { get; set; }
 
-    public string? AppVersion { get; protected set; }
+    public string? AppVersion { get; set; }
 }
