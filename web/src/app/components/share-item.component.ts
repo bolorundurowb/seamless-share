@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DatePipe } from '@angular/common';
 import { FileRes, LinkRes, TextRes } from '../types';
@@ -10,24 +10,22 @@ import { FileRes, LinkRes, TextRes } from '../types';
   template: `
     <div class="card">
       <div class="card-content">
-        <h1 class="title">{{ title }}</h1>
-        <h2 *ngIf="subtitle" class="subtitle">{{ subtitle }}</h2>
+        <div class="header">{{ title }}</div>
 
         <div class="metadata">
-          <span class="status">{{ status }}</span>
-          <span class="category">{{ category }}</span>
-          <span class="date">{{ date | date }}</span>
+          <span class="pill type">{{ type }}</span>
+          <span class="pill status">{{ status }}</span>
+          <span class="pill source">{{ source }}</span>
         </div>
+
+        <div class="date">{{ createdAt | date: 'medium' }}</div>
       </div>
     </div>
   `,
   styles: [ `
     .card {
-      border: 1px solid #e0e0e0;
-      border-radius: 4px;
-      padding: 24px;
-      margin: 16px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      border-bottom: 1px solid #e0e0e0;
+      margin: 1rem;
       background-color: white;
 
       &-content {
@@ -35,18 +33,11 @@ import { FileRes, LinkRes, TextRes } from '../types';
         flex-direction: column;
         gap: 8px;
 
-        .title {
+        .header {
           margin: 0;
           font-size: 24px;
           font-weight: 500;
           color: #333;
-        }
-
-        .subtitle {
-          margin: 0;
-          font-size: 16px;
-          font-weight: 400;
-          color: #666;
         }
 
         .metadata {
@@ -56,34 +47,63 @@ import { FileRes, LinkRes, TextRes } from '../types';
           color: #666;
           font-size: 14px;
 
-          .status {
+          .pill {
             font-weight: 500;
             color: #333;
-          }
 
-          .category,
-          .date {
-            position: relative;
-            padding-left: 16px;
+            &.type {
 
-            &::before {
-              content: "•";
-              position: absolute;
-              left: 0;
-              color: #e0e0e0;
             }
+
+            &.status {
+
+            }
+
+            &.source {
+
+            }
+          }
+        }
+
+        .date {
+          position: relative;
+          padding-left: 16px;
+
+          &::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #e0e0e0;
           }
         }
       }
     }
   ` ]
 })
-export class TitleCardComponent {
+export class TitleCardComponent implements OnInit {
   @Input() item!: FileRes | TextRes | LinkRes;
 
   title: string = 'Title';
-  subtitle?: string;
   status: string = 'Draft';
-  category: string = 'Web';
-  date: Date = new Date();
+  type: string = 'Web';
+  source?: string;
+  createdAt: Date = new Date();
+
+  ngOnInit() {
+    this.createdAt = new Date(this.item.createdAt);
+    this.type = this.getType();
+    this.source = this.source?.toString() ?? 'Unknown';
+  }
+
+  getType(): string {
+    if ('content' in this.item && this.item.content) {
+      return 'Text';
+    }
+
+    if ('url' in this.item && this.item.url) {
+      return 'Link';
+    }
+
+    return 'Document';
+  }
 }
