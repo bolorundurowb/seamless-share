@@ -2,19 +2,16 @@
 
 <div class="container">
   <div class="actions">
+    <nz-input-group nzSearch nzSize="large" [nzAddOnAfter]="suffixButton">
+      <input type="text" nz-input placeholder="your share link"/>
+    </nz-input-group>
     <button nz-button nzType="primary">
-      <nz-icon nzType="plus-square" nzTheme="outline" />
+      <nz-icon nzType="plus-square" nzTheme="outline"/>
       Add To Share
     </button>
-  </div>
-
-  <div>
-    <nz-input-group nzSearch nzSize="large" [nzAddOnAfter]="suffixButton">
-      <input type="text" nz-input placeholder="your share link" />
-    </nz-input-group>
     <ng-template #suffixButton>
       <button nz-button nzType="primary" nzSearch>
-        <nz-icon nzType="copy" nzTheme="outline" />
+        <nz-icon nzType="copy" nzTheme="outline"/>
         Copy
       </button>
     </ng-template>
@@ -22,7 +19,9 @@
 
   <div class="main">
     <div class="sidebar">
-
+      <ng-container *ngFor="let item of items">
+        <ss-share-item-card [item]="item"></ss-share-item-card>
+      </ng-container>
     </div>
     <div class="content">
       Hello

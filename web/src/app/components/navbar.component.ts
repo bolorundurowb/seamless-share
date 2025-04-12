@@ -26,6 +26,7 @@ import { NzMenuDirective, NzMenuDividerDirective, NzMenuItemComponent } from 'ng
   ],
   template: `
     <div class="navbar">
+      <div>Seamless Share</div>
       <div class="actions">
         <ng-container *ngIf="isAuthenticated">
           <div>
