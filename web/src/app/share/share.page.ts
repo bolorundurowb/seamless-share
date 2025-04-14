@@ -35,6 +35,8 @@ export class SharePage implements OnInit {
   private texts: TextRes[] = [];
   private links: LinkRes[] = [];
 
+  selectedItem?: LinkRes | FileRes | TextRes;
+
 
   constructor(title: Title) {
     title.setTitle('Seamless Share | Your Share');
@@ -59,5 +61,9 @@ export class SharePage implements OnInit {
     this.texts = await this.shareService.getTextShares(this.share.id);
     this.links = await this.shareService.getLinkShares(this.share.id);
     this.images = await this.shareService.getImageShares(this.share.id);
+  }
+
+  select(item: FileRes | TextRes | LinkRes) {
+    this.selectedItem = item;
   }
 }

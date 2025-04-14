@@ -20,7 +20,11 @@
   <div class="main">
     <div class="sidebar">
       <ng-container *ngFor="let item of items">
-        <ss-share-item-card [item]="item"></ss-share-item-card>
+        <ss-share-item-card
+          [item]="item"
+          [selected]="item === selectedItem"
+          (click)="select(item)">
+        </ss-share-item-card>
       </ng-container>
     </div>
     <div class="content">

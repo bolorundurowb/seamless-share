@@ -8,7 +8,7 @@ import { AppSource, FileRes, LinkRes, TextRes } from '../types';
   standalone: true,
   imports: [ CommonModule, DatePipe ],
   template: `
-    <div class="card">
+    <div class="card" [class.selected]="selected">
       <div class="card-content">
         <div class="header">{{ title }}</div>
 
@@ -49,6 +49,13 @@ import { AppSource, FileRes, LinkRes, TextRes } from '../types';
       margin: 1rem;
       background-color: white;
       cursor: pointer;
+
+      &.selected {
+        background-color: #f0f8ff;
+        border-left: 4px solid #1e88e5;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+      }
 
       &-content {
         display: flex;
@@ -129,6 +136,7 @@ import { AppSource, FileRes, LinkRes, TextRes } from '../types';
 })
 export class TitleCardComponent implements OnInit {
   @Input() item!: FileRes | TextRes | LinkRes;
+  @Input() selected: boolean = false;
 
   title!: string;
   status: string = 'Active'
