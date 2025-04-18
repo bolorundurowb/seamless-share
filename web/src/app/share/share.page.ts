@@ -70,6 +70,9 @@ export class SharePage implements OnInit {
     this.texts = await this.shareService.getTextShares(this.share.id);
     this.links = await this.shareService.getLinkShares(this.share.id);
     this.images = await this.shareService.getImageShares(this.share.id);
+
+    // create the share link
+    this.shareLink = `${location.origin}/shares/${this.share.code}`;
   }
 
   select(item: FileRes | TextRes | LinkRes) {
@@ -122,6 +125,16 @@ export class SharePage implements OnInit {
       }
     } else {
       this.messageService.error('Invalid operation');
+    }
+  }
+
+  async copyShareLink() {
+    const success = await this.copyTextToClipboard(this.shareLink);
+
+    if (success) {
+      this.messageService.success('Share link copied to clipboard');
+    } else {
+      this.messageService.error('Failed to copy share link to clipboard');
     }
   }
 

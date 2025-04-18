@@ -10,7 +10,7 @@
       Add To Share
     </button>
     <ng-template #suffixButton>
-      <button nz-button nzType="primary" nzSearch>
+      <button nz-button nzType="primary" nzSearch (click)="copyShareLink()">
         <nz-icon nzType="link" nzTheme="outline"/>
         Copy Share Link
       </button>
