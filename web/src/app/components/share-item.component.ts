@@ -11,49 +11,52 @@ import { isLink, isText } from '../utils';
   template: `
     <div class="card" [class.selected]="selected">
       <div class="card-icon">
-        <img src="/images/text.png"/>
+        <img [src]="'/images/' + type?.toLowerCase() + '.png'"/>
       </div>
       <div class="card-content">
         <div class="header">{{ title }}</div>
 
-        <div class="metadata">
-          <span class="pill type">{{ type }}</span>
-          <span class="pill status">{{ status }}</span>
-          <ng-container *ngIf="source">
-            <ng-container *ngIf="source === AppSource.Web">
+        <div class="date">{{ createdAt | date: 'medium' }}</div>
+      </div>
+
+      <div class="metadata">
+        <span class="pill type">{{ type }}</span>
+        <span class="pill status">{{ status }}</span>
+        <ng-container *ngIf="source">
+          <ng-container *ngIf="source === AppSource.Web">
               <span class="pill web">
                 {{ source }}
               </span>
-            </ng-container>
-            <ng-container *ngIf="source === AppSource.Android">
+          </ng-container>
+          <ng-container *ngIf="source === AppSource.Android">
               <span class="pill android">
                 {{ source }}
               </span>
-            </ng-container>
-            <ng-container *ngIf="source === AppSource.iOS">
+          </ng-container>
+          <ng-container *ngIf="source === AppSource.iOS">
               <span class="pill ios">
                 {{ source }}
               </span>
-            </ng-container>
-            <ng-container *ngIf="source === AppSource.Unknown">
+          </ng-container>
+          <ng-container *ngIf="source === AppSource.Unknown">
               <span class="pill unknown">
                 {{ source }}
               </span>
-            </ng-container>
           </ng-container>
-        </div>
-
-        <div class="date">{{ createdAt | date: 'medium' }}</div>
+        </ng-container>
       </div>
     </div>
   `,
   styles: [ `
     .card {
       border-bottom: 1px solid #e0e0e0;
-      padding: 1rem 1rem 0.3rem;
-      background-color: white;
+      padding: 0.65rem;
       cursor: pointer;
-      display: flex;
+      display: grid;
+      grid-template-columns: 4rem calc(100% - 4rem);
+      grid-template-rows: 3rem 1rem 1.2rem;
+      gap: 1rem;
+      align-items: center;
 
       &.selected {
         background-color: #F2ECFD;
@@ -63,87 +66,97 @@ import { isLink, isText } from '../utils';
       }
 
       &-icon {
-        width: 5rem;
-        padding: 0.3rem;
+        grid-column: 1;
+        grid-row: 1 / span 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        box-sizing: border-box;
 
         img {
           width: 100%;
+          height: auto;
+          max-height: 100%;
+          object-fit: contain;
+          border-radius: 0.25rem;
         }
       }
 
       &-content {
-        flex: 1;
+        grid-column: 2;
+        grid-row: 1 / span 2;
         display: flex;
         flex-direction: column;
-        gap: 0.2rem;
+        gap: 0.5rem;
 
         .header {
-          margin-bottom: 0.5rem;
-          font-size: 1.1rem;
           font-weight: 500;
           color: #333;
-          max-lines: 2;
-        }
-
-        .metadata {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          color: #666;
-          font-size: 14px;
-
-          .pill {
-            text-transform: lowercase;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.875rem;
-            font-weight: 500;
-            line-height: 1;
-            white-space: nowrap;
-            cursor: default;
-            user-select: none;
-
-            &.type {
-              background-color: #f7fee7;
-              color: #65a30d;
-            }
-
-            &.status {
-              background-color: #e0f2fe;
-              color: #0369a1;
-            }
-
-            &.unknown {
-              background-color: #fff7ed;
-              color: #c2410c;
-            }
-
-            &.web {
-              background-color: #ccfbf1;
-              color: #0d9488;
-            }
-
-            &.android {
-              background-color: #ffe4e6;
-              color: #9f1239;
-            }
-
-            &.ios {
-              background-color: #ede9fe;
-              color: #5b21b6;
-            }
-          }
+          font-size: 1rem;
+          line-height: 1.5;
+          height: calc(2 * 1rem * 1.5);
+          overflow: hidden;
         }
 
         .date {
           font-size: 0.85rem;
-          margin-bottom: 0.5rem;
-          margin-top: 0.35rem;
-          margin-left: 0.5rem;
           color: #626B73;
+        }
+      }
+
+      .metadata {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #666;
+        font-size: 0.9rem;
+        grid-column: 1 / -1;
+        grid-row: 3;
+
+        .pill {
+          text-transform: lowercase;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0.25rem 0.75rem;
+          border-radius: 9999px;
+          font-size: 0.875rem;
+          font-weight: 500;
+          line-height: 1;
+          white-space: nowrap;
+          cursor: default;
+          user-select: none;
+
+          &.type {
+            background-color: #f7fee7;
+            color: #65a30d;
+          }
+
+          &.status {
+            background-color: #e0f2fe;
+            color: #0369a1;
+          }
+
+          &.unknown {
+            background-color: #fff7ed;
+            color: #c2410c;
+          }
+
+          &.web {
+            background-color: #ccfbf1;
+            color: #0d9488;
+          }
+
+          &.android {
+            background-color: #ffe4e6;
+            color: #9f1239;
+          }
+
+          &.ios {
+            background-color: #ede9fe;
+            color: #5b21b6;
+          }
         }
       }
     }
