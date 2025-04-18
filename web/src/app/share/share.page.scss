@@ -6,12 +6,12 @@ $breakpoint-md: 768px;
   height: 100vh;
   padding: 3.5rem 1rem 1rem;
 
-  .actions {
+  .share-row {
     margin-top: 1.2rem;
     margin-bottom: 1.2rem;
     //background-color: lighten(#7851A9, 45%);
-    background-color: color.adjust(#82A951, $lightness: 45%);
-    //background-color: color.adjust(#bfbfbf, $lightness: 20%);
+    //background-color: color.adjust(#82A951, $lightness: 45%);
+    background-color: color.adjust(#bfbfbf, $lightness: 20%);
     border: #9272BB solid 0.1rem;
     padding: 0.75rem;
     display: flex;
@@ -21,7 +21,6 @@ $breakpoint-md: 768px;
   .main {
     display: flex;
     min-height: 100vh;
-    font-family: 'Arial', sans-serif;
     border-top: #6c757d solid 1px;
 
     @media (max-width: $breakpoint-md) {
@@ -30,29 +29,65 @@ $breakpoint-md: 768px;
 
     .sidebar {
       width: 25%;
-      padding: 0.5rem;
       color: white;
-      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
 
       @media (max-width: $breakpoint-md) {
         width: 100%;
         height: auto;
-        padding: 1rem;
+        //padding: 1rem;
       }
     }
 
     .content {
       flex: 1;
-      padding: 2rem;
+      padding: 1rem 2rem;
       background-color: #f9f9f9;
       transition: all 0.3s ease;
 
-      // Center content example
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2rem;
-      color: #3498db;
+      .empty {
+        display: flex;
+        height: 100%;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin-top: -10rem;
+      }
+
+      .item-actions {
+        text-align: end;
+
+        button {
+          margin-left: 0.35rem;
+        }
+      }
+
+      .item-content {
+        margin-top: 1rem;
+
+        span {
+          img {
+            margin-right: 0.35rem;
+            height: 1rem;
+            margin-top: -0.5rem;
+          }
+
+          a {
+            font-size: 1.25rem;
+          }
+        }
+
+        p {
+          font-size: 1.15rem;
+          text-align: justify;
+        }
+
+        .link-warning {
+          color: #ff4d4f;
+          font-size: small;
+          margin-top: 0.75rem;
+        }
+      }
 
       @media (max-width: $breakpoint-md) {
         padding: 1rem;

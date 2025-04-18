@@ -1,9 +1,9 @@
 <ss-navbar></ss-navbar>
 
 <div class="container">
-  <div class="actions">
+  <div class="share-row">
     <nz-input-group nzSearch [nzAddOnAfter]="suffixButton">
-      <input type="text" nz-input placeholder="your share link"/>
+      <input type="text" nz-input readonly [value]="shareLink"/>
     </nz-input-group>
     <button nz-button nzType="primary">
       <nz-icon nzType="plus-square" nzTheme="outline"/>
@@ -11,8 +11,8 @@
     </button>
     <ng-template #suffixButton>
       <button nz-button nzType="primary" nzSearch>
-        <nz-icon nzType="copy" nzTheme="outline"/>
-        Copy
+        <nz-icon nzType="link" nzTheme="outline"/>
+        Copy Share Link
       </button>
     </ng-template>
   </div>
@@ -28,7 +28,46 @@
       </ng-container>
     </div>
     <div class="content">
-      Hello
+      <ng-container *ngIf="!selectedItem">
+        <div class="empty">
+          <div>
+            👋 Nothing selected yet!
+          </div>
+          <div>
+            Click an item from the list to see details here.
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="selectedItem">
+        <div class="item-actions">
+          <button *ngIf="isSelectedItemAFile()" nz-button nzType="dashed" nzSize="default" nzShape="circle">
+            <nz-icon nzType="download"/>
+          </button>
+          <button nz-button nzType="dashed" nzSize="default" nzShape="circle" (click)="copyToClipboard()">
+            <nz-icon nzType="copy" nzTheme="twotone" nzTwotoneColor="#52c41a"/>
+          </button>
+          <button nz-button nzType="dashed" nzSize="default" nzShape="circle">
+            <nz-icon nzType="delete" nzTheme="twotone" nzTwotoneColor="#ff4d4f"/>
+          </button>
+        </div>
+        <div class="item-content">
+          <ng-container *ngIf="isLink()">
+              <span>
+                <img src="/icons/hyperlink.png"/>
+                <a target="_blank" href="{{ selectedItem.url }}">{{ selectedItem.url }} </a>
+              </span>
+            <div class="link-warning">
+              If clicked, this link will open in a new tab. Exercise caution when visiting links
+            </div>
+          </ng-container>
+          <ng-container *ngIf="isText()">
+            <p>
+              {{ selectedItem.content }}
+            </p>
+          </ng-container>
+        </div>
+      </ng-container>
     </div>
   </div>
 </div>

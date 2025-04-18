@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
   template: `
     <div class="auth-page">
       <div class="logo">
-        <img src="favicon.ico" alt="App Logo">
+        <img src="/images/logo.jpg" alt="App Logo">
       </div>
 
       <div class="auth-container">

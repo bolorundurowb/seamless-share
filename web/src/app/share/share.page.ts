@@ -7,8 +7,10 @@ import { Title } from '@angular/platform-browser';
 import { ShareService } from '../services/share.service';
 import { FileRes, LinkRes, ShareRes, TextRes } from '../types';
 import { Router } from '@angular/router';
-import { NgForOf } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import { TitleCardComponent } from '../components/share-item.component';
+import { isFile, isLink, isText } from '../utils';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'ss-share',
@@ -21,13 +23,15 @@ import { TitleCardComponent } from '../components/share-item.component';
     NzInputGroupComponent,
     NzIconDirective,
     NgForOf,
-    TitleCardComponent
+    TitleCardComponent,
+    NgIf
   ],
   standalone: true,
 })
 export class SharePage implements OnInit {
   private readonly shareService = inject(ShareService);
   private readonly router = inject(Router);
+  private readonly messageService = inject(NzMessageService);
 
   private share!: ShareRes;
   private documents: FileRes[] = [];
@@ -35,7 +39,9 @@ export class SharePage implements OnInit {
   private texts: TextRes[] = [];
   private links: LinkRes[] = [];
 
-  selectedItem?: LinkRes | FileRes | TextRes;
+  // selectedItem?: LinkRes | FileRes | TextRes;
+  selectedItem?: any;
+  shareLink!: string;
 
 
   constructor(title: Title) {
@@ -65,5 +71,63 @@ export class SharePage implements OnInit {
 
   select(item: FileRes | TextRes | LinkRes) {
     this.selectedItem = item;
+  }
+
+  isSelectedItemAFile(): boolean {
+    return isFile(this.selectedItem);
+  }
+
+  isLink(): boolean {
+    return isLink(this.selectedItem);
+  }
+
+  isText(): boolean {
+    return isText(this.selectedItem);
+  }
+
+  async copyToClipboard() {
+    if (isLink() || isText()) {
+      const text = this.selectedItem.url || this.selectedItem.content;
+      const success = await this.copyTextToClipboard(text);
+      console.log('---------> After copy', {text, success});
+
+      if (success) {
+        this.messageService.success('Copied to clipboard');
+      } else {
+        this.messageService.error('Failed to copy to clipboard');
+      }
+    }
+  }
+
+  async copyTextToClipboard(text: string): Promise<boolean> {
+    if (navigator.clipboard) {
+      try {
+        await navigator.clipboard.writeText(text);
+        return true;
+      } catch (err) {
+        console.error(err);
+        return false;
+      }
+    }
+
+    return this.copyTextToClipboardLegacy(text);
+  }
+
+  copyTextToClipboardLegacy(text: string): boolean {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.style.position = 'fixed';
+    document.body.appendChild(textarea);
+    textarea.select();
+
+    try {
+      const successful = document.execCommand('copy');
+      document.body.removeChild(textarea);
+      return successful;
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
+      document.body.removeChild(textarea);
+      return false;
+    }
   }
 }
