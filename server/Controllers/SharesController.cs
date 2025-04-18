@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SeamlessShareApi.Background;
 using SeamlessShareApi.Mappers;
 using SeamlessShareApi.Models.Data;
 using SeamlessShareApi.Models.Response;
@@ -18,7 +19,8 @@ public partial class SharesController(
     AuthService authService,
     FileService fileService,
     DocumentService documentService,
-    ImageService imageService) : ControllerBase
+    ImageService imageService,
+    UrlMetadataService metadataService) : ControllerBase
 {
     private readonly ShareMapper _shareMapper = new();
     private readonly LinkMapper _linkMapper = new();

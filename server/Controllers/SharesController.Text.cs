@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SeamlessShareApi.Background;
 using SeamlessShareApi.Models.Data;
 using SeamlessShareApi.Models.Request;
 using SeamlessShareApi.Models.Response;
@@ -44,6 +45,10 @@ public partial class SharesController
             sharedContent = await linkService.Create(shareId, req.Content, version, source);
         else
             sharedContent = await textService.Create(shareId, req.Content, version, source);
+        
+        // enqueue the share for processing
+        if (sharedContent is LinkSchema link)
+            metadataService.EnqueueProcessing(link.Id);
 
         return Ok(sharedContent);
     }

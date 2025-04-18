@@ -13,6 +13,7 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using SeamlessShareApi;
+using SeamlessShareApi.Background;
 using SeamlessShareApi.Services;
 
 // load env vars
@@ -22,6 +23,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.WebHost.UseSentry();
+
+builder.Services.AddHttpClient("MetadataService", client =>
+{
+    client.DefaultRequestHeaders.Add("Accept", "text/html,application/xhtml+xml");
+    client.Timeout = TimeSpan.FromSeconds(30);
+});
+
+builder.Services.AddHostedService<UrlMetadataService>();
+builder.Services.AddSingleton<UrlMetadataService>();
 
 builder.Services.AddScoped<ShareService>();
 builder.Services.AddScoped<LinkService>();
