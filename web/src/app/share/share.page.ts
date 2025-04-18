@@ -85,17 +85,51 @@ export class SharePage implements OnInit {
     return isText(this.selectedItem);
   }
 
+  isDocument(): boolean {
+    return isFile(this.selectedItem) && !this.selectedItem.metadata.mimeType.startsWith('image/');
+  }
+
+  async downloadFIle() {
+    if (this.isSelectedItemAFile()) {
+      const messageId = this.messageService.loading('Downloading file...', { nzDuration: 0 }).messageId;
+
+      try {
+        const url = this.selectedItem.url;
+        const fileName = this.selectedItem.metadata.name;
+
+        const response = await fetch(url);
+        const blob = await response.blob();
+
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = fileName;
+        link.click();
+        URL.revokeObjectURL(link.href);
+
+        this.messageService.success('File downloaded successfully');
+      } catch (err) {
+        console.error(err);
+        this.messageService.error('Failed to download file');
+      } finally {
+        this.messageService.remove(messageId);
+      }
+    } else {
+      this.messageService.error('Invalid operation');
+    }
+  }
+
   async copyToClipboard() {
-    if (isLink() || isText()) {
+    if (this.isLink() || this.isText()) {
       const text = this.selectedItem.url || this.selectedItem.content;
       const success = await this.copyTextToClipboard(text);
-      console.log('---------> After copy', {text, success});
 
       if (success) {
         this.messageService.success('Copied to clipboard');
       } else {
         this.messageService.error('Failed to copy to clipboard');
       }
+    } else {
+      this.messageService.error('Invalid operation');
     }
   }
 

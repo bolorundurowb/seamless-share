@@ -53,7 +53,7 @@ import { isLink, isText } from '../utils';
       padding: 0.65rem;
       cursor: pointer;
       display: grid;
-      grid-template-columns: 4rem calc(100% - 4rem);
+      grid-template-columns: 4rem calc(100% - 4.5rem);
       grid-template-rows: 3rem 1rem 1.2rem;
       gap: 1rem;
       align-items: center;
