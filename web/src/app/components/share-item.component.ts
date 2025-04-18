@@ -10,6 +10,9 @@ import { isLink, isText } from '../utils';
   imports: [ CommonModule, DatePipe ],
   template: `
     <div class="card" [class.selected]="selected">
+      <div class="card-icon">
+        <img src="/images/text.png"/>
+      </div>
       <div class="card-content">
         <div class="header">{{ title }}</div>
 
@@ -50,6 +53,7 @@ import { isLink, isText } from '../utils';
       padding: 1rem 1rem 0.3rem;
       background-color: white;
       cursor: pointer;
+      display: flex;
 
       &.selected {
         background-color: #F2ECFD;
@@ -58,7 +62,17 @@ import { isLink, isText } from '../utils';
         transform: translateY(-2px);
       }
 
+      &-icon {
+        width: 5rem;
+        padding: 0.3rem;
+
+        img {
+          width: 100%;
+        }
+      }
+
       &-content {
+        flex: 1;
         display: flex;
         flex-direction: column;
         gap: 0.2rem;
@@ -140,7 +154,7 @@ export class TitleCardComponent implements OnInit {
   @Input() selected: boolean = false;
 
   title!: string;
-  status: string = 'Active'
+  status: string = 'Active';
   type!: string;
   source?: AppSource;
   createdAt: Date = new Date();
@@ -204,7 +218,7 @@ export class TitleCardComponent implements OnInit {
     if (this.isText) {
       const text = this.item as TextRes;
       const truncated = text.content.substring(0, 50);
-      return truncated.length < text.content.length ? `${truncated}...` :truncated;
+      return truncated.length < text.content.length ? `${truncated}...` : truncated;
     }
 
     throw new Error('Unknown item type');
