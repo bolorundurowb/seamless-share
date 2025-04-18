@@ -20,7 +20,7 @@ $breakpoint-md: 768px;
 
   .main {
     display: flex;
-    min-height: 100vh;
+    min-height: calc(100vh - 10rem);
     border-top: #6c757d solid 1px;
 
     @media (max-width: $breakpoint-md) {
@@ -34,7 +34,6 @@ $breakpoint-md: 768px;
       @media (max-width: $breakpoint-md) {
         width: 100%;
         height: auto;
-        //padding: 1rem;
       }
     }
 
@@ -51,7 +50,7 @@ $breakpoint-md: 768px;
         align-items: center;
         justify-content: center;
         font-size: 1.5rem;
-        margin-top: -10rem;
+        margin-top: -15rem;
       }
 
       .item-actions {
