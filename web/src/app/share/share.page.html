@@ -40,30 +40,33 @@
       </ng-container>
 
       <ng-container *ngIf="selectedItem">
-          <div class="item-actions">
-            <button *ngIf="isSelectedItemAFile()" nz-button nzType="dashed" nzSize="default" nzShape="circle">
-              <nz-icon nzType="download" />
-            </button>
-            <button nz-button nzType="dashed" nzSize="default" nzShape="circle">
-              <nz-icon nzType="copy" nzTheme="twotone" nzTwotoneColor="#52c41a" />
-            </button>
-            <button nz-button nzType="dashed" nzSize="default" nzShape="circle">
-              <nz-icon nzType="delete" nzTheme="twotone" nzTwotoneColor="#ff4d4f" />
-            </button>
-          </div>
-          <div class="item-content">
-            <ng-container *ngIf="isLink()">
-              <a target="_blank" href="{{ selectedItem.url }}">{{ selectedItem.url }} </a>
-              <div class="link-warning">
-                If clicked, this link will open in a new tab. Exercise caution when visiting links
-              </div>
-            </ng-container>
-            <ng-container *ngIf="isText()">
-              <p>
-                {{ selectedItem.content }}
-              </p>
-            </ng-container>
-          </div>
+        <div class="item-actions">
+          <button *ngIf="isSelectedItemAFile()" nz-button nzType="dashed" nzSize="default" nzShape="circle">
+            <nz-icon nzType="download"/>
+          </button>
+          <button nz-button nzType="dashed" nzSize="default" nzShape="circle">
+            <nz-icon nzType="copy" nzTheme="twotone" nzTwotoneColor="#52c41a"/>
+          </button>
+          <button nz-button nzType="dashed" nzSize="default" nzShape="circle">
+            <nz-icon nzType="delete" nzTheme="twotone" nzTwotoneColor="#ff4d4f"/>
+          </button>
+        </div>
+        <div class="item-content">
+          <ng-container *ngIf="isLink()">
+              <span>
+                <img src="/icons/hyperlink.png"/>
+                <a target="_blank" href="{{ selectedItem.url }}">{{ selectedItem.url }} </a>
+              </span>
+            <div class="link-warning">
+              If clicked, this link will open in a new tab. Exercise caution when visiting links
+            </div>
+          </ng-container>
+          <ng-container *ngIf="isText()">
+            <p>
+              {{ selectedItem.content }}
+            </p>
+          </ng-container>
+        </div>
       </ng-container>
     </div>
   </div>

@@ -65,8 +65,16 @@ $breakpoint-md: 768px;
       .item-content {
         margin-top: 1rem;
 
-        a {
-          font-size: 1.25rem;
+        span {
+          img {
+            margin-right: 0.35rem;
+            height: 1rem;
+            margin-top: -0.5rem;
+          }
+
+          a {
+            font-size: 1.25rem;
+          }
         }
 
         p {
