@@ -28,7 +28,20 @@
       </ng-container>
     </div>
     <div class="content">
-      Hello
+      <ng-container *ngIf="!selectedItem">
+        <div class="empty">
+          <div>
+            👋 Nothing selected yet!
+          </div>
+          <div>
+            Click an item from the list to see details here.
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="selectedItem">
+        <div>World</div>
+      </ng-container>
     </div>
   </div>
 </div>

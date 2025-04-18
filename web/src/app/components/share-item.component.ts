@@ -46,13 +46,13 @@ import { AppSource, FileRes, LinkRes, TextRes } from '../types';
   styles: [ `
     .card {
       border-bottom: 1px solid #e0e0e0;
-      margin: 1rem;
+      padding: 1rem 1rem 0.3rem;
       background-color: white;
       cursor: pointer;
 
       &.selected {
-        background-color: #f0f8ff;
-        border-left: 4px solid #1e88e5;
+        background-color: #F2ECFD;
+        border-left: 0.2rem solid #9272BB;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         transform: translateY(-2px);
       }
@@ -60,7 +60,7 @@ import { AppSource, FileRes, LinkRes, TextRes } from '../types';
       &-content {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 0.2rem;
 
         .header {
           margin-bottom: 0.5rem;
@@ -73,7 +73,7 @@ import { AppSource, FileRes, LinkRes, TextRes } from '../types';
         .metadata {
           display: flex;
           align-items: center;
-          gap: 16px;
+          gap: 0.5rem;
           color: #666;
           font-size: 14px;
 

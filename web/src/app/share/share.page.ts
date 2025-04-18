@@ -7,7 +7,7 @@ import { Title } from '@angular/platform-browser';
 import { ShareService } from '../services/share.service';
 import { FileRes, LinkRes, ShareRes, TextRes } from '../types';
 import { Router } from '@angular/router';
-import { NgForOf } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import { TitleCardComponent } from '../components/share-item.component';
 
 @Component({
@@ -21,7 +21,8 @@ import { TitleCardComponent } from '../components/share-item.component';
     NzInputGroupComponent,
     NzIconDirective,
     NgForOf,
-    TitleCardComponent
+    TitleCardComponent,
+    NgIf
   ],
   standalone: true,
 })
