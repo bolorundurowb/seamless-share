@@ -26,13 +26,17 @@ import { NzMenuDirective, NzMenuDividerDirective, NzMenuItemComponent } from 'ng
   ],
   template: `
     <div class="navbar">
-      <div>Seamless Share</div>
-      <div class="actions">
+      <div class="left">
+        <img src="/images/logo.jpg"/>
+        Seamless Share
+      </div>
+
+      <div class="right">
         <ng-container *ngIf="isAuthenticated">
-          <div>
+          <div class="user-info">
             <a nz-dropdown nzTrigger="hover">
               <ss-text-icon name="{{ user!.firstName }} {{ user!.lastName }}"></ss-text-icon>
-              <nz-icon nzType="down" />
+              <nz-icon nzType="down"/>
             </a>
             <nz-dropdown-menu #menu="nzDropdownMenu">
               <ul nz-menu>
@@ -61,14 +65,32 @@ import { NzMenuDirective, NzMenuDividerDirective, NzMenuItemComponent } from 'ng
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       z-index: 1000;
       display: flex;
+      justify-content: space-between;
       padding: 10px 20px;
-      justify-content: end;
 
-      .actions {
+      .left {
         display: flex;
-        gap: 1rem;
-        height: 100%;
         align-items: center;
+        gap: 1rem;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #333;
+
+        img {
+          width: 2.5rem;
+        }
+      }
+
+      .right {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
       }
     }
   `
