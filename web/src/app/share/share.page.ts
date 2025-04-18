@@ -92,6 +92,10 @@ export class SharePage implements OnInit {
     return isFile(this.selectedItem) && !this.selectedItem.metadata.mimeType.startsWith('image/');
   }
 
+  isImage(): boolean {
+    return isFile(this.selectedItem) && this.selectedItem.metadata.mimeType.startsWith('image/');
+  }
+
   async downloadFIle() {
     if (this.isSelectedItemAFile()) {
       const messageId = this.messageService.loading('Downloading file...', { nzDuration: 0 }).messageId;
