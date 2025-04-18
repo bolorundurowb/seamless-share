@@ -6,7 +6,7 @@ $breakpoint-md: 768px;
   height: 100vh;
   padding: 3.5rem 1rem 1rem;
 
-  .actions {
+  .share-row {
     margin-top: 1.2rem;
     margin-bottom: 1.2rem;
     //background-color: lighten(#7851A9, 45%);
@@ -52,6 +52,33 @@ $breakpoint-md: 768px;
         justify-content: center;
         font-size: 1.5rem;
         margin-top: -10rem;
+      }
+
+      .item-actions {
+        text-align: end;
+
+        button {
+          margin-left: 0.35rem;
+        }
+      }
+
+      .item-content {
+        margin-top: 1rem;
+
+        a {
+          font-size: 1.25rem;
+        }
+
+        p {
+          font-size: 1.15rem;
+          text-align: justify;
+        }
+
+        .link-warning {
+          color: #ff4d4f;
+          font-size: small;
+          margin-top: 0.75rem;
+        }
       }
 
       @media (max-width: $breakpoint-md) {

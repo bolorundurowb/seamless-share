@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DatePipe } from '@angular/common';
 import { AppSource, FileRes, LinkRes, TextRes } from '../types';
+import { isLink, isText } from '../utils';
 
 @Component({
   selector: 'ss-share-item-card',
@@ -155,15 +156,12 @@ export class TitleCardComponent implements OnInit {
   }
 
   get isLink(): boolean {
-    const link = this.item as any;
-    return link.url && !this.isDocument && !this.isImage;
+    return isLink(this.item);
   }
 
   get isText(): boolean {
-    const link = this.item as any;
-    return link.content;
+    return isText(this.item);
   }
-
 
   ngOnInit() {
     this.createdAt = new Date(this.item.createdAt);

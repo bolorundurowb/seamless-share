@@ -9,6 +9,7 @@ import { FileRes, LinkRes, ShareRes, TextRes } from '../types';
 import { Router } from '@angular/router';
 import { NgForOf, NgIf } from '@angular/common';
 import { TitleCardComponent } from '../components/share-item.component';
+import { isFile, isLink, isText } from '../utils';
 
 @Component({
   selector: 'ss-share',
@@ -36,7 +37,9 @@ export class SharePage implements OnInit {
   private texts: TextRes[] = [];
   private links: LinkRes[] = [];
 
-  selectedItem?: LinkRes | FileRes | TextRes;
+  // selectedItem?: LinkRes | FileRes | TextRes;
+  selectedItem?: any;
+  shareLink!: string;
 
 
   constructor(title: Title) {
@@ -66,5 +69,17 @@ export class SharePage implements OnInit {
 
   select(item: FileRes | TextRes | LinkRes) {
     this.selectedItem = item;
+  }
+
+  isSelectedItemAFile(): boolean {
+    return isFile(this.selectedItem);
+  }
+
+  isLink(): boolean {
+    return isLink(this.selectedItem);
+  }
+
+  isText(): boolean {
+    return isText(this.selectedItem);
   }
 }
