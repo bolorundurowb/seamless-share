@@ -7,10 +7,11 @@ import { Title } from '@angular/platform-browser';
 import { ShareService } from '../services/share.service';
 import { FileRes, LinkRes, ShareRes, TextRes } from '../types';
 import { Router } from '@angular/router';
-import { NgForOf, NgIf } from '@angular/common';
+import { DatePipe, NgForOf, NgIf } from '@angular/common';
 import { TitleCardComponent } from '../components/share-item.component';
 import { isFile, isLink, isText } from '../utils';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { FilesizePipe } from '../components/file-size.pipe';
 
 @Component({
   selector: 'ss-share',
@@ -24,7 +25,9 @@ import { NzMessageService } from 'ng-zorro-antd/message';
     NzIconDirective,
     NgForOf,
     TitleCardComponent,
-    NgIf
+    NgIf,
+    DatePipe,
+    FilesizePipe
   ],
   standalone: true,
 })

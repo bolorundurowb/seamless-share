@@ -68,6 +68,58 @@
               {{ selectedItem.content }}
             </p>
           </ng-container>
+          <ng-container *ngIf="isSelectedItemAFile()">
+            <div class="file-display">
+              <div class="file-header">
+                <div class="file-icon">{{selectedItem.metadata.extension}}</div>
+                <div class="file-main-info">
+                  <h3>{{selectedItem.metadata.name}}</h3>
+                  <div class="file-subinfo">
+                    <span>{{selectedItem.metadata.sizeInBytes | filesize}}</span>
+                    <span>•</span>
+                    <span>{{selectedItem.metadata.mimeType}}</span>
+                    <span>•</span>
+                    <span>Uploaded {{selectedItem.createdAt | date:'mediumDate'}}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="file-details">
+                <div class="detail-group">
+                  <div class="detail-item">
+                    <span class="label">File ID</span>
+                    <span class="value">{{selectedItem.id}}</span>
+                  </div>
+                  <div class="detail-item" *ngIf="selectedItem.source">
+                    <span class="label">Source</span>
+                    <span class="value">{{selectedItem.source}}</span>
+                  </div>
+                </div>
+
+                <div class="detail-group">
+                  <div class="detail-item">
+                    <span class="label">Last Updated</span>
+                    <span class="value">{{selectedItem.updatedAt | date:'mediumDate'}}</span>
+                  </div>
+                  <div class="detail-item" *ngIf="selectedItem.appVersion">
+                    <span class="label">App Version</span>
+                    <span class="value">{{selectedItem.appVersion}}</span>
+                  </div>
+                </div>
+
+                <div class="detail-group">
+                  <div class="detail-item" *ngIf="selectedItem.metadata.checksum">
+                    <span class="label">Checksum</span>
+                    <span class="value">{{selectedItem.metadata.checksum}}</span>
+                  </div>
+                  <div class="detail-item" *ngIf="selectedItem.deviceName">
+                    <span class="label">Device</span>
+                    <span class="value">{{selectedItem.deviceName}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
         </div>
       </ng-container>
     </div>
