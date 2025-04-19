@@ -36,7 +36,7 @@ export class SharePage implements OnInit {
   private readonly router = inject(Router);
   private readonly messageService = inject(NzMessageService);
 
-  @ViewChild('sharedImage', {static: true}) sharedImageRef!: ElementRef<HTMLImageElement>;
+  @ViewChild('sharedImage') sharedImageRef!: ElementRef<HTMLImageElement>;
 
   private share!: ShareRes;
   private documents: FileRes[] = [];
