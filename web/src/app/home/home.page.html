@@ -67,7 +67,8 @@
         <button nz-button
                 nzType="primary"
                 class="button-spacer"
-                [disabled]="!isSharedFileValid">
+                [disabled]="!isSharedFileValid"
+                (click)="createDocumentShare()">
           Share Document
         </button>
       </ss-section>

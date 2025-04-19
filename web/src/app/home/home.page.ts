@@ -5,13 +5,14 @@ import { FormsModule } from '@angular/forms';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
 import { AuthService } from '../services/auth.service';
 import { ShareService } from '../services/share.service';
-import { ShareRes } from '../types';
+import { FileRes, ShareRes } from '../types';
 import { SectionComponent, SectionsComponent } from '../components/section.components';
 import { NzIconDirective } from 'ng-zorro-antd/icon';
 import { Router } from '@angular/router';
 import { ImagePasteSelectComponent } from '../components/image-paste-select.component';
 import { NavbarComponent } from '../components/navbar.component';
 import { isUrlValid } from '../utils';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'ss-home',
@@ -35,6 +36,7 @@ export class HomePage implements OnInit {
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
   private readonly shareService = inject(ShareService);
+  private readonly messageService = inject(NzMessageService);
 
   sharedUrl?: string;
   isSharedUrlValid = false;
@@ -71,6 +73,21 @@ export class HomePage implements OnInit {
     await this.goToShare(share.code);
   }
 
+  async createDocumentShare() {
+    const messageId = this.messageService.loading('Uploading document...', { nzDuration: 0 }).messageId;
+
+    try {
+      const share = await this.createShare();
+     await this.shareService.createDocumentShare(share.id, this.sharedFile!);
+      await this.goToShare(share.code);
+    } catch (err) {
+      console.error(err);
+      this.messageService.error('Failed to upload document');
+    } finally {
+      this.messageService.remove(messageId);
+    }
+  }
+
   validateSharedUrl() {
     this.isSharedUrlValid = isUrlValid(this.sharedUrl);
   }
@@ -79,12 +96,17 @@ export class HomePage implements OnInit {
     this.isSharedTextValid = !!this.sharedText && this.sharedText.length > 0 && this.sharedText.length <= 5000;
   }
 
+  validateSharedFile() {
+    this.isSharedFileValid = !!this.sharedFile && this.sharedFile.size > 0 && this.sharedFile.size <= 10_000_000;
+  }
+
   fileChanged(event: any) {
     this.sharedFile = event.target.files[0];
   }
 
   private async createShare(): Promise<ShareRes> {
     return await this.shareService.createShare();
+    this.validateSharedFile();
   }
 
   private async goToShare(shareCode: string) {

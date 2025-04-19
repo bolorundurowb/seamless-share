@@ -298,7 +298,7 @@ export class SharePage implements OnInit {
     const link = await this.shareService.addTextToShare(this.share.id, { content: this.sharedUrl! }) as LinkRes;
     this.links = [ link, ...this.links ];
 
-    this.messageService.success('Link shared successfully');
+    this.messageService.success('Link added to share');
     this.resetState();
   }
 
@@ -306,12 +306,28 @@ export class SharePage implements OnInit {
     const text = await this.shareService.addTextToShare(this.share.id, { content: this.sharedText! }) as TextRes;
     this.texts = [ text, ...this.texts ];
 
-    this.messageService.success('Text shared successfully');
+    this.messageService.success('Text added to share');
     this.resetState();
   }
 
+  async createDocumentShare() {
+    const messageId = this.messageService.loading('Uploading document...', { nzDuration: 0 }).messageId;
+
+    try {
+      const document = await this.shareService.createDocumentShare(this.share.id, this.sharedFile!) as FileRes;
+      this.documents = [ document, ...this.documents ];
+
+      this.messageService.success('Document added to share');
+      this.resetState();
+    } catch (err) {
+      console.error(err);
+      this.messageService.error('Failed to upload document');
+    } finally {
+      this.messageService.remove(messageId);
+    }
+  }
+
   validateSharedUrl() {
-    console.log(this.sharedUrl, isUrlValid(this.sharedUrl));
     this.isSharedUrlValid = isUrlValid(this.sharedUrl);
   }
 
@@ -319,8 +335,13 @@ export class SharePage implements OnInit {
     this.isSharedTextValid = !!this.sharedText && this.sharedText.length > 0 && this.sharedText.length <= 5000;
   }
 
+  validateSharedFile() {
+    this.isSharedFileValid = !!this.sharedFile && this.sharedFile.size > 0 && this.sharedFile.size <= 10_000_000;
+  }
+
   fileChanged(event: any) {
     this.sharedFile = event.target.files[0];
+    this.validateSharedFile();
   }
 
   resetState() {
