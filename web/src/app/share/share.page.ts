@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { NavbarComponent } from '../components/navbar.component';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
 import { NzInputDirective, NzInputGroupComponent } from 'ng-zorro-antd/input';
@@ -36,6 +36,8 @@ export class SharePage implements OnInit {
   private readonly router = inject(Router);
   private readonly messageService = inject(NzMessageService);
 
+  @ViewChild('sharedImage', {static: true}) sharedImageRef!: ElementRef<HTMLImageElement>;
+
   private share!: ShareRes;
   private documents: FileRes[] = [];
   private images: FileRes[] = [];
@@ -62,14 +64,27 @@ export class SharePage implements OnInit {
     const shareCode = routeSnapshot.root.firstChild?.params['shareCode'];
 
     if (!shareCode) {
-      await this.router.navigate([ '/' ]);
+      await this.goHome();
     }
 
-    this.share = await this.shareService.getShareByCode(shareCode);
-    this.documents = await this.shareService.getDocumentShares(this.share.id);
-    this.texts = await this.shareService.getTextShares(this.share.id);
-    this.links = await this.shareService.getLinkShares(this.share.id);
-    this.images = await this.shareService.getImageShares(this.share.id);
+    try {
+      this.share = await this.shareService.getShareByCode(shareCode);
+      this.documents = await this.shareService.getDocumentShares(this.share.id);
+      this.texts = await this.shareService.getTextShares(this.share.id);
+      this.links = await this.shareService.getLinkShares(this.share.id);
+      this.images = await this.shareService.getImageShares(this.share.id);
+    } catch (e) {
+      const error = e as any;
+      const statusCode = error.status;
+      if (statusCode === 404) {
+        this.messageService.warning('You do not have access to this share');
+        await this.router.navigate(['auth', 'login']);
+        return;
+      }
+
+      this.messageService.error(error.message);
+      throw e;
+    }
 
     // create the share link
     this.shareLink = `${location.origin}/shares/${this.share.code}`;
@@ -97,6 +112,10 @@ export class SharePage implements OnInit {
 
   isImage(): boolean {
     return isFile(this.selectedItem) && this.selectedItem.metadata.mimeType.startsWith('image/');
+  }
+
+  async goHome() {
+    await this.router.navigate([ '/' ]);
   }
 
   async downloadFIle() {
@@ -148,9 +167,42 @@ export class SharePage implements OnInit {
       } else {
         this.messageService.error('Failed to copy to clipboard');
       }
+    } else if (this.isImage()) {
+      const success = await this.copyRenderedImageToClipboard(this.sharedImageRef.nativeElement)
+
+      if (success) {
+        this.messageService.success('Image copied to clipboard');
+      } else {
+        this.messageService.error('Failed to copy image to clipboard');
+      }
     } else {
       this.messageService.error('Invalid operation');
     }
+  }
+
+  async copyRenderedImageToClipboard(imgElement: HTMLImageElement): Promise<boolean> {
+    const canvas = document.createElement('canvas');
+    canvas.width = imgElement.naturalWidth;
+    canvas.height = imgElement.naturalHeight;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return false;
+
+    ctx.drawImage(imgElement, 0, 0);
+
+    return new Promise<boolean>((resolve) => {
+      canvas.toBlob(async (blob) => {
+        if (!blob) return resolve(false);
+
+        try {
+          const item = new ClipboardItem({ [blob.type]: blob });
+          await navigator.clipboard.write([item]);
+          resolve(true);
+        } catch {
+          resolve(false);
+        }
+      }, 'image/png');
+    });
   }
 
   async copyTextToClipboard(text: string): Promise<boolean> {
