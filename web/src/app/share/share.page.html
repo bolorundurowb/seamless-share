@@ -187,68 +187,70 @@
 
 <nz-modal nzWidth="50rem" [(nzVisible)]="isAdderModalVisible">
   <ng-container *nzModalContent>
-    <ss-sections>
-      <ss-section title="Links">
-        <input nz-input
-               placeholder="input the URL to be shared"
-               [(ngModel)]="sharedUrl"
-               (keyup)="validateSharedUrl()"/>
+   <div style="width: 100%; text-align: center; margin-top: 0.2rem;">
+     <ss-sections>
+       <ss-section title="Links">
+         <input nz-input
+                placeholder="input the URL to be shared"
+                [(ngModel)]="sharedUrl"
+                (keyup)="validateSharedUrl()"/>
 
-        <button nz-button
-                nzType="primary"
-                class="button-spacer"
-                [disabled]="!isSharedUrlValid"
-                (click)="createLinkShare()">
-          Share Links
-        </button>
-      </ss-section>
+         <button nz-button
+                 nzType="primary"
+                 class="button-spacer"
+                 [disabled]="!isSharedUrlValid"
+                 (click)="createLinkShare()">
+           Share Links
+         </button>
+       </ss-section>
 
-      <ss-section title="Text">
-        <nz-textarea-count
-          [nzMaxCharacterCount]="5000">
+       <ss-section title="Text">
+         <nz-textarea-count
+           [nzMaxCharacterCount]="5000">
           <textarea nz-input
                     rows="3"
                     [(ngModel)]="sharedText"
                     (keyup)="validateSharedText()"></textarea>
-        </nz-textarea-count>
+         </nz-textarea-count>
 
-        <button nz-button
-                nzType="primary"
-                class="button-spacer"
-                [disabled]="!isSharedTextValid"
-                (click)="createTextShare()">
-          Share Text
-        </button>
-      </ss-section>
+         <button nz-button
+                 nzType="primary"
+                 class="button-spacer"
+                 [disabled]="!isSharedTextValid"
+                 (click)="createTextShare()">
+           Share Text
+         </button>
+       </ss-section>
 
-      <ss-section title="Images">
-        <div>
-          <ss-image-paste-select></ss-image-paste-select>
-        </div>
-      </ss-section>
+       <ss-section title="Images">
+         <div>
+           <ss-image-paste-select></ss-image-paste-select>
+         </div>
+       </ss-section>
 
-      <ss-section title="Documents">
-        <nz-input-group nzSearch [nzAddOnAfter]="filePickerButton">
-          <input nz-input readonly class="selected-file-display" type="text" placeholder="Select a file"
-                 [value]="sharedFile?.name"/>
-          <input #fileInput class="hidden-file-input" type="file"
-                 accept=".pdf,.doc,.docx,.txt,.rtf,.xlsx,.xls"
-                 (change)="fileChanged($event)"/>
-          <ng-template #filePickerButton>
-            <button nz-button nzSearch (click)="fileInput.click()">
-              <nz-icon nzType="paper-clip"></nz-icon>
-            </button>
-          </ng-template>
-        </nz-input-group>
+       <ss-section title="Documents">
+         <nz-input-group nzSearch [nzAddOnAfter]="filePickerButton">
+           <input nz-input readonly class="selected-file-display" type="text" placeholder="Select a file"
+                  [value]="sharedFile?.name"/>
+           <input #fileInput class="hidden-file-input" type="file"
+                  accept=".pdf,.doc,.docx,.txt,.rtf,.xlsx,.xls"
+                  (change)="fileChanged($event)"/>
+           <ng-template #filePickerButton>
+             <button nz-button nzSearch (click)="fileInput.click()">
+               <nz-icon nzType="paper-clip"></nz-icon>
+             </button>
+           </ng-template>
+         </nz-input-group>
 
-        <button nz-button
-                nzType="primary"
-                class="button-spacer"
-                [disabled]="!isSharedFileValid">
-          Share Document
-        </button>
-      </ss-section>
-    </ss-sections>
+         <button nz-button
+                 nzType="primary"
+                 class="button-spacer"
+                 [disabled]="!isSharedFileValid">
+           Share Document
+         </button>
+       </ss-section>
+     </ss-sections>
+   </div>
   </ng-container>
 
 

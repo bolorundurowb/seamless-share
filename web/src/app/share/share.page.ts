@@ -139,7 +139,8 @@ export class SharePage implements OnInit {
   }
 
   async dismissAdderModal() {
-    this.isAdderModalVisible = true;
+    this.isAdderModalVisible = false;
+    this.resetState();
   }
 
   async downloadFIle() {
@@ -310,7 +311,8 @@ export class SharePage implements OnInit {
   }
 
   validateSharedUrl() {
-    return isUrlValid(this.sharedUrl);
+    console.log(this.sharedUrl, isUrlValid(this.sharedUrl));
+    this.isSharedUrlValid = isUrlValid(this.sharedUrl);
   }
 
   validateSharedText() {

@@ -72,7 +72,7 @@ export class HomePage implements OnInit {
   }
 
   validateSharedUrl() {
-    return isUrlValid(this.sharedUrl);
+    this.isSharedUrlValid = isUrlValid(this.sharedUrl);
   }
 
   validateSharedText() {

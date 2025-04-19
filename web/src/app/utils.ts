@@ -4,7 +4,9 @@ export const isLink = (item? : any): boolean => item && item.url && !item.metada
 
 export const isText = (item? : any): boolean => item && item.content;
 
-export const isUrlValid = (url? : string): boolean => {
-  const urlPattern = /^(https?:\/\/)?([\w\d-]+)\.([a-z]{2,})([\/\w\d.-]*)*\/?$/;
-  return urlPattern.test(url || '');
+export const isUrlValid = (url?: string): boolean => {
+  if (!url) return false;
+
+  const urlPattern = /^(?:(https?|ftp|ws):\/\/)?(?:([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}|localhost|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})(?::\d+)?(?:\/[^\s?#]*)?(?:\?[^#\s]*)?(?:#[^\s]*)?$/;
+  return urlPattern.test(url);
 }
