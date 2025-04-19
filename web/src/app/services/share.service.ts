@@ -27,7 +27,7 @@ export class ShareService {
     return firstValueFrom(this.http.get<TextRes[]>(`${this.baseUrl}/shares/${shareId}/text`));
   }
 
-  async addTextToShare(shareId: string, req: AddTextToShareReq): Promise<TextRes> {
+  async addTextToShare(shareId: string, req: AddTextToShareReq): Promise<TextRes|LinkRes> {
     return firstValueFrom(this.http.post<TextRes>(`${this.baseUrl}/shares/${shareId}/text`, req));
   }
 

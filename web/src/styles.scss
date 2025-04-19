@@ -3,3 +3,16 @@ body {
   font-family: "Manrope", sans-serif !important;
   font-optical-sizing: auto;
 }
+
+
+.button-spacer {
+  margin-top: 0.5rem;
+}
+
+.hidden-file-input {
+  display: none;
+}
+
+.selected-file-display {
+  cursor: not-allowed;
+}

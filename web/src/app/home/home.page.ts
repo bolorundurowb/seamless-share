@@ -11,6 +11,7 @@ import { NzIconDirective } from 'ng-zorro-antd/icon';
 import { Router } from '@angular/router';
 import { ImagePasteSelectComponent } from '../components/image-paste-select.component';
 import { NavbarComponent } from '../components/navbar.component';
+import { isUrlValid } from '../utils';
 
 @Component({
   selector: 'ss-home',
@@ -71,8 +72,7 @@ export class HomePage implements OnInit {
   }
 
   validateSharedUrl() {
-    const urlPattern = /^(https?:\/\/)?([\w\d-]+)\.([a-z]{2,})([\/\w\d.-]*)*\/?$/;
-    this.isSharedUrlValid = urlPattern.test(this.sharedUrl || '');
+    return isUrlValid(this.sharedUrl);
   }
 
   validateSharedText() {

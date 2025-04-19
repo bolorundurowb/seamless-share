@@ -1,7 +1,7 @@
 import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { NavbarComponent } from '../components/navbar.component';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
-import { NzInputDirective, NzInputGroupComponent } from 'ng-zorro-antd/input';
+import { NzInputDirective, NzInputGroupComponent, NzTextareaCountComponent } from 'ng-zorro-antd/input';
 import { NzIconDirective } from 'ng-zorro-antd/icon';
 import { Title } from '@angular/platform-browser';
 import { ShareService } from '../services/share.service';
@@ -9,10 +9,14 @@ import { FileRes, LinkRes, ShareRes, TextRes } from '../types';
 import { Router } from '@angular/router';
 import { DatePipe, NgForOf, NgIf } from '@angular/common';
 import { TitleCardComponent } from '../components/share-item.component';
-import { isFile, isLink, isText } from '../utils';
+import { isFile, isLink, isText, isUrlValid } from '../utils';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { FilesizePipe } from '../components/file-size.pipe';
 import { NzPopconfirmDirective } from 'ng-zorro-antd/popconfirm';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { FormsModule } from '@angular/forms';
+import { ImagePasteSelectComponent } from '../components/image-paste-select.component';
+import { SectionComponent, SectionsComponent } from '../components/section.components';
 
 @Component({
   selector: 'ss-share',
@@ -29,7 +33,13 @@ import { NzPopconfirmDirective } from 'ng-zorro-antd/popconfirm';
     NgIf,
     DatePipe,
     FilesizePipe,
-    NzPopconfirmDirective
+    NzPopconfirmDirective,
+    NzModalModule,
+    FormsModule,
+    ImagePasteSelectComponent,
+    NzTextareaCountComponent,
+    SectionComponent,
+    SectionsComponent
   ],
   standalone: true,
 })
@@ -49,6 +59,14 @@ export class SharePage implements OnInit {
   // selectedItem?: LinkRes | FileRes | TextRes;
   selectedItem?: any;
   shareLink!: string;
+  isAdderModalVisible = false;
+
+  sharedUrl?: string;
+  isSharedUrlValid = false;
+  sharedText?: string;
+  isSharedTextValid = false;
+  sharedFile?: File;
+  isSharedFileValid = false;
 
 
   constructor(title: Title) {
@@ -66,7 +84,7 @@ export class SharePage implements OnInit {
     const shareCode = routeSnapshot.root.firstChild?.params['shareCode'];
 
     if (!shareCode) {
-      await this.goHome();
+      await this.router.navigate([ '/' ]);
     }
 
     try {
@@ -80,7 +98,7 @@ export class SharePage implements OnInit {
       const statusCode = error.status;
       if (statusCode === 404) {
         this.messageService.warning('You do not have access to this share');
-        await this.router.navigate(['auth', 'login']);
+        await this.router.navigate([ 'auth', 'login' ]);
         return;
       }
 
@@ -116,8 +134,12 @@ export class SharePage implements OnInit {
     return isFile(this.selectedItem) && this.selectedItem.metadata.mimeType.startsWith('image/');
   }
 
-  async goHome() {
-    await this.router.navigate([ '/' ]);
+  async showAdderModal() {
+    this.isAdderModalVisible = true;
+  }
+
+  async dismissAdderModal() {
+    this.isAdderModalVisible = true;
   }
 
   async downloadFIle() {
@@ -170,7 +192,7 @@ export class SharePage implements OnInit {
         this.messageService.error('Failed to copy to clipboard');
       }
     } else if (this.isImage()) {
-      const success = await this.copyRenderedImageToClipboard(this.sharedImageRef.nativeElement)
+      const success = await this.copyRenderedImageToClipboard(this.sharedImageRef.nativeElement);
 
       if (success) {
         this.messageService.success('Image copied to clipboard');
@@ -230,7 +252,7 @@ export class SharePage implements OnInit {
 
         try {
           const item = new ClipboardItem({ [blob.type]: blob });
-          await navigator.clipboard.write([item]);
+          await navigator.clipboard.write([ item ]);
           resolve(true);
         } catch {
           resolve(false);
@@ -269,5 +291,42 @@ export class SharePage implements OnInit {
       document.body.removeChild(textarea);
       return false;
     }
+  }
+
+  async createLinkShare() {
+    const link = await this.shareService.addTextToShare(this.share.id, { content: this.sharedUrl! }) as LinkRes;
+    this.links = [ link, ...this.links ];
+
+    this.messageService.success('Link shared successfully');
+    this.resetState();
+  }
+
+  async createTextShare() {
+    const text = await this.shareService.addTextToShare(this.share.id, { content: this.sharedText! }) as TextRes;
+    this.texts = [ text, ...this.texts ];
+
+    this.messageService.success('Text shared successfully');
+    this.resetState();
+  }
+
+  validateSharedUrl() {
+    return isUrlValid(this.sharedUrl);
+  }
+
+  validateSharedText() {
+    this.isSharedTextValid = !!this.sharedText && this.sharedText.length > 0 && this.sharedText.length <= 5000;
+  }
+
+  fileChanged(event: any) {
+    this.sharedFile = event.target.files[0];
+  }
+
+  resetState() {
+    this.sharedUrl = undefined;
+    this.sharedText = undefined;
+    this.sharedFile = undefined;
+    this.isSharedUrlValid = false;
+    this.isSharedTextValid = false;
+    this.isSharedFileValid = false;
   }
 }
