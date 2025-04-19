@@ -12,6 +12,7 @@ import { TitleCardComponent } from '../components/share-item.component';
 import { isFile, isLink, isText } from '../utils';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { FilesizePipe } from '../components/file-size.pipe';
+import { NzPopconfirmDirective } from 'ng-zorro-antd/popconfirm';
 
 @Component({
   selector: 'ss-share',
@@ -27,7 +28,8 @@ import { FilesizePipe } from '../components/file-size.pipe';
     TitleCardComponent,
     NgIf,
     DatePipe,
-    FilesizePipe
+    FilesizePipe,
+    NzPopconfirmDirective
   ],
   standalone: true,
 })
@@ -177,6 +179,38 @@ export class SharePage implements OnInit {
       }
     } else {
       this.messageService.error('Invalid operation');
+    }
+  }
+
+  async deleteItem() {
+    const messageId = this.messageService.loading('Deleting item...', { nzDuration: 0 }).messageId;
+    const shareId = this.share.id;
+    const shareItemId = this.selectedItem.id;
+
+    try {
+      if (this.isLink()) {
+        await this.shareService.deleteLinkFromShare(shareId, shareItemId);
+        this.links = this.links.filter((link) => link.id !== shareItemId);
+      } else if (this.isDocument()) {
+        await this.shareService.deleteDocumentShare(shareId, shareItemId);
+        this.documents = this.documents.filter((doc) => doc.id !== shareItemId);
+      } else if (this.isImage()) {
+        await this.shareService.deleteImageShare(shareId, shareItemId);
+        this.images = this.images.filter((img) => img.id !== shareItemId);
+      } else if (this.isText()) {
+        await this.shareService.deleteTextFromShare(shareId, shareItemId);
+        this.texts = this.texts.filter((text) => text.id !== shareItemId);
+      } else {
+        throw new Error('Unknown item type');
+      }
+
+      this.selectedItem = undefined;
+      this.messageService.success('Item deleted successfully');
+    } catch (err) {
+      console.error(err);
+      this.messageService.error('Failed to delete item');
+    } finally {
+      this.messageService.remove(messageId);
     }
   }
 
