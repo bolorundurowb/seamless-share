@@ -44,8 +44,11 @@ export class HomePage implements OnInit {
   sharedText?: string;
   isSharedTextValid = false;
 
-  sharedFile?: File;
-  isSharedFileValid = false;
+  sharedDocument?: File;
+  isSharedDocumentValid = false;
+
+  sharedImage?: File;
+  isSharedImageValid = false;
 
 
   constructor(title: Title) {
@@ -78,11 +81,26 @@ export class HomePage implements OnInit {
 
     try {
       const share = await this.createShare();
-     await this.shareService.createDocumentShare(share.id, this.sharedFile!);
+      await this.shareService.createDocumentShare(share.id, this.sharedDocument!);
       await this.goToShare(share.code);
     } catch (err) {
       console.error(err);
       this.messageService.error('Failed to upload document');
+    } finally {
+      this.messageService.remove(messageId);
+    }
+  }
+
+  async createImageShare() {
+    const messageId = this.messageService.loading('Uploading image...', { nzDuration: 0 }).messageId;
+
+    try {
+      const share = await this.createShare();
+      await this.shareService.createImageShare(share.id, this.sharedImage!);
+      await this.goToShare(share.code);
+    } catch (err) {
+      console.error(err);
+      this.messageService.error('Failed to upload image');
     } finally {
       this.messageService.remove(messageId);
     }
@@ -96,17 +114,27 @@ export class HomePage implements OnInit {
     this.isSharedTextValid = !!this.sharedText && this.sharedText.length > 0 && this.sharedText.length <= 5000;
   }
 
-  validateSharedFile() {
-    this.isSharedFileValid = !!this.sharedFile && this.sharedFile.size > 0 && this.sharedFile.size <= 10_000_000;
+  validateSharedImage() {
+    this.isSharedImageValid = !!this.sharedImage && this.sharedImage.size > 0 && this.sharedImage.size <= 10_000_000;
+  }
+
+  imageSelected(event: File) {
+    this.sharedImage = event;
+    this.validateSharedImage();
+  }
+
+  validateSharedDocument() {
+    this.isSharedDocumentValid = !!this.sharedDocument && this.sharedDocument.size > 0 && this.sharedDocument.size <= 10_000_000;
   }
 
   fileChanged(event: any) {
-    this.sharedFile = event.target.files[0];
+    this.sharedDocument = event.target.files[0];
+    this.validateSharedDocument();
   }
 
   private async createShare(): Promise<ShareRes> {
     return await this.shareService.createShare();
-    this.validateSharedFile();
+    this.validateSharedDocument();
   }
 
   private async goToShare(shareCode: string) {

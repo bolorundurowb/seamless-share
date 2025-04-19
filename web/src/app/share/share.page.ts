@@ -65,8 +65,10 @@ export class SharePage implements OnInit {
   isSharedUrlValid = false;
   sharedText?: string;
   isSharedTextValid = false;
-  sharedFile?: File;
-  isSharedFileValid = false;
+  sharedDocument?: File;
+  isSharedDocumentValid = false;
+  sharedImage?: File;
+  isSharedImageValid = false;
 
 
   constructor(title: Title) {
@@ -310,11 +312,28 @@ export class SharePage implements OnInit {
     this.resetState();
   }
 
+  async createImageShare() {
+    const messageId = this.messageService.loading('Uploading image...', { nzDuration: 0 }).messageId;
+
+    try {
+      const image = await this.shareService.createImageShare(this.share.id, this.sharedImage!) as FileRes;
+      this.images = [ image, ...this.images ];
+
+      this.messageService.success('Image added to share');
+      this.resetState();
+    } catch (err) {
+      console.error(err);
+      this.messageService.error('Failed to upload image');
+    } finally {
+      this.messageService.remove(messageId);
+    }
+  }
+
   async createDocumentShare() {
     const messageId = this.messageService.loading('Uploading document...', { nzDuration: 0 }).messageId;
 
     try {
-      const document = await this.shareService.createDocumentShare(this.share.id, this.sharedFile!) as FileRes;
+      const document = await this.shareService.createDocumentShare(this.share.id, this.sharedDocument!) as FileRes;
       this.documents = [ document, ...this.documents ];
 
       this.messageService.success('Document added to share');
@@ -335,21 +354,32 @@ export class SharePage implements OnInit {
     this.isSharedTextValid = !!this.sharedText && this.sharedText.length > 0 && this.sharedText.length <= 5000;
   }
 
-  validateSharedFile() {
-    this.isSharedFileValid = !!this.sharedFile && this.sharedFile.size > 0 && this.sharedFile.size <= 10_000_000;
+  validateSharedImage() {
+    this.isSharedImageValid = !!this.sharedImage && this.sharedImage.size > 0 && this.sharedImage.size <= 10_000_000;
+  }
+
+  imageSelected(event: File) {
+    this.sharedImage = event;
+    this.validateSharedImage();
+  }
+
+  validateSharedDocument() {
+    this.isSharedDocumentValid = !!this.sharedDocument && this.sharedDocument.size > 0 && this.sharedDocument.size <= 10_000_000;
   }
 
   fileChanged(event: any) {
-    this.sharedFile = event.target.files[0];
-    this.validateSharedFile();
+    this.sharedDocument = event.target.files[0];
+    this.validateSharedDocument();
   }
 
   resetState() {
     this.sharedUrl = undefined;
     this.sharedText = undefined;
-    this.sharedFile = undefined;
+    this.sharedDocument = undefined;
+    this.sharedImage = undefined;
     this.isSharedUrlValid = false;
     this.isSharedTextValid = false;
-    this.isSharedFileValid = false;
+    this.isSharedDocumentValid = false;
+    this.isSharedImageValid = false;
   }
 }

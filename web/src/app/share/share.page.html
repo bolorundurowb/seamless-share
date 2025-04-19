@@ -224,14 +224,22 @@
 
         <ss-section title="Images">
           <div>
-            <ss-image-paste-select></ss-image-paste-select>
+            <ss-image-paste-select (imageSelected)="imageSelected($event)"></ss-image-paste-select>
           </div>
+
+          <button nz-button
+                  nzType="primary"
+                  class="button-spacer"
+                  [disabled]="!isSharedImageValid"
+                  (click)="createImageShare()">
+            Share Image
+          </button>
         </ss-section>
 
         <ss-section title="Documents">
           <nz-input-group nzSearch [nzAddOnAfter]="filePickerButton">
             <input nz-input readonly class="selected-file-display" type="text" placeholder="Select a file"
-                   [value]="sharedFile?.name"/>
+                   [value]="sharedDocument?.name"/>
             <input #fileInput class="hidden-file-input" type="file"
                    accept=".pdf,.doc,.docx,.txt,.rtf,.xlsx,.xls"
                    (change)="fileChanged($event)"/>
@@ -245,7 +253,7 @@
           <button nz-button
                   nzType="primary"
                   class="button-spacer"
-                  [disabled]="!isSharedFileValid"
+                  [disabled]="!isSharedDocumentValid"
                   (click)="createDocumentShare()">
             Share Document
           </button>

@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Output, ViewChild } from '@angular/core';
 import { NgIf } from '@angular/common';
 
 @Component({
@@ -70,6 +70,7 @@ import { NgIf } from '@angular/common';
 })
 export class ImagePasteSelectComponent {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+  @Output() imageSelected = new EventEmitter<File>();
 
   imageSrc: string | ArrayBuffer | null = null;
   fileName: string | null = null;
@@ -81,6 +82,7 @@ export class ImagePasteSelectComponent {
       const file = input.files[0];
       this.fileName = file.name;
       this.readFile(file);
+      this.imageSelected.emit(file);
     }
   }
 
@@ -110,6 +112,7 @@ export class ImagePasteSelectComponent {
           if (blob) {
             this.fileName = null; // No file name for pasted images
             this.readFile(blob);
+            this.imageSelected.emit(blob);
           }
         }
       }
