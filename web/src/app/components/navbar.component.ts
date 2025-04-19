@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { NgIf } from '@angular/common';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
 import { TextIconComponent } from './text-icon.component';
-import { NzDropDownDirective, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzIconDirective } from 'ng-zorro-antd/icon';
 import { NzMenuDirective, NzMenuDividerDirective, NzMenuItemComponent } from 'ng-zorro-antd/menu';
 
@@ -17,9 +17,8 @@ import { NzMenuDirective, NzMenuDividerDirective, NzMenuItemComponent } from 'ng
     NgIf,
     NzButtonComponent,
     TextIconComponent,
-    NzDropDownDirective,
     NzIconDirective,
-    NzDropdownMenuComponent,
+    NzDropDownModule,
     NzMenuDirective,
     NzMenuItemComponent,
     NzMenuDividerDirective,
@@ -34,15 +33,15 @@ import { NzMenuDirective, NzMenuDividerDirective, NzMenuItemComponent } from 'ng
       <div class="right">
         <ng-container *ngIf="isAuthenticated">
           <div class="user-info">
-            <a nz-dropdown nzTrigger="hover">
+            <a nz-dropdown [nzDropdownMenu]="menu" nzTrigger="hover" nzPlacement="bottomRight">
               <ss-text-icon name="{{ user!.firstName }} {{ user!.lastName }}"></ss-text-icon>
-              <nz-icon nzType="down"/>
+              <span nz-icon nzType="down" style="font-size: 1rem; font-weight: bolder"></span>
             </a>
             <nz-dropdown-menu #menu="nzDropdownMenu">
               <ul nz-menu>
                 <li nz-menu-item>My Share</li>
                 <li nz-menu-divider></li>
-                <li nz-menu-item>Log Out</li>
+                <li nz-menu-item (click)="logout()">Log Out</li>
               </ul>
             </nz-dropdown-menu>
           </div>
@@ -91,6 +90,12 @@ import { NzMenuDirective, NzMenuDividerDirective, NzMenuItemComponent } from 'ng
         display: flex;
         align-items: center;
         gap: 0.5rem;
+
+        a {
+          display: flex;
+          align-items: center;
+          gap: 0.1rem;
+        }
       }
     }
   `
@@ -114,5 +119,10 @@ export class NavbarComponent implements OnInit {
 
   async goToRegister() {
     await this.router.navigate([ 'auth', 'register' ]);
+  }
+
+  async logout() {
+    this.authService.clearAuth();
+    await this.router.navigate([ '/' ]);
   }
 }
