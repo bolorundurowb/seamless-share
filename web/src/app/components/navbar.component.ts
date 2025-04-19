@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { ShareService } from '../services/share.service';
 import { UserRes } from '../types';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { NgIf } from '@angular/common';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
 import { TextIconComponent } from './text-icon.component';
@@ -22,11 +22,12 @@ import { NzMenuDirective, NzMenuDividerDirective, NzMenuItemComponent } from 'ng
     NzMenuDirective,
     NzMenuItemComponent,
     NzMenuDividerDirective,
+    RouterLink,
   ],
   template: `
     <div class="navbar">
       <div class="left">
-        <img src="/images/logo.jpg"/>
+        <a routerLink="/"><img src="/images/logo.jpg"/></a>
         Seamless Share
       </div>
 

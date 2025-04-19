@@ -30,6 +30,8 @@ $breakpoint-md: 768px;
     .sidebar {
       width: 25%;
       color: white;
+      overflow-y: auto;
+      max-height: calc(100vh - 10rem);
 
       @media (max-width: $breakpoint-md) {
         width: 100%;

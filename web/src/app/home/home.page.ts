@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
 import { AuthService } from '../services/auth.service';
 import { ShareService } from '../services/share.service';
-import { FileRes, ShareRes } from '../types';
+import { ShareRes } from '../types';
 import { SectionComponent, SectionsComponent } from '../components/section.components';
 import { NzIconDirective } from 'ng-zorro-antd/icon';
 import { Router } from '@angular/router';
@@ -38,6 +38,8 @@ export class HomePage implements OnInit {
   private readonly shareService = inject(ShareService);
   private readonly messageService = inject(NzMessageService);
 
+  ownedShare?: ShareRes;
+
   sharedUrl?: string;
   isSharedUrlValid = false;
 
@@ -59,8 +61,7 @@ export class HomePage implements OnInit {
     const isAuthenticated = this.authService.isAuthenticated();
 
     if (isAuthenticated) {
-      const ownedShare = await this.shareService.getOwnedShare();
-      await this.goToShare(ownedShare.code);
+      this.ownedShare = await this.shareService.getOwnedShare();
     }
   }
 
@@ -133,8 +134,11 @@ export class HomePage implements OnInit {
   }
 
   private async createShare(): Promise<ShareRes> {
+    if (this.ownedShare) {
+      return this.ownedShare;
+    }
+
     return await this.shareService.createShare();
-    this.validateSharedDocument();
   }
 
   private async goToShare(shareCode: string) {
