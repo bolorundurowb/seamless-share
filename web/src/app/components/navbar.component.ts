@@ -9,6 +9,7 @@ import { TextIconComponent } from './text-icon.component';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzIconDirective } from 'ng-zorro-antd/icon';
 import { NzMenuDirective, NzMenuDividerDirective, NzMenuItemComponent } from 'ng-zorro-antd/menu';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'ss-navbar',
@@ -40,7 +41,7 @@ import { NzMenuDirective, NzMenuDividerDirective, NzMenuItemComponent } from 'ng
             </a>
             <nz-dropdown-menu #menu="nzDropdownMenu">
               <ul nz-menu>
-                <li nz-menu-item>My Share</li>
+                <li nz-menu-item (click)="goToMyShare()">My Share</li>
                 <li nz-menu-divider></li>
                 <li nz-menu-item (click)="logout()">Log Out</li>
               </ul>
@@ -105,6 +106,7 @@ export class NavbarComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
   private readonly shareService = inject(ShareService);
+  private readonly messageService = inject(NzMessageService);
 
   isAuthenticated = false;
   user: UserRes | null = null;
@@ -120,6 +122,16 @@ export class NavbarComponent implements OnInit {
 
   async goToRegister() {
     await this.router.navigate([ 'auth', 'register' ]);
+  }
+
+  async goToMyShare() {
+    try {
+      const share = await this.shareService.getOwnedShare();
+      await this.router.navigate([ 'shares', share.code ]);
+    } catch (e) {
+      console.error(e);
+      this.messageService.error('Failed to load share');
+    }
   }
 
   async logout() {

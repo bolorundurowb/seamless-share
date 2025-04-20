@@ -76,7 +76,8 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
         corsPolicyBuilder => corsPolicyBuilder
-            .WithOrigins("http://localhost:4200", "https://seamless_share.com") // Replace with your allowed origins
+            // TODO: update to expected 
+            .WithOrigins("http://localhost:4200", "https://seamless_share.com")
             .AllowAnyHeader()
             .AllowAnyMethod());
 });
