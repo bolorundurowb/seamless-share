@@ -7,7 +7,7 @@ on:
 env:
   ANGULAR_PROJECT_DIR: "web"
   DOTNET_PROJECT_DIR: "server"
-  DOTNET_SOLUTION_FILE_NAME: "seamless-share-api.slon"
+  DOTNET_SOLUTION_FILE_NAME: "seamless-share-api.sln"
 
 jobs:
   build:
