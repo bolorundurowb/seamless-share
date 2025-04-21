@@ -7,6 +7,7 @@ on:
 env:
   ANGULAR_PROJECT_DIR: "web"
   DOTNET_PROJECT_DIR: "server"
+  DOTNET_SOLUTION_FILE_NAME: "seamless-share-api.slon"
 
 jobs:
   build:
@@ -27,9 +28,9 @@ jobs:
       - name: Build .NET Core app
         working-directory: ${{ env.DOTNET_PROJECT_DIR }}
         run: |
-          dotnet restore
-          dotnet build --configuration Release --no-restore
-          dotnet publish -c Release -o ../publish
+          dotnet restore ${{ env.DOTNET_SOLUTION_FILE_NAME }}
+          dotnet build ${{ env.DOTNET_SOLUTION_FILE_NAME }} --configuration Release --no-restore
+          dotnet publish ${{ env.DOTNET_SOLUTION_FILE_NAME }} -c Release -o ../publish
 
       # Setup Node.js
       - name: Setup Node.js
