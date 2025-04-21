@@ -1,0 +1,45 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: [ "main" ]
+
+env:
+  ANGULAR_PROJECT_DIR: "web"
+  DOTNET_PROJECT_DIR: "server"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      docker-image: ${{ steps.build-docker.outputs.docker-image }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Setup .NET Core
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '9.0.x'
+
+      # Build ASP.NET Core app
+      - name: Build .NET Core app
+        working-directory: ${{ env.DOTNET_PROJECT_DIR }}
+        run: |
+          dotnet restore
+          dotnet build --configuration Release --no-restore
+          dotnet publish -c Release -o ../publish
+
+      # Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+
+      # Build Angular app
+      - name: Build Angular app
+        working-directory: ${{ env.ANGULAR_PROJECT_DIR }}
+        run: |
+          npm ci
+          npm run build -- --configuration=production
