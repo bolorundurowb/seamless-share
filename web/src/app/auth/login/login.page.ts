@@ -5,6 +5,7 @@ import { AuthService } from '../../services/auth.service';
 import { LoginReq } from '../../types';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Router } from '@angular/router';
+import { extractErrorMessaging } from '../../utils';
 
 @Component({
   selector: 'ss-login',
@@ -99,7 +100,7 @@ export class LoginPage {
       this.notificationService.create(
         'error',
         'Error',
-        e.error?.message ?? 'Failed to log in'
+        extractErrorMessaging(e) ??  'Failed to log in'
       );
     }
   }

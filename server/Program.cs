@@ -36,7 +36,8 @@ builder.Services.AddSingleton<FileService>();
 builder.Services.AddHostedService<ShareItemsCleanupService>();
 
 builder.Services.AddControllers()
-    .AddJsonOptions(opts => opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+    .AddJsonOptions(opts => opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()))
+    .ConfigureApiBehaviorOptions(opts => opts.InvalidModelStateResponseFactory = context => context.Format());
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

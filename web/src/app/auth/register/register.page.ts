@@ -5,6 +5,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { RegisterReq } from '../../types';
+import { extractErrorMessaging } from '../../utils';
 
 @Component({
   selector: 'ss-register',
@@ -107,7 +108,7 @@ export class RegisterPage {
       this.notificationService.create(
         'error',
         'Error',
-        e.error?.message ?? 'Failed to create an account'
+        extractErrorMessaging(e) ?? 'Failed to create an account'
       );
     }
   }

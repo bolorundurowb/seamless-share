@@ -11,7 +11,7 @@ import { NzIconDirective } from 'ng-zorro-antd/icon';
 import { Router } from '@angular/router';
 import { ImagePasteSelectComponent } from '../components/image-paste-select.component';
 import { NavbarComponent } from '../components/navbar.component';
-import { isUrlValid } from '../utils';
+import { extractErrorMessaging, isUrlValid } from '../utils';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
@@ -86,7 +86,7 @@ export class HomePage implements OnInit {
       await this.goToShare(share.code);
     } catch (err) {
       console.error(err);
-      this.messageService.error('Failed to upload document');
+      this.messageService.error(extractErrorMessaging(err) ?? 'Failed to upload document');
     } finally {
       this.messageService.remove(messageId);
     }
@@ -101,7 +101,7 @@ export class HomePage implements OnInit {
       await this.goToShare(share.code);
     } catch (err) {
       console.error(err);
-      this.messageService.error('Failed to upload image');
+      this.messageService.error(extractErrorMessaging(err) ?? 'Failed to upload image');
     } finally {
       this.messageService.remove(messageId);
     }

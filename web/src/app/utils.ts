@@ -10,3 +10,7 @@ export const isUrlValid = (url?: string): boolean => {
   const urlPattern = /^(?:(https?|ftp|ws):\/\/)?(?:([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}|localhost|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})(?::\d+)?(?:\/[^\s?#]*)?(?:\?[^#\s]*)?(?:#[^\s]*)?$/;
   return urlPattern.test(url);
 }
+
+export const extractErrorMessaging = (err: any): string | undefined =>  {
+  return err.error?.message;
+}

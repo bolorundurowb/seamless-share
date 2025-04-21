@@ -9,7 +9,7 @@ import { FileRes, LinkRes, ShareRes, TextRes } from '../types';
 import { Router } from '@angular/router';
 import { DatePipe, NgForOf, NgIf } from '@angular/common';
 import { TitleCardComponent } from '../components/share-item.component';
-import { isFile, isLink, isText, isUrlValid } from '../utils';
+import { extractErrorMessaging, isFile, isLink, isText, isUrlValid } from '../utils';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { FilesizePipe } from '../components/file-size.pipe';
 import { NzPopconfirmDirective } from 'ng-zorro-antd/popconfirm';
@@ -95,17 +95,16 @@ export class SharePage implements OnInit {
       this.texts = await this.shareService.getTextShares(this.share.id);
       this.links = await this.shareService.getLinkShares(this.share.id);
       this.images = await this.shareService.getImageShares(this.share.id);
-    } catch (e) {
-      const error = e as any;
-      const statusCode = error.status;
+    } catch (err: any) {
+      const statusCode = err.status;
       if (statusCode === 404) {
         this.messageService.warning('You do not have access to this share');
         await this.router.navigate([ 'auth', 'login' ]);
         return;
       }
 
-      this.messageService.error(error.message);
-      throw e;
+      this.messageService.error(extractErrorMessaging(err) ?? 'Failed to load share');
+      throw err;
     }
 
     // create the share link
@@ -165,7 +164,7 @@ export class SharePage implements OnInit {
         this.messageService.success('File downloaded successfully');
       } catch (err) {
         console.error(err);
-        this.messageService.error('Failed to download file');
+        this.messageService.error(extractErrorMessaging(err) ?? 'Failed to download file');
       } finally {
         this.messageService.remove(messageId);
       }
@@ -233,7 +232,7 @@ export class SharePage implements OnInit {
       this.messageService.success('Item deleted successfully');
     } catch (err) {
       console.error(err);
-      this.messageService.error('Failed to delete item');
+      this.messageService.error(extractErrorMessaging(err) ?? 'Failed to delete item');
     } finally {
       this.messageService.remove(messageId);
     }
@@ -323,7 +322,7 @@ export class SharePage implements OnInit {
       this.resetState();
     } catch (err) {
       console.error(err);
-      this.messageService.error('Failed to upload image');
+      this.messageService.error(extractErrorMessaging(err) ?? 'Failed to upload image');
     } finally {
       this.messageService.remove(messageId);
     }
@@ -340,7 +339,7 @@ export class SharePage implements OnInit {
       this.resetState();
     } catch (err) {
       console.error(err);
-      this.messageService.error('Failed to upload document');
+      this.messageService.error(extractErrorMessaging(err) ?? 'Failed to upload document');
     } finally {
       this.messageService.remove(messageId);
     }
