@@ -96,16 +96,16 @@ Meerkat.Connect(dbUrl);
 
 var app = builder.Build();
 
-app.UseLogly(opts => opts
-    .AddRequestMethod()
-    .AddStatusCode()
-    .AddResponseTime()
-    .AddUrl()
-    .AddResponseLength());
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseLogly(opts => opts
+        .AddRequestMethod()
+        .AddStatusCode()
+        .AddResponseTime()
+        .AddUrl()
+        .AddResponseLength());
+
     app.UseSwagger();
     app.UseSwaggerUI();
 }
