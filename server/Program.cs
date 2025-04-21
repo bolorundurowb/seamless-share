@@ -80,7 +80,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowSpecificOrigin",
         corsPolicyBuilder => corsPolicyBuilder
             // TODO: update to expected 
-            .WithOrigins("http://localhost:4200", "https://seamless_share.com")
+            .WithOrigins("http://localhost:4200", "https://seamless-share.netlify.app")
             .AllowAnyHeader()
             .AllowAnyMethod());
 });
