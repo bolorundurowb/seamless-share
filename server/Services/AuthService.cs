@@ -20,11 +20,11 @@ public class AuthService(ILogger<AuthService> logger, IConfiguration configurati
         var claims = new[]
         {
             new Claim(ClaimTypes.Name, user.Name()),
-            new Claim(JwtRegisteredClaimNames.Sub, ((Guid)user.Id).ToString("D")),
+            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString("D")),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 
-        var expiry = DateTime.Now.AddHours(12);
+        var expiry = DateTime.Now.AddDays(7);
 
         var token = new JwtSecurityToken(
             issuer: jwtSettings["Issuer"],

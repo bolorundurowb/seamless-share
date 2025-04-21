@@ -11,7 +11,7 @@ import { isLink, isText } from '../utils';
   template: `
     <div class="card" [class.selected]="selected">
       <div class="card-icon">
-        <img [src]="'/images/' + type?.toLowerCase() + '.png'"/>
+        <img [src]="'/images/' + type.toLowerCase() + '.png'"/>
       </div>
       <div class="card-content">
         <div class="header">{{ title }}</div>
