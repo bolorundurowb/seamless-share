@@ -10,14 +10,14 @@ public class RegisterReqValidator : AbstractValidator<RegisterReq>
         RuleFor(x => x.FirstName)
             .MaximumLength(100)
             .WithMessage("First name cannot exceed 100 characters.")
-            .Matches(@"^[a-zA-Z\s]*$")
+            .Matches(@"^[a-zA-Z\s-]*$")
             .WithMessage("First name can only contain letters and spaces.")
             .When(x => !string.IsNullOrEmpty(x.FirstName));
 
         RuleFor(x => x.LastName)
             .MaximumLength(100)
             .WithMessage("Last name cannot exceed 100 characters.")
-            .Matches(@"^[a-zA-Z\s]*$")
+            .Matches(@"^[a-zA-Z\s-]*$")
             .WithMessage("Last name can only contain letters and spaces.")
             .When(x => !string.IsNullOrEmpty(x.LastName));
 
