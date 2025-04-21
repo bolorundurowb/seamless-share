@@ -1,5 +1,13 @@
-import { ApplicationConfig, provideZoneChangeDetection, importProvidersFrom } from '@angular/core';
+import {
+  ApplicationConfig,
+  provideZoneChangeDetection,
+  importProvidersFrom,
+  ErrorHandler,
+  APP_INITIALIZER
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
+import { Router } from '@angular/router';
+import * as Sentry from "@sentry/angular";
 
 import { routes } from './app.routes';
 import { en_GB, provideNzI18n } from 'ng-zorro-antd/i18n';
@@ -22,5 +30,19 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       withInterceptors([authInterceptor])
     ),
+    {
+      provide: ErrorHandler,
+      useValue: Sentry.createErrorHandler(),
+    },
+    {
+      provide: Sentry.TraceService,
+      deps: [Router],
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: () => () => {},
+      deps: [Sentry.TraceService],
+      multi: true,
+    },
   ]
 };

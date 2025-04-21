@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../environment';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { AddTextToShareReq, FileRes, LinkRes, ShareRes, TextRes } from '../types';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class ShareService {

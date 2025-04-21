@@ -22,7 +22,7 @@ DotEnv.Load();
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.WebHost.UseSentry();
+builder.WebHost.UseSentry(o => o.Debug = !builder.Environment.IsProduction());
 
 builder.Services.AddScoped<ShareService>();
 builder.Services.AddScoped<LinkService>();

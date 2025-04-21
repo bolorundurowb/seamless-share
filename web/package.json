@@ -5,9 +5,10 @@
     "ng": "ng",
     "dev": "ng serve --hmr",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build && npm run sentry:sourcemaps",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org bolorundurowb --project seamless-share-web ./dist/ && sentry-cli sourcemaps upload --org bolorundurowb --project seamless-share-web ./dist/"
   },
   "private": true,
   "dependencies": {
@@ -19,6 +20,8 @@
     "@angular/platform-browser": "^19.1.7",
     "@angular/platform-browser-dynamic": "^19.1.7",
     "@angular/router": "^19.1.7",
+    "@sentry/angular": "^9.13.0",
+    "@sentry/cli": "^2.43.0",
     "ng-zorro-antd": "19.1.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
