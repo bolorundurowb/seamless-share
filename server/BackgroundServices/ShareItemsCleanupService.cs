@@ -5,18 +5,18 @@ using SeamlessShareApi.Services;
 
 namespace SeamlessShareApi.BackgroundServices;
 
-public class ShareCleanupService : BackgroundService
+public class ShareItemsCleanupService : BackgroundService
 {
     private const int MaxAnonymousShareAgeInDays = 7;
     private const int MaxOwnedShareAgeInDays = 30;
 
-    private readonly ILogger<ShareCleanupService> _logger;
+    private readonly ILogger<ShareItemsCleanupService> _logger;
     private readonly FileService _fileService;
 
     private readonly TimeSpan[] _scheduledTimes;
     private DateTime _nextRunTime;
 
-    public ShareCleanupService(ILogger<ShareCleanupService> logger, FileService fileService)
+    public ShareItemsCleanupService(ILogger<ShareItemsCleanupService> logger, FileService fileService)
     {
         _logger = logger;
         _fileService = fileService;
@@ -31,7 +31,7 @@ public class ShareCleanupService : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _logger.LogInformation("ShareCleanupService is starting.");
+        _logger.LogInformation("ShareItemsCleanupService is starting.");
 
         while (!stoppingToken.IsCancellationRequested)
         {
@@ -67,7 +67,7 @@ public class ShareCleanupService : BackgroundService
             await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
         }
 
-        _logger.LogInformation("ShareCleanupService is exiting.");
+        _logger.LogInformation("ShareItemsCleanupService is exiting.");
     }
 
     private async Task DeleteExpiredLinks(List<Guid> anonymousShareIds, List<Guid> ownedShareIds)

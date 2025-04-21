@@ -13,6 +13,7 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using SeamlessShareApi;
+using SeamlessShareApi.BackgroundServices;
 using SeamlessShareApi.Services;
 
 // load env vars
@@ -26,11 +27,13 @@ builder.WebHost.UseSentry();
 builder.Services.AddScoped<ShareService>();
 builder.Services.AddScoped<LinkService>();
 builder.Services.AddScoped<TextService>();
-builder.Services.AddScoped<FileService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<DocumentService>();
 builder.Services.AddScoped<ImageService>();
+builder.Services.AddSingleton<FileService>();
+
+builder.Services.AddHostedService<ShareItemsCleanupService>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(opts => opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
