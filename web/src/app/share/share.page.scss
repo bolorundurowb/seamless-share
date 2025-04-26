@@ -5,6 +5,8 @@ $breakpoint-md: 768px;
 .container {
   height: 100vh;
   padding: 3.5rem 1rem 1rem;
+  display: flex;
+  flex-direction: column;
 
   .share-row {
     margin-top: 1.2rem;
@@ -16,6 +18,19 @@ $breakpoint-md: 768px;
     padding: 0.75rem;
     display: flex;
     flex-direction: row;
+
+    @media (max-width: $breakpoint-md) {
+      flex-direction: column;
+      gap: 0.75rem;
+      
+      nz-input-group {
+        width: 100%;
+      }
+      
+      button {
+        width: 100%;
+      }
+    }
   }
 
   .main {
@@ -33,6 +48,33 @@ $breakpoint-md: 768px;
       overflow-y: auto;
       max-height: calc(100vh - 10rem);
 
+      .empty-sidebar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        padding: 2rem;
+        text-align: center;
+        color: #718096;
+
+        .empty-message {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 1rem;
+
+          .empty-icon {
+            font-size: 3rem;
+            color: #a0aec0;
+          }
+
+          .empty-subtext {
+            font-size: 0.875rem;
+            color: #a0aec0;
+          }
+        }
+      }
+
       @media (max-width: $breakpoint-md) {
         width: 100%;
         height: auto;
@@ -44,6 +86,12 @@ $breakpoint-md: 768px;
       padding: 1rem 2rem;
       background-color: #f9f9f9;
       transition: all 0.3s ease;
+
+      &.desktop-only {
+        @media (max-width: $breakpoint-md) {
+          display: none;
+        }
+      }
 
       .empty {
         display: flex;
@@ -222,6 +270,162 @@ $breakpoint-md: 768px;
       }
 
       // Add your content specific styles here
+    }
+  }
+}
+
+.mobile-content {
+  padding: 1rem;
+  background-color: #f9f9f9;
+  height: 100%;
+  overflow-y: auto;
+
+  .modal-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+
+    button {
+      color: #666;
+      &:hover {
+        color: #333;
+      }
+    }
+  }
+
+  .item-actions {
+    text-align: end;
+    margin-bottom: 1rem;
+
+    button {
+      margin-left: 0.35rem;
+    }
+  }
+
+  .item-content {
+    .file-display {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      overflow: hidden;
+      color: #2d3748;
+
+      .link-content {
+        padding: 16px;
+        display: flex;
+        gap: 12px;
+
+        .link-icon {
+          flex-shrink: 0;
+
+          img {
+            width: 48px;
+            height: 48px;
+          }
+        }
+
+        .link-info {
+          font-size: 1.1rem;
+
+          .warning {
+            color: #FFB347;
+            font-size: small;
+            margin-top: 0.25rem;
+          }
+        }
+      }
+
+      .text-content {
+        font-size: 1.1rem;
+        text-align: justify;
+        margin: 16px;
+      }
+
+      .file-header {
+        display: flex;
+        gap: 12px;
+        padding: 16px;
+        border-bottom: 1px solid #e2e8f0;
+
+        .file-icon {
+          flex-shrink: 0;
+          width: 48px;
+          height: 48px;
+          background: #ebf4ff;
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #4a6bdf;
+          font-weight: 600;
+          font-size: 12px;
+          text-transform: uppercase;
+        }
+
+        .file-main-info {
+          flex: 1;
+          min-width: 0;
+
+          h3 {
+            margin: 0 0 8px;
+            font-size: 16px;
+            font-weight: 600;
+            white-space: normal;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+
+          .file-subinfo {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: #718096;
+
+            span {
+              white-space: nowrap;
+            }
+          }
+        }
+      }
+
+      .file-details {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        padding: 16px;
+
+        .detail-group {
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+        }
+
+        .detail-item {
+          .label {
+            display: block;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #718096;
+            margin-bottom: 4px;
+          }
+
+          .value {
+            font-size: 14px;
+            font-weight: 500;
+            word-break: break-word;
+          }
+
+          img {
+            max-width: 100%;
+            border: 1px dashed #718096;
+            border-radius: 10px;
+            padding: 0.25rem;
+          }
+        }
+      }
     }
   }
 }

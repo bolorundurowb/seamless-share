@@ -40,6 +40,10 @@ import { Component } from '@angular/core';
         border: 1px solid #ddd;
         border-radius: 0.5rem;
         background-color: #fff;
+
+        @media (max-width: 480px) {
+          width: 95%;
+        }
       }
     }
   `
