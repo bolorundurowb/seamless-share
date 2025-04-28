@@ -33,25 +33,48 @@ import { NzMessageService } from 'ng-zorro-antd/message';
       </div>
 
       <div class="right">
-        <ng-container *ngIf="isAuthenticated">
-          <div class="user-info">
-            <a nz-dropdown [nzDropdownMenu]="menu" nzTrigger="hover" nzPlacement="bottomRight">
-              <ss-text-icon name="{{ user!.firstName }} {{ user!.lastName }}"></ss-text-icon>
-              <span nz-icon nzType="down" style="font-size: 1rem; font-weight: bolder"></span>
-            </a>
-            <nz-dropdown-menu #menu="nzDropdownMenu">
-              <ul nz-menu>
+        <!-- Mobile Menu -->
+        <div class="mobile-menu">
+          <a nz-dropdown [nzDropdownMenu]="mobileMenu" nzTrigger="click" nzPlacement="bottomRight">
+            <span nz-icon nzType="menu" style="font-size: 1.5rem;"></span>
+          </a>
+          <nz-dropdown-menu #mobileMenu="nzDropdownMenu">
+            <ul nz-menu>
+              <ng-container *ngIf="isAuthenticated">
                 <li nz-menu-item (click)="goToMyShare()">My Share</li>
                 <li nz-menu-divider></li>
                 <li nz-menu-item (click)="logout()">Log Out</li>
-              </ul>
-            </nz-dropdown-menu>
-          </div>
-        </ng-container>
-        <ng-container *ngIf="!isAuthenticated">
-          <button nz-button nzType="primary" (click)="goToLogin()">Login</button>
-          <button nz-button (click)="goToRegister()">Register</button>
-        </ng-container>
+              </ng-container>
+              <ng-container *ngIf="!isAuthenticated">
+                <li nz-menu-item (click)="goToLogin()">Login</li>
+                <li nz-menu-item (click)="goToRegister()">Register</li>
+              </ng-container>
+            </ul>
+          </nz-dropdown-menu>
+        </div>
+
+        <!-- Desktop Menu -->
+        <div class="desktop-menu">
+          <ng-container *ngIf="isAuthenticated">
+            <div class="user-info">
+              <a nz-dropdown [nzDropdownMenu]="menu" nzTrigger="hover" nzPlacement="bottomRight">
+                <ss-text-icon name="{{ user!.firstName }} {{ user!.lastName }}"></ss-text-icon>
+                <span nz-icon nzType="down" style="font-size: 1rem; font-weight: bolder"></span>
+              </a>
+              <nz-dropdown-menu #menu="nzDropdownMenu">
+                <ul nz-menu>
+                  <li nz-menu-item (click)="goToMyShare()">My Share</li>
+                  <li nz-menu-divider></li>
+                  <li nz-menu-item (click)="logout()">Log Out</li>
+                </ul>
+              </nz-dropdown-menu>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="!isAuthenticated">
+            <button nz-button nzType="primary" (click)="goToLogin()">Login</button>
+            <button nz-button (click)="goToRegister()">Register</button>
+          </ng-container>
+        </div>
       </div>
     </div>
   `,
@@ -98,6 +121,39 @@ import { NzMessageService } from 'ng-zorro-antd/message';
           align-items: center;
           gap: 0.1rem;
         }
+      }
+
+      .mobile-menu {
+        display: none;
+      }
+
+      .desktop-menu {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      @media (max-width: 768px) {
+        .left {
+          font-size: 1rem;
+          
+          img {
+            width: 2rem;
+          }
+        }
+
+        .mobile-menu {
+          display: block;
+        }
+
+        .desktop-menu {
+          display: none;
+        }
+      }
+
+      @media (max-width: 480px) {
+        padding-top: 15px;
+        padding-bottom: 15px;
       }
     }
   `

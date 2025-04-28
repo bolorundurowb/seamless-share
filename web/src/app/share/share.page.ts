@@ -60,6 +60,7 @@ export class SharePage implements OnInit {
   selectedItem?: any;
   shareLink!: string;
   isAdderModalVisible = false;
+  isMobileContentModalVisible = false;
 
   sharedUrl?: string;
   isSharedUrlValid = false;
@@ -113,6 +114,11 @@ export class SharePage implements OnInit {
 
   select(item: FileRes | TextRes | LinkRes) {
     this.selectedItem = item;
+    
+    // Show mobile modal on tablet/mobile devices
+    if (window.innerWidth <= 768) {
+      this.isMobileContentModalVisible = true;
+    }
   }
 
   isSelectedItemAFile(): boolean {
@@ -230,6 +236,11 @@ export class SharePage implements OnInit {
 
       this.selectedItem = undefined;
       this.messageService.success('Item deleted successfully');
+      
+      // Close mobile modal if open
+      if (window.innerWidth <= 768) {
+        this.isMobileContentModalVisible = false;
+      }
     } catch (err) {
       console.error(err);
       this.messageService.error(extractErrorMessaging(err) ?? 'Failed to delete item');
@@ -380,5 +391,9 @@ export class SharePage implements OnInit {
     this.isSharedTextValid = false;
     this.isSharedDocumentValid = false;
     this.isSharedImageValid = false;
+  }
+
+  closeMobileModal() {
+    this.isMobileContentModalVisible = false;
   }
 }
