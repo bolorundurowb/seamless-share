@@ -2,19 +2,18 @@
 
 <div class="container">
   <div class="share-row">
-    <nz-input-group nzSearch [nzAddOnAfter]="suffixButton">
-      <input type="text" nz-input readonly [value]="shareLink"/>
-    </nz-input-group>
-    <button nz-button nzType="primary" (click)="showAdderModal()">
-      <nz-icon nzType="plus-square" nzTheme="outline"/>
-      Add To Share
-    </button>
-    <ng-template #suffixButton>
+    <input type="text" nz-input readonly [value]="shareLink"/>
+
+    <div class="share-buttons">
       <button nz-button nzType="primary" nzSearch (click)="copyShareLink()">
         <nz-icon nzType="link" nzTheme="outline"/>
         Copy Share Link
       </button>
-    </ng-template>
+      <button nz-button nzType="primary" (click)="showAdderModal()">
+        <nz-icon nzType="plus-square" nzTheme="outline"/>
+        Add To Share
+      </button>
+    </div>
   </div>
 
   <div class="main">
@@ -277,7 +276,8 @@
   </ng-container>
 </nz-modal>
 
-<nz-modal nzWidth="100%" [(nzVisible)]="isMobileContentModalVisible" [nzFooter]="null" (nzOnCancel)="closeMobileModal()">
+<nz-modal nzWidth="100%" [(nzVisible)]="isMobileContentModalVisible" [nzFooter]="null"
+          (nzOnCancel)="closeMobileModal()">
   <ng-container *nzModalContent>
     <div class="mobile-content">
       <ng-container *ngIf="selectedItem">
