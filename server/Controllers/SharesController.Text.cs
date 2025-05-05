@@ -22,7 +22,7 @@ public partial class SharesController
 
         var text = await textService.GetAll(shareId);
 
-        return Ok(text.Select(x => _textMapper.Map(x)).ToList());
+        return Ok(text.Select(x => _textMapper.MapToDto(x, ownerId.HasValue)).ToList());
     }
 
     [HttpPost("{shareId:guid}/text")]

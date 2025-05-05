@@ -11,4 +11,8 @@ public static class Constants
     public const string DocumentsFolderName = "docs";
 
     public const string ImagesFolderName = "images";
+    
+    public const int MaxAnonymousShareAgeInDays = 7;
+    
+    public const int MaxOwnedShareAgeInDays = 30;
 }

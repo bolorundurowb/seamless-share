@@ -21,4 +21,6 @@ public class FileRes
     public string? DeviceName { get; set; }
 
     public string? AppVersion { get; set; }
+    
+    public DateTime ExpiresAt { get; set; }
 }

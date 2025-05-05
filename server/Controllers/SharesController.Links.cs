@@ -19,7 +19,7 @@ public partial class SharesController
 
         var links = await linkService.GetAll(shareId);
 
-        return Ok(links.Select(x => _linkMapper.Map(x)).ToList());
+        return Ok(links.Select(x => _linkMapper.MapToDto(x, ownerId.HasValue)).ToList());
     }
 
     [Authorize]

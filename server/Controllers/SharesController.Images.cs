@@ -25,7 +25,7 @@ public partial class SharesController
         if (images.Count > 0)
             foreach (var image in images)
             {
-                var mappedImage = _fileMapper.MapImage(image);
+                var mappedImage = _fileMapper.MapImageToDto(image, ownerId.HasValue);
                 mappedImage.Url = fileService.GetSignedUrl(image.Url);
                 mappedImages.Add(mappedImage);
             }

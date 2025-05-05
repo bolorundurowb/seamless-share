@@ -7,9 +7,6 @@ namespace SeamlessShareApi.BackgroundServices;
 
 public class ShareItemsCleanupService : BackgroundService
 {
-    private const int MaxAnonymousShareAgeInDays = 7;
-    private const int MaxOwnedShareAgeInDays = 30;
-
     private readonly ILogger<ShareItemsCleanupService> _logger;
     private readonly FileService _fileService;
 
@@ -74,9 +71,9 @@ public class ShareItemsCleanupService : BackgroundService
     {
         _logger.LogInformation("Cleaning up expired links.");
         await Meerkat.RemoveAsync<LinkSchema, Guid>(x =>
-            x.CreatedAt < DateTime.UtcNow.AddDays(-MaxAnonymousShareAgeInDays) && anonymousShareIds.Contains(x.Id));
+            x.CreatedAt < DateTime.UtcNow.AddDays(-Constants.MaxAnonymousShareAgeInDays) && anonymousShareIds.Contains(x.Id));
         await Meerkat.RemoveAsync<LinkSchema, Guid>(x =>
-            x.CreatedAt < DateTime.UtcNow.AddDays(-MaxOwnedShareAgeInDays) && ownedShareIds.Contains(x.Id));
+            x.CreatedAt < DateTime.UtcNow.AddDays(-Constants.MaxOwnedShareAgeInDays) && ownedShareIds.Contains(x.Id));
         _logger.LogInformation("Expired links cleaned up.");
     }
 
@@ -84,9 +81,9 @@ public class ShareItemsCleanupService : BackgroundService
     {
         _logger.LogInformation("Cleaning up expired texts.");
         await Meerkat.RemoveAsync<TextSchema, Guid>(x =>
-            x.CreatedAt < DateTime.UtcNow.AddDays(-MaxAnonymousShareAgeInDays) && anonymousShareIds.Contains(x.Id));
+            x.CreatedAt < DateTime.UtcNow.AddDays(-Constants.MaxAnonymousShareAgeInDays) && anonymousShareIds.Contains(x.Id));
         await Meerkat.RemoveAsync<TextSchema, Guid>(x =>
-            x.CreatedAt < DateTime.UtcNow.AddDays(-MaxOwnedShareAgeInDays) && ownedShareIds.Contains(x.Id));
+            x.CreatedAt < DateTime.UtcNow.AddDays(-Constants.MaxOwnedShareAgeInDays) && ownedShareIds.Contains(x.Id));
         _logger.LogInformation("Expired texts cleaned up.");
     }
 
@@ -95,9 +92,9 @@ public class ShareItemsCleanupService : BackgroundService
         _logger.LogInformation("Cleaning up expired images.");
 
         var anonymousImages = await Meerkat.FindAsync<ImageSchema, Guid>(x =>
-            x.CreatedAt < DateTime.UtcNow.AddDays(-MaxAnonymousShareAgeInDays) && anonymousShareIds.Contains(x.Id));
+            x.CreatedAt < DateTime.UtcNow.AddDays(-Constants.MaxAnonymousShareAgeInDays) && anonymousShareIds.Contains(x.Id));
         var ownedImages = await Meerkat.FindAsync<ImageSchema, Guid>(x =>
-            x.CreatedAt < DateTime.UtcNow.AddDays(-MaxOwnedShareAgeInDays) && ownedShareIds.Contains(x.Id));
+            x.CreatedAt < DateTime.UtcNow.AddDays(-Constants.MaxOwnedShareAgeInDays) && ownedShareIds.Contains(x.Id));
 
         // delete files from external provider
         await Task.WhenAll(anonymousImages.Select(x => _fileService.Delete(x.Metadata.ExternalId)));
@@ -105,9 +102,9 @@ public class ShareItemsCleanupService : BackgroundService
 
         // delete images from database
         await Meerkat.RemoveAsync<ImageSchema, Guid>(x =>
-            x.CreatedAt < DateTime.UtcNow.AddDays(-MaxAnonymousShareAgeInDays) && anonymousShareIds.Contains(x.Id));
+            x.CreatedAt < DateTime.UtcNow.AddDays(-Constants.MaxAnonymousShareAgeInDays) && anonymousShareIds.Contains(x.Id));
         await Meerkat.RemoveAsync<ImageSchema, Guid>(x =>
-            x.CreatedAt < DateTime.UtcNow.AddDays(-MaxOwnedShareAgeInDays) && ownedShareIds.Contains(x.Id));
+            x.CreatedAt < DateTime.UtcNow.AddDays(-Constants.MaxOwnedShareAgeInDays) && ownedShareIds.Contains(x.Id));
 
         _logger.LogInformation("Expired images cleaned up.");
     }
@@ -116,9 +113,9 @@ public class ShareItemsCleanupService : BackgroundService
     {
         _logger.LogInformation("Cleaning up expired documents.");
         var anonymousDocuments = await Meerkat.FindAsync<DocumentSchema, Guid>(x =>
-            x.CreatedAt < DateTime.UtcNow.AddDays(-MaxAnonymousShareAgeInDays) && anonymousShareIds.Contains(x.Id));
+            x.CreatedAt < DateTime.UtcNow.AddDays(-Constants.MaxAnonymousShareAgeInDays) && anonymousShareIds.Contains(x.Id));
         var ownedDocuments = await Meerkat.FindAsync<DocumentSchema, Guid>(x =>
-            x.CreatedAt < DateTime.UtcNow.AddDays(-MaxOwnedShareAgeInDays) && ownedShareIds.Contains(x.Id));
+            x.CreatedAt < DateTime.UtcNow.AddDays(-Constants.MaxOwnedShareAgeInDays) && ownedShareIds.Contains(x.Id));
 
         // delete files from external provider
         await Task.WhenAll(anonymousDocuments.Select(x => _fileService.Delete(x.Metadata.ExternalId)));
@@ -126,9 +123,9 @@ public class ShareItemsCleanupService : BackgroundService
 
         // delete documents from database
         await Meerkat.RemoveAsync<DocumentSchema, Guid>(x =>
-            x.CreatedAt < DateTime.UtcNow.AddDays(-MaxAnonymousShareAgeInDays) && anonymousShareIds.Contains(x.Id));
+            x.CreatedAt < DateTime.UtcNow.AddDays(-Constants.MaxAnonymousShareAgeInDays) && anonymousShareIds.Contains(x.Id));
         await Meerkat.RemoveAsync<DocumentSchema, Guid>(x =>
-            x.CreatedAt < DateTime.UtcNow.AddDays(-MaxOwnedShareAgeInDays) && ownedShareIds.Contains(x.Id));
+            x.CreatedAt < DateTime.UtcNow.AddDays(-Constants.MaxOwnedShareAgeInDays) && ownedShareIds.Contains(x.Id));
 
         _logger.LogInformation("Expired documents cleaned up.");
     }
