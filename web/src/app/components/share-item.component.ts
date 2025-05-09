@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DatePipe } from '@angular/common';
 import { AppSource, FileRes, LinkRes, TextRes } from '../types';
-import { isLink, isText } from '../utils';
+import {generatePreview, isLink, isText} from '../utils';
 
 @Component({
   selector: 'ss-share-item-card',
@@ -230,8 +230,9 @@ export class TitleCardComponent implements OnInit {
 
     if (this.isText) {
       const text = this.item as TextRes;
-      const truncated = text.content.substring(0, 50);
-      return truncated.length < text.content.length ? `${truncated}...` : truncated;
+      return  generatePreview(text.content);
+      // return  preview.substring(0, 50);
+      // return truncated.length < text.content.length ? `${truncated}...` : truncated;
     }
 
     throw new Error('Unknown item type');

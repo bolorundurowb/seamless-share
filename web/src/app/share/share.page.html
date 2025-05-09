@@ -79,9 +79,7 @@
               </div>
             </ng-container>
             <ng-container *ngIf="isText()">
-              <p class="text-content">
-                {{ selectedItem.content }}
-              </p>
+              <div class="text-content" [innerHTML]="selectedItem.content"></div>
             </ng-container>
             <ng-container *ngIf="isDocument()">
               <div class="file-header">
@@ -213,13 +211,9 @@
         </ss-section>
 
         <ss-section title="Text">
-          <nz-textarea-count
-            [nzMaxCharacterCount]="5000">
-          <textarea nz-input
-                    rows="3"
-                    [(ngModel)]="sharedText"
-                    (keyup)="validateSharedText()"></textarea>
-          </nz-textarea-count>
+          <ss-text-share
+            (htmlChange)="validateSharedText($event)"
+          ></ss-text-share>
 
           <button nz-button
                   nzType="primary"
@@ -312,9 +306,7 @@
               </div>
             </ng-container>
             <ng-container *ngIf="isText()">
-              <p class="text-content">
-                {{ selectedItem.content }}
-              </p>
+              <div class="text-content" [innerHTML]="selectedItem.content"></div>
             </ng-container>
             <ng-container *ngIf="isDocument()">
               <div class="file-header">

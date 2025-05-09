@@ -13,6 +13,7 @@ import { ImagePasteSelectComponent } from '../components/image-paste-select.comp
 import { NavbarComponent } from '../components/navbar.component';
 import { extractErrorMessaging, isUrlValid } from '../utils';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import {TextShareComponent} from '../components/text-share.component';
 
 @Component({
   selector: 'ss-home',
@@ -23,13 +24,13 @@ import { NzMessageService } from 'ng-zorro-antd/message';
     FormsModule,
     NzButtonComponent,
     NzInputDirective,
-    NzTextareaCountComponent,
     SectionsComponent,
     SectionComponent,
     NzInputGroupComponent,
     NzIconDirective,
     ImagePasteSelectComponent,
-    NavbarComponent
+    NavbarComponent,
+    TextShareComponent
   ]
 })
 export class HomePage implements OnInit {
@@ -111,7 +112,8 @@ export class HomePage implements OnInit {
     this.isSharedUrlValid = isUrlValid(this.sharedUrl);
   }
 
-  validateSharedText() {
+  validateSharedText(text: string) {
+    this.sharedText = text;
     this.isSharedTextValid = !!this.sharedText && this.sharedText.length > 0 && this.sharedText.length <= 5000;
   }
 
