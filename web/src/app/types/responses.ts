@@ -24,14 +24,18 @@ export interface ShareRes {
   createdAt: string;
 }
 
-export interface FileRes {
+interface BaseItemRes {
   id: string;
-  url: string;
   createdAt: string;
+  expiresAt: string;
   updatedAt: string;
   source?: AppSource;
   deviceName?: string;
   appVersion?: string;
+}
+
+export interface FileRes extends BaseItemRes {
+  url: string;
   metadata: {
     externalId: string;
     name: string;
@@ -42,22 +46,10 @@ export interface FileRes {
   };
 }
 
-export interface LinkRes {
-  id: string;
+export interface LinkRes extends BaseItemRes {
   url: string;
-  createdAt: string;
-  updatedAt: string;
-  source?: AppSource;
-  deviceName?: string;
-  appVersion?: string;
 }
 
-export interface TextRes {
-  id: string;
+export interface TextRes extends BaseItemRes {
   content: string;
-  createdAt: string;
-  updatedAt: string;
-  source?: AppSource;
-  deviceName?: string;
-  appVersion?: string;
 }

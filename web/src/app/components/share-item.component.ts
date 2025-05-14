@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DatePipe } from '@angular/common';
 import { AppSource, FileRes, LinkRes, TextRes } from '../types';
-import {generatePreview, isLink, isText} from '../utils';
+import { generatePreview, isLink, isText } from '../utils';
 
 @Component({
   selector: 'ss-share-item-card',
@@ -10,98 +10,72 @@ import {generatePreview, isLink, isText} from '../utils';
   imports: [ CommonModule, DatePipe ],
   template: `
     <div class="card" [class.selected]="selected">
-      <div class="card-icon">
-        <img [src]="'/images/' + type.toLowerCase() + '.png'"/>
+      <div class="title">
+        {{ titleIcon }}
+        {{ title }}
       </div>
-      <div class="card-content">
-        <div class="header">{{ title }}</div>
-
-        <div class="date">{{ createdAt | date: 'medium' }}</div>
+      <div class="date">
+        📅 <span>Created At:</span>
+        {{ item.createdAt | date: 'medium' }}
+      </div>
+      <div class="date">
+        ⏳ <span>Expires At:</span>
+        {{ item.expiresAt | date: 'medium' }}
       </div>
 
       <div class="metadata">
         <span class="pill type">{{ type }}</span>
         <span class="pill status">{{ status }}</span>
-        <ng-container *ngIf="source">
-          <ng-container *ngIf="source === AppSource.Web">
+        <ng-container *ngIf="item.source">
+          <ng-container *ngIf="item.source === AppSource.Web">
               <span class="pill web">
-                {{ source }}
+                {{ item.source }}
               </span>
           </ng-container>
-          <ng-container *ngIf="source === AppSource.Android">
+          <ng-container *ngIf="item.source === AppSource.Android">
               <span class="pill android">
-                {{ source }}
+                {{ item.source }}
               </span>
           </ng-container>
-          <ng-container *ngIf="source === AppSource.iOS">
+          <ng-container *ngIf="item.source === AppSource.iOS">
               <span class="pill ios">
-                {{ source }}
+                {{ item.source }}
               </span>
           </ng-container>
-          <ng-container *ngIf="source === AppSource.Unknown">
+          <ng-container *ngIf="item.source === AppSource.Unknown">
               <span class="pill unknown">
-                {{ source }}
+                {{ item.source }}
               </span>
           </ng-container>
         </ng-container>
       </div>
-    </div>
-  `,
+    </div>`,
   styles: [ `
     .card {
       border-bottom: 1px solid #e0e0e0;
       padding: 0.65rem;
       cursor: pointer;
-      display: grid;
-      grid-template-columns: 4rem calc(100% - 4.5rem);
-      grid-template-rows: 3rem 1rem 1.2rem;
       gap: 1rem;
       align-items: center;
 
-      &.selected {
-        background-color: #F2ECFD;
-        border-left: 0.2rem solid #9272BB;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        transform: translateY(-2px);
+      .title {
+        font-weight: 500;
+        color: #333;
+        font-size: 1rem;
+        line-height: 1.5;
+        //overflow: hidden;
+        //text-overflow: ellipsis;
+        margin-bottom: 0.75rem;
       }
 
-      &-icon {
-        grid-column: 1;
-        grid-row: 1 / span 2;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 100%;
-        box-sizing: border-box;
+      .date {
+        font-size: 0.85rem;
+        color: #626B73;
+        margin-top: 0.25rem;
+        margin-bottom: 0.25rem;
 
-        img {
-          width: 100%;
-          height: auto;
-          max-height: 100%;
-          object-fit: contain;
-          border-radius: 0.25rem;
-        }
-      }
-
-      &-content {
-        grid-column: 2;
-        grid-row: 1 / span 2;
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-
-        .header {
-          font-weight: 500;
-          color: #333;
-          font-size: 1rem;
-          line-height: 1.5;
-          height: calc(2 * 1rem * 1.5);
-          overflow: hidden;
-        }
-
-        .date {
-          font-size: 0.85rem;
-          color: #626B73;
+        span {
+          font-weight: 600;
         }
       }
 
@@ -113,6 +87,7 @@ import {generatePreview, isLink, isText} from '../utils';
         font-size: 0.9rem;
         grid-column: 1 / -1;
         grid-row: 3;
+        margin-top: 0.75rem;
 
         .pill {
           text-transform: lowercase;
@@ -159,6 +134,13 @@ import {generatePreview, isLink, isText} from '../utils';
           }
         }
       }
+
+      &.selected {
+        background-color: #F2ECFD;
+        border-left: 0.2rem solid #9272BB;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+      }
     }
   ` ]
 })
@@ -167,10 +149,9 @@ export class TitleCardComponent implements OnInit {
   @Input() selected: boolean = false;
 
   title!: string;
+  titleIcon!: string;
   status: string = 'Active';
   type!: string;
-  source?: AppSource;
-  createdAt: Date = new Date();
 
   get isImage(): boolean {
     const file = this.item as FileRes;
@@ -191,10 +172,9 @@ export class TitleCardComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.createdAt = new Date(this.item.createdAt);
     this.type = this.getType();
-    this.source = this.item.source;
     this.title = this.getTitle();
+    this.titleIcon = this.getTitleIcon();
   }
 
   getType(): string {
@@ -230,9 +210,29 @@ export class TitleCardComponent implements OnInit {
 
     if (this.isText) {
       const text = this.item as TextRes;
-      return  generatePreview(text.content);
-      // return  preview.substring(0, 50);
+      const preview = generatePreview(text.content);
+      return preview.substring(0, 25);
       // return truncated.length < text.content.length ? `${truncated}...` : truncated;
+    }
+
+    throw new Error('Unknown item type');
+  }
+
+  getTitleIcon(): string {
+    if (this.isLink) {
+      return '🔗';
+    }
+
+    if (this.isImage) {
+      return '🖼️';
+    }
+
+    if (this.isDocument) {
+      return '📜';
+    }
+
+    if (this.isText) {
+      return '🅰️';
     }
 
     throw new Error('Unknown item type');
