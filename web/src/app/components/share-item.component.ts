@@ -27,26 +27,9 @@ import { generatePreview, isLink, isText } from '../utils';
         <span class="pill type">{{ type }}</span>
         <span class="pill status">{{ status }}</span>
         <ng-container *ngIf="item.source">
-          <ng-container *ngIf="item.source === AppSource.Web">
-              <span class="pill web">
-                {{ item.source }}
-              </span>
-          </ng-container>
-          <ng-container *ngIf="item.source === AppSource.Android">
-              <span class="pill android">
-                {{ item.source }}
-              </span>
-          </ng-container>
-          <ng-container *ngIf="item.source === AppSource.iOS">
-              <span class="pill ios">
-                {{ item.source }}
-              </span>
-          </ng-container>
-          <ng-container *ngIf="item.source === AppSource.Unknown">
-              <span class="pill unknown">
-                {{ item.source }}
-              </span>
-          </ng-container>
+          <span class="pill" [ngClass]="sourceStyle">
+            {{item.source}}
+          </span>
         </ng-container>
       </div>
     </div>`,
@@ -152,6 +135,7 @@ export class TitleCardComponent implements OnInit {
   titleIcon!: string;
   status: string = 'Active';
   type!: string;
+  sourceStyle: any = {};
 
   get isImage(): boolean {
     const file = this.item as FileRes;
@@ -175,6 +159,10 @@ export class TitleCardComponent implements OnInit {
     this.type = this.getType();
     this.title = this.getTitle();
     this.titleIcon = this.getTitleIcon();
+
+    if (this.item.source) {
+      this.sourceStyle[this.item.source.toLowerCase()] = true;
+    }
   }
 
   getType(): string {
