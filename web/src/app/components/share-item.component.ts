@@ -14,13 +14,23 @@ import { generatePreview, isLink, isText } from '../utils';
         {{ titleIcon }}
         {{ title }}
       </div>
-      <div class="date">
-        📅 <span>Created At:</span>
-        {{ item.createdAt | date: 'medium' }}
-      </div>
-      <div class="date">
-        ⏳ <span>Expires At:</span>
-        {{ item.expiresAt | date: 'medium' }}
+      <div class="dates">
+        <div class="date-column">
+          <div class="date-label">
+            📅 <span>Created</span>
+          </div>
+          <div class="date-value">
+            {{ item.createdAt | date: 'dd MMM, yyyy h:mma' }}
+          </div>
+        </div>
+        <div class="date-column">
+          <div class="date-label">
+            ⏳ <span>Expires</span>
+          </div>
+          <div class="date-value">
+            {{ item.expiresAt | date: 'dd MMM, yyyy H:mma' }}
+          </div>
+        </div>
       </div>
 
       <div class="metadata">
@@ -28,7 +38,7 @@ import { generatePreview, isLink, isText } from '../utils';
         <span class="pill status">{{ status }}</span>
         <ng-container *ngIf="item.source">
           <span class="pill" [ngClass]="sourceStyle">
-            {{item.source}}
+            {{ item.source }}
           </span>
         </ng-container>
       </div>
@@ -46,19 +56,33 @@ import { generatePreview, isLink, isText } from '../utils';
         color: #333;
         font-size: 1rem;
         line-height: 1.5;
-        //overflow: hidden;
-        //text-overflow: ellipsis;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
         margin-bottom: 0.75rem;
       }
 
-      .date {
-        font-size: 0.85rem;
+      .dates {
+        margin-top: 0.5rem;
+        display: flex;
+        flex-direction: row;
         color: #626B73;
-        margin-top: 0.25rem;
-        margin-bottom: 0.25rem;
 
-        span {
-          font-weight: 600;
+        .date-column {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          gap: 0.35rem;
+
+          .date-label {
+            span {
+              font-weight: 600;
+              font-size: 0.85rem;
+            }
+          }
+
+          .date-value {
+          }
         }
       }
 
@@ -198,8 +222,9 @@ export class TitleCardComponent implements OnInit {
 
     if (this.isText) {
       const text = this.item as TextRes;
-      const preview = generatePreview(text.content);
-      return preview.substring(0, 25);
+      return generatePreview(text.content);
+      // const preview = generatePreview(text.content);
+      // return preview.substring(0, 25);
       // return truncated.length < text.content.length ? `${truncated}...` : truncated;
     }
 
@@ -225,6 +250,4 @@ export class TitleCardComponent implements OnInit {
 
     throw new Error('Unknown item type');
   }
-
-  protected readonly AppSource = AppSource;
 }
