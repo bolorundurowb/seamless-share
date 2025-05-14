@@ -17,6 +17,7 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { FormsModule } from '@angular/forms';
 import { ImagePasteSelectComponent } from '../components/image-paste-select.component';
 import { SectionComponent, SectionsComponent } from '../components/section.components';
+import {TextShareComponent} from '../components/text-share.component';
 
 @Component({
   selector: 'ss-share',
@@ -37,9 +38,9 @@ import { SectionComponent, SectionsComponent } from '../components/section.compo
     NzModalModule,
     FormsModule,
     ImagePasteSelectComponent,
-    NzTextareaCountComponent,
     SectionComponent,
-    SectionsComponent
+    SectionsComponent,
+    TextShareComponent
   ],
   standalone: true,
 })
@@ -114,7 +115,7 @@ export class SharePage implements OnInit {
 
   select(item: FileRes | TextRes | LinkRes) {
     this.selectedItem = item;
-    
+
     // Show mobile modal on tablet/mobile devices
     if (window.innerWidth <= 768) {
       this.isMobileContentModalVisible = true;
@@ -236,7 +237,7 @@ export class SharePage implements OnInit {
 
       this.selectedItem = undefined;
       this.messageService.success('Item deleted successfully');
-      
+
       // Close mobile modal if open
       if (window.innerWidth <= 768) {
         this.isMobileContentModalVisible = false;
@@ -360,7 +361,8 @@ export class SharePage implements OnInit {
     this.isSharedUrlValid = isUrlValid(this.sharedUrl);
   }
 
-  validateSharedText() {
+  validateSharedText(text: string) {
+    this.sharedText = text;
     this.isSharedTextValid = !!this.sharedText && this.sharedText.length > 0 && this.sharedText.length <= 5000;
   }
 

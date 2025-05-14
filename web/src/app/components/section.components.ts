@@ -65,7 +65,7 @@ export class SectionComponent {
       border-width: 0.15rem;
       border-color: #cacaca;
       padding: 0.75rem 1rem;
-      height: 14rem;
+      height: 17.5rem;
       background-color: #fafafa;
       display: flex;
       flex-direction: column;
