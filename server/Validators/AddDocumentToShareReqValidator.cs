@@ -23,7 +23,7 @@ public class AddDocumentToShareReqValidator : AbstractValidator<AddDocumentToSha
 
         var allowedExtensions = new[]
         {
-            ".pdf", ".txt", ".docx", ".xlsx", ".doc", ".xls", ".rtf"
+            ".pdf", ".txt", ".docx", ".xlsx", ".doc", ".xls", ".rtf", ".odt", ".pptx", ".ppt", ".csv", ".md"
         };
         var fileExtension = Path.GetExtension(file.FileName).ToLower();
         return allowedExtensions.Contains(fileExtension);
