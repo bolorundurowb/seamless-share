@@ -59,7 +59,7 @@
           <input nz-input readonly class="selected-file-display" type="text" placeholder="Select a file"
                  [value]="sharedDocument?.name"/>
           <input #fileInput class="hidden-file-input" type="file"
-                 accept=".pdf,.doc,.docx,.txt,.rtf,.xlsx,.xls"
+                 accept=".pdf,.doc,.docx,.txt,.rtf,.xlsx,.xls,.odt,.pptx,.ppt,.md"
                  (change)="fileChanged($event)"/>
           <ng-template #filePickerButton>
             <button nz-button nzSearch (click)="fileInput.click()">
