@@ -19,7 +19,7 @@ public class LinkService(ILogger<LinkService> logger)
     }
 
     public Task<List<LinkSchema>> GetAll(Guid shareId) => Meerkat.Query<LinkSchema, Guid>()
-        .Where(x => x.ShareId == shareId)
+        .Where(x => x.ShareId == shareId && x.IsArchived == false)
         .OrderByDescending(x => x.CreatedAt)
         .ToListAsync();
 

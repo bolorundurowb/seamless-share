@@ -19,7 +19,7 @@ public class TextService(ILogger<TextService> logger)
     }
 
     public Task<List<TextSchema>> GetAll(Guid shareId) => Meerkat.Query<TextSchema, Guid>()
-        .Where(x => x.ShareId == shareId)
+        .Where(x => x.ShareId == shareId && x.IsArchived == false)
         .OrderByDescending(x => x.CreatedAt)
         .ToListAsync();
 
